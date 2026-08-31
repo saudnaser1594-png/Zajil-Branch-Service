@@ -1,85 +1,1941 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الموقع يعمل بنجاح</title>
-    
-    <!-- كود التنسيقات (CSS) مدمج -->
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: #f0f2f5;
-            color: #1c1e21;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
+<title>Zajil Branch Customer Service</title>
 
-        .card {
-            background: #ffffff;
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-        }
+<style>
 
-        h1 {
-            color: #2c3e50;
-            margin-bottom: 1rem;
-            font-size: 1.8rem;
-        }
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,Tahoma,sans-serif;
+}
 
-        p {
-            color: #606770;
-            margin-bottom: 1.5rem;
-            line-height: 1.5;
-        }
+body{
+    background:#f4f7fa;
+    color:#17324d;
+}
 
-        button {
-            background-color: #0084ff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
+header{
+    background:#0756a8;
+    color:white;
+    padding:14px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 3px 12px rgba(0,0,0,.15);
+}
 
-        button:hover {
-            background-color: #006bce;
-        }
-    </style>
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:bold;
+}
+
+.logoIcon{
+    width:42px;
+    height:42px;
+    border-radius:10px;
+    background:#ffd400;
+    color:#0756a8;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+}
+
+button{
+    cursor:pointer;
+    border:0;
+}
+
+.headerBtn{
+    background:#ffd400;
+    color:#0756a8;
+    padding:11px 16px;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:25px 18px;
+}
+
+.hero{
+    background:linear-gradient(135deg,#0756a8,#0c72d4);
+    color:white;
+    border-radius:20px;
+    padding:45px 25px;
+    text-align:center;
+}
+
+.hero h1{
+    font-size:30px;
+    margin-bottom:12px;
+}
+
+.hero p{
+    line-height:1.9;
+}
+
+.title{
+    color:#0756a8;
+    margin:25px 0 15px;
+}
+
+.services{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+}
+
+.service{
+    background:white;
+    padding:22px;
+    border-radius:15px;
+    border:2px solid transparent;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+    cursor:pointer;
+    transition:.2s;
+}
+
+.service:hover{
+    border-color:#ffd400;
+    transform:translateY(-2px);
+}
+
+.serviceIcon{
+    font-size:32px;
+    margin-bottom:10px;
+}
+
+.service h3{
+    color:#0756a8;
+    margin-bottom:7px;
+}
+
+.service p{
+    color:#667085;
+    line-height:1.6;
+    font-size:14px;
+}
+
+.branches{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+}
+
+.branch{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+}
+
+.branch h3{
+    color:#0756a8;
+    margin-bottom:8px;
+}
+
+.online{
+    color:#198754;
+    font-size:13px;
+    margin-bottom:15px;
+}
+
+.branchBtn{
+    width:100%;
+    background:#ffd400;
+    color:#0756a8;
+    padding:12px;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.formBox{
+    background:white;
+    margin-top:20px;
+    padding:22px;
+    border-radius:15px;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+}
+
+.formBox h2{
+    color:#0756a8;
+    margin-bottom:12px;
+}
+
+.formBox input,
+.formBox select,
+.formBox textarea{
+    width:100%;
+    padding:13px;
+    margin:6px 0;
+    border:1px solid #ddd;
+    border-radius:8px;
+    outline:none;
+}
+
+.formBox textarea{
+    min-height:120px;
+}
+
+.primaryBtn{
+    width:100%;
+    padding:13px;
+    margin-top:8px;
+    background:#0756a8;
+    color:white;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.page{
+    display:none;
+}
+
+/* CHAT */
+
+.chatPage{
+    max-width:850px;
+    margin:25px auto;
+    padding:0 15px;
+}
+
+.chatBox{
+    background:white;
+    border-radius:17px;
+    overflow:hidden;
+    box-shadow:0 5px 20px rgba(0,0,0,.1);
+}
+
+.chatHeader{
+    background:#0756a8;
+    color:white;
+    padding:18px;
+}
+
+.chatStatus{
+    color:#ffd400;
+    font-size:13px;
+    margin-top:5px;
+}
+
+.messages{
+    height:430px;
+    overflow-y:auto;
+    background:#f3f5f7;
+    padding:20px;
+}
+
+.message{
+    max-width:80%;
+    padding:12px 15px;
+    border-radius:14px;
+    margin-bottom:12px;
+    line-height:1.7;
+}
+
+.customerMessage{
+    background:#0756a8;
+    color:white;
+    margin-right:auto;
+}
+
+.employeeMessage{
+    background:#ffd400;
+    color:#17324d;
+    margin-left:auto;
+}
+
+.message small{
+    display:block;
+    font-size:10px;
+    margin-top:5px;
+    opacity:.7;
+}
+
+.chatInput{
+    display:flex;
+    gap:8px;
+    padding:12px;
+}
+
+.chatInput input{
+    flex:1;
+    padding:13px;
+    border:1px solid #ddd;
+    border-radius:8px;
+}
+
+.chatInput button{
+    background:#0756a8;
+    color:white;
+    padding:0 20px;
+    border-radius:8px;
+}
+
+/* LOGIN */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:100;
+}
+
+.loginBox{
+    width:100%;
+    max-width:420px;
+    background:white;
+    padding:25px;
+    border-radius:17px;
+}
+
+.loginBox h2{
+    color:#0756a8;
+    margin-bottom:10px;
+}
+
+.loginBox p{
+    color:#667085;
+    line-height:1.7;
+    margin-bottom:15px;
+}
+
+.loginBox input{
+    width:100%;
+    padding:13px;
+    margin-bottom:10px;
+    border:1px solid #ddd;
+    border-radius:8px;
+}
+
+.close{
+    float:left;
+    font-size:25px;
+    cursor:pointer;
+}
+
+.error{
+    color:#d93025;
+    display:none;
+    margin-bottom:10px;
+    font-size:13px;
+}
+
+/* EMPLOYEE */
+
+.employeePage{
+    max-width:1100px;
+    margin:25px auto;
+    padding:0 18px;
+}
+
+.employeeHeader{
+    background:#0756a8;
+    color:white;
+    padding:25px;
+    border-radius:16px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+    margin:20px 0;
+}
+
+.stat{
+    background:white;
+    padding:20px;
+    border-radius:13px;
+    box-shadow:0 3px 12px rgba(0,0,0,.06);
+}
+
+.stat strong{
+    display:block;
+    font-size:28px;
+    color:#0756a8;
+    margin-bottom:5px;
+}
+
+.inbox{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+}
+
+.inboxTitle{
+    color:#0756a8;
+    margin-bottom:15px;
+}
+
+.ticket{
+    border:1px solid #e5e7eb;
+    border-radius:12px;
+    padding:17px;
+    margin-bottom:12px;
+}
+
+.ticketTop{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:8px;
+}
+
+.ticketNumber{
+    color:#0756a8;
+    font-weight:bold;
+}
+
+.badge{
+    background:#ffd400;
+    color:#0756a8;
+    padding:5px 9px;
+    border-radius:5px;
+    font-size:12px;
+}
+
+.ticketText{
+    color:#555;
+    line-height:1.7;
+}
+
+.ticketTime{
+    color:#999;
+    font-size:11px;
+    margin-top:8px;
+}
+
+.ticketActions{
+    display:flex;
+    gap:8px;
+    margin-top:12px;
+}
+
+.ticketActions button{
+    padding:9px 13px;
+    border-radius:7px;
+    background:#0756a8;
+    color:white;
+}
+
+.ticketActions .closeTicket{
+    background:#198754;
+}
+
+.noMessages{
+    text-align:center;
+    padding:40px;
+    color:#888;
+}
+
+footer{
+    text-align:center;
+    color:#777;
+    padding:30px;
+    font-size:13px;
+}
+
+@media(max-width:600px){
+
+    .hero h1{
+        font-size:24px;
+    }
+
+    .logo{
+        font-size:14px;
+    }
+
+    .headerBtn{
+        padding:9px;
+        font-size:12px;
+    }
+
+    .ticketTop{
+        flex-direction:column;
+    }
+
+    .chatInput button{
+        padding:0 12px;
+    }
+
+}
+
+</style>
 </head>
+
+
 <body>
 
-    <div class="card">
-        <h1>تم حل مشكلة الشاشة البيضاء!</h1>
-        <p>الكود الآن مدمج ويعمل داخل ملف واحد بدون مشاكل في مسارات الملفات الخارجية.</p>
-        <button id="btn">اضغط للتجربة</button>
+
+<header>
+
+    <div class="logo">
+
+        <div class="logoIcon">
+            ز
+        </div>
+
+        Zajil Branch Service
+
     </div>
 
-    <!-- كود السكربت (JavaScript) مدمج -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log("تم تحميل الصفحة والسكربت بنجاح!");
 
-            const button = document.getElementById('btn');
-            button.addEventListener('click', () => {
-                alert('السكربت يعمل بشكل ممتاز!');
-            });
+    <button
+        class="headerBtn"
+        onclick="openLogin()">
+
+        دخول الموظفين
+
+    </button>
+
+</header>
+
+
+
+<!-- ================= HOME ================= -->
+
+<section id="homePage">
+
+<div class="container">
+
+
+    <div class="hero">
+
+        <h1>
+            خدمة عملاء فروع زاجل
+        </h1>
+
+        <p>
+            تواصل مع فرعك مباشرة دون الحاجة إلى إعطاء رقم الموظف الشخصي.
+            <br>
+            أرسل استفسارك أو شكواك وسيتم حفظها داخل النظام.
+        </p>
+
+    </div>
+
+
+
+    <h2 class="title">
+        الخدمات
+    </h2>
+
+
+    <div class="services">
+
+
+        <div
+            class="service"
+            onclick="showForm('استفسار عن سعر الشحن')">
+
+            <div class="serviceIcon">💰</div>
+
+            <h3>
+                سعر الشحن
+            </h3>
+
+            <p>
+                اسأل عن تكلفة شحنتك.
+            </p>
+
+        </div>
+
+
+
+        <div
+            class="service"
+            onclick="showForm('تتبع الشحنة')">
+
+            <div class="serviceIcon">📦</div>
+
+            <h3>
+                تتبع الشحنة
+            </h3>
+
+            <p>
+                استفسر عن حالة شحنتك.
+            </p>
+
+        </div>
+
+
+
+        <div
+            class="service"
+            onclick="showForm('طلب سيارة')">
+
+            <div class="serviceIcon">🚚</div>
+
+            <h3>
+                طلب سيارة
+            </h3>
+
+            <p>
+                اطلب سيارة لاستلام البضائع من المنزل.
+            </p>
+
+        </div>
+
+
+
+        <div
+            class="service"
+            onclick="showForm('مناطق الخدمة')">
+
+            <div class="serviceIcon">📍</div>
+
+            <h3>
+                مناطق الخدمة
+            </h3>
+
+            <p>
+                اسأل عن المناطق التي يخدمها الفرع.
+            </p>
+
+        </div>
+
+
+
+        <div
+            class="service"
+            onclick="showForm('شكوى')">
+
+            <div class="serviceIcon">📝</div>
+
+            <h3>
+                تقديم شكوى
+            </h3>
+
+            <p>
+                سجل شكواك واحصل على رقم مرجعي.
+            </p>
+
+        </div>
+
+
+
+        <div
+            class="service"
+            onclick="showForm('استفسار عام')">
+
+            <div class="serviceIcon">💬</div>
+
+            <h3>
+                استفسار عام
+            </h3>
+
+            <p>
+                أرسل رسالتك إلى خدمة عملاء الفرع.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <div id="formArea"></div>
+
+
+
+    <h2 class="title">
+        التواصل مع الفرع
+    </h2>
+
+
+    <div class="branches">
+
+
+        <div class="branch">
+
+            <h3>
+                فرع تبوك
+            </h3>
+
+            <div class="online">
+                ● خدمة العملاء متاحة
+            </div>
+
+            <button
+                class="branchBtn"
+                onclick="openChat('فرع تبوك')">
+
+                محادثة مع الفرع
+
+            </button>
+
+        </div>
+
+
+
+        <div class="branch">
+
+            <h3>
+                فرع الرياض
+            </h3>
+
+            <div class="online">
+                ● خدمة العملاء متاحة
+            </div>
+
+            <button
+                class="branchBtn"
+                onclick="openChat('فرع الرياض')">
+
+                محادثة مع الفرع
+
+            </button>
+
+        </div>
+
+
+
+        <div class="branch">
+
+            <h3>
+                فرع جدة
+            </h3>
+
+            <div class="online">
+                ● خدمة العملاء متاحة
+            </div>
+
+            <button
+                class="branchBtn"
+                onclick="openChat('فرع جدة')">
+
+                محادثة مع الفرع
+
+            </button>
+
+        </div>
+
+
+
+        <div class="branch">
+
+            <h3>
+                فرع المدينة
+            </h3>
+
+            <div class="online">
+                ● خدمة العملاء متاحة
+            </div>
+
+            <button
+                class="branchBtn"
+                onclick="openChat('فرع المدينة')">
+
+                محادثة مع الفرع
+
+            </button>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- ================= CHAT ================= -->
+
+<section id="chatPage" class="page">
+
+<div class="chatPage">
+
+<div class="chatBox">
+
+
+    <div class="chatHeader">
+
+        <h2 id="chatBranch">
+            خدمة العملاء
+        </h2>
+
+        <div class="chatStatus">
+            ● الرسائل محفوظة داخل النظام
+        </div>
+
+    </div>
+
+
+
+    <div
+        id="messages"
+        class="messages">
+
+    </div>
+
+
+
+    <div class="chatInput">
+
+        <input
+            id="messageInput"
+            placeholder="اكتب رسالتك..."
+            onkeydown="if(event.key==='Enter') sendMessage()"
+        >
+
+        <button onclick="sendMessage()">
+            إرسال
+        </button>
+
+    </div>
+
+
+</div>
+
+
+<br>
+
+
+<button
+    class="primaryBtn"
+    onclick="goHome()">
+
+    العودة للرئيسية
+
+</button>
+
+</div>
+
+</section>
+
+
+
+<!-- ================= EMPLOYEE ================= -->
+
+<section id="employeePage" class="page">
+
+<div class="employeePage">
+
+
+    <div class="employeeHeader">
+
+        <h2 id="employeeBranch">
+            غرفة الفرع
+        </h2>
+
+        <p id="employeeInfo"></p>
+
+    </div>
+
+
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <strong id="totalMessages">
+                0
+            </strong>
+
+            إجمالي الرسائل
+
+        </div>
+
+
+        <div class="stat">
+
+            <strong id="newMessages">
+                0
+            </strong>
+
+            رسائل جديدة
+
+        </div>
+
+
+        <div class="stat">
+
+            <strong id="openTickets">
+                0
+            </strong>
+
+            طلبات مفتوحة
+
+        </div>
+
+    </div>
+
+
+
+    <div class="inbox">
+
+        <h2 class="inboxTitle">
+            📥 رسائل العملاء
+        </h2>
+
+
+        <div id="employeeMessages">
+
+        </div>
+
+    </div>
+
+
+
+    <button
+        class="primaryBtn"
+        onclick="logout()"
+        style="margin-top:20px;">
+
+        تسجيل الخروج
+
+    </button>
+
+
+</div>
+
+</section>
+
+
+
+<!-- ================= LOGIN ================= -->
+
+<div
+    id="loginModal"
+    class="modal">
+
+
+<div class="loginBox">
+
+
+    <span
+        class="close"
+        onclick="closeLogin()">
+
+        ×
+
+    </span>
+
+
+    <h2>
+        دخول الموظفين
+    </h2>
+
+
+    <p>
+        أدخل بريدك الإلكتروني وكلمة المرور.
+    </p>
+
+
+    <div
+        id="loginError"
+        class="error">
+
+    </div>
+
+
+    <input
+        id="email"
+        type="email"
+        placeholder="البريد الإلكتروني"
+    >
+
+
+    <input
+        id="password"
+        type="password"
+        placeholder="كلمة المرور"
+    >
+
+
+    <button
+        class="primaryBtn"
+        onclick="login()">
+
+        دخول
+
+    </button>
+
+</div>
+
+</div>
+
+
+
+<footer>
+
+    Zajil Branch Customer Service © 2026
+
+</footer>
+
+
+
+<script>
+
+/* =========================================
+   حسابات الموظفين التجريبية
+   ========================================= */
+
+const employees = {
+
+    "ahmed@gmail.com":{
+        name:"أحمد",
+        branch:"فرع تبوك",
+        password:"123456"
+    },
+
+    "ali@gmail.com":{
+        name:"علي",
+        branch:"فرع الرياض",
+        password:"123456"
+    },
+
+    "mohammed@gmail.com":{
+        name:"محمد",
+        branch:"فرع جدة",
+        password:"123456"
+    },
+
+    "manager@gmail.com":{
+        name:"المدير",
+        branch:"جميع الفروع",
+        password:"123456"
+    }
+
+};
+
+
+/* =========================================
+   قاعدة البيانات المحلية
+   ========================================= */
+
+function getMessages(){
+
+    return JSON.parse(
+        localStorage.getItem("zajil_messages") || "[]"
+    );
+
+}
+
+
+function saveMessages(messages){
+
+    localStorage.setItem(
+        "zajil_messages",
+        JSON.stringify(messages)
+    );
+
+}
+
+
+/* =========================================
+   إنشاء النموذج
+   ========================================= */
+
+function showForm(service){
+
+    const area =
+        document.getElementById("formArea");
+
+
+    area.innerHTML = `
+
+        <div class="formBox">
+
+            <h2>
+                ${service}
+            </h2>
+
+            <input
+                id="customerName"
+                placeholder="اسم العميل"
+            >
+
+            <input
+                id="customerPhone"
+                type="tel"
+                placeholder="رقم التواصل"
+            >
+
+            <select id="customerBranch">
+
+                <option value="">
+                    اختر الفرع
+                </option>
+
+                <option>
+                    فرع تبوك
+                </option>
+
+                <option>
+                    فرع الرياض
+                </option>
+
+                <option>
+                    فرع جدة
+                </option>
+
+                <option>
+                    فرع المدينة
+                </option>
+
+            </select>
+
+            <textarea
+                id="customerDetails"
+                placeholder="اكتب تفاصيل طلبك..."
+            ></textarea>
+
+
+            <button
+                class="primaryBtn"
+                onclick="submitRequest('${service}')">
+
+                إرسال الطلب
+
+            </button>
+
+        </div>
+    `;
+
+
+    area.scrollIntoView({
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================================
+   إرسال طلب
+   ========================================= */
+
+function submitRequest(service){
+
+    const name =
+        document.getElementById("customerName")
+        .value.trim();
+
+
+    const phone =
+        document.getElementById("customerPhone")
+        .value.trim();
+
+
+    const branch =
+        document.getElementById("customerBranch")
+        .value;
+
+
+    const details =
+        document.getElementById("customerDetails")
+        .value.trim();
+
+
+    if(!name || !phone || !branch || !details){
+
+        alert(
+            "يرجى تعبئة جميع البيانات."
+        );
+
+        return;
+
+    }
+
+
+    const messages =
+        getMessages();
+
+
+    const id =
+        "ZJ-" +
+        Date.now().toString().slice(-7);
+
+
+    messages.push({
+
+        id:id,
+
+        name:name,
+
+        phone:phone,
+
+        branch:branch,
+
+        service:service,
+
+        text:details,
+
+        sender:"customer",
+
+        status:"new",
+
+        time:new Date().toLocaleString("ar-SA")
+
+    });
+
+
+    saveMessages(messages);
+
+
+    alert(
+        "تم إرسال طلبك بنجاح.\n\n" +
+        "رقم الطلب: " + id
+    );
+
+
+    document.getElementById("formArea")
+        .innerHTML="";
+
+}
+
+
+/* =========================================
+   فتح المحادثة
+   ========================================= */
+
+function openChat(branch){
+
+    document.getElementById("homePage")
+        .style.display="none";
+
+
+    document.getElementById("employeePage")
+        .style.display="none";
+
+
+    document.getElementById("chatPage")
+        .style.display="block";
+
+
+    document.getElementById("chatBranch")
+        .innerText =
+        "خدمة عملاء " + branch;
+
+
+    loadChat(branch);
+
+}
+
+
+/* =========================================
+   تحميل الرسائل
+   ========================================= */
+
+function loadChat(branch){
+
+    const messages =
+        getMessages()
+        .filter(m => m.branch === branch);
+
+
+    const box =
+        document.getElementById("messages");
+
+
+    box.innerHTML="";
+
+
+    if(messages.length === 0){
+
+        box.innerHTML = `
+
+            <div class="message employeeMessage">
+
+                مرحبًا بك 👋
+
+                <br>
+
+                أنت الآن تتواصل مع ${branch}.
+                اكتب رسالتك وسيقوم موظف الفرع بالرد عليك.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    messages.forEach(m => {
+
+        const div =
+            document.createElement("div");
+
+
+        div.className =
+            m.sender === "customer"
+            ? "message customerMessage"
+            : "message employeeMessage";
+
+
+        div.innerHTML =
+            escapeHTML(m.text) +
+            "<small>" +
+            escapeHTML(m.time) +
+            "</small>";
+
+
+        box.appendChild(div);
+
+    });
+
+
+    box.scrollTop =
+        box.scrollHeight;
+
+}
+
+
+/* =========================================
+   إرسال رسالة من العميل
+   ========================================= */
+
+function sendMessage(){
+
+    const input =
+        document.getElementById("messageInput");
+
+
+    const text =
+        input.value.trim();
+
+
+    if(!text){
+        return;
+    }
+
+
+    const branch =
+        document.getElementById("chatBranch")
+        .innerText
+        .replace("خدمة عملاء ","");
+
+
+    const messages =
+        getMessages();
+
+
+    const id =
+        "ZJ-" +
+        Date.now().toString().slice(-7);
+
+
+    messages.push({
+
+        id:id,
+
+        name:"عميل الموقع",
+
+        phone:"",
+
+        branch:branch,
+
+        service:"محادثة",
+
+        text:text,
+
+        sender:"customer",
+
+        status:"new",
+
+        time:new Date().toLocaleString("ar-SA")
+
+    });
+
+
+    saveMessages(messages);
+
+
+    input.value="";
+
+
+    loadChat(branch);
+
+}
+
+
+/* =========================================
+   دخول الموظف
+   ========================================= */
+
+function openLogin(){
+
+    document.getElementById("loginModal")
+        .style.display="flex";
+
+}
+
+
+function closeLogin(){
+
+    document.getElementById("loginModal")
+        .style.display="none";
+
+}
+
+
+function login(){
+
+    const email =
+        document.getElementById("email")
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const password =
+        document.getElementById("password")
+        .value;
+
+
+    const error =
+        document.getElementById("loginError");
+
+
+    error.style.display="none";
+
+
+    const employee =
+        employees[email];
+
+
+    if(!employee){
+
+        error.innerText =
+            "البريد الإلكتروني غير مسجل.";
+
+        error.style.display="block";
+
+        return;
+
+    }
+
+
+    if(employee.password !== password){
+
+        error.innerText =
+            "كلمة المرور غير صحيحة.";
+
+        error.style.display="block";
+
+        return;
+
+    }
+
+
+    closeLogin();
+
+
+    document.getElementById("homePage")
+        .style.display="none";
+
+
+    document.getElementById("chatPage")
+        .style.display="none";
+
+
+    document.getElementById("employeePage")
+        .style.display="block";
+
+
+    document.getElementById("employeeBranch")
+        .innerText =
+        employee.branch === "جميع الفروع"
+        ? "لوحة الإدارة"
+        : "غرفة " + employee.branch;
+
+
+    document.getElementById("employeeInfo")
+        .innerHTML =
+        "👤 " + employee.name +
+        "<br>" +
+        "✉️ " + email;
+
+
+    loadEmployeeMessages(employee.branch);
+
+}
+
+
+/* =========================================
+   تحميل صندوق الموظف
+   ========================================= */
+
+function loadEmployeeMessages(branch){
+
+    let messages =
+        getMessages();
+
+
+    let visible;
+
+
+    if(branch === "جميع الفروع"){
+
+        visible = messages;
+
+    }else{
+
+        visible =
+            messages.filter(
+                m => m.branch === branch
+            );
+
+    }
+
+
+    const container =
+        document.getElementById("employeeMessages");
+
+
+    container.innerHTML="";
+
+
+    document.getElementById("totalMessages")
+        .innerText=visible.length;
+
+
+    document.getElementById("newMessages")
+        .innerText =
+        visible.filter(
+            m => m.status === "new"
+        ).length;
+
+
+    document.getElementById("openTickets")
+        .innerText =
+        visible.filter(
+            m => m.status !== "closed"
+        ).length;
+
+
+    if(visible.length === 0){
+
+        container.innerHTML = `
+
+            <div class="noMessages">
+
+                لا توجد رسائل حاليًا.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    visible
+        .slice()
+        .reverse()
+        .forEach(message => {
+
+            const ticket =
+                document.createElement("div");
+
+
+            ticket.className="ticket";
+
+
+            ticket.innerHTML = `
+
+                <div class="ticketTop">
+
+                    <span class="ticketNumber">
+
+                        ${escapeHTML(message.id)}
+
+                    </span>
+
+                    <span class="badge">
+
+                        ${escapeHTML(message.service)}
+
+                    </span>
+
+                </div>
+
+
+                <strong>
+
+                    ${escapeHTML(message.name)}
+
+                </strong>
+
+
+                <p class="ticketText">
+
+                    ${escapeHTML(message.text)}
+
+                </p>
+
+
+                <div class="ticketTime">
+
+                    ${escapeHTML(message.time)}
+
+                </div>
+
+
+                <div class="ticketActions">
+
+                    <button
+                        onclick="replyToCustomer('${message.id}')">
+
+                        الرد
+
+                    </button>
+
+
+                    <button
+                        class="closeTicket"
+                        onclick="closeTicket('${message.id}')">
+
+                        إغلاق الطلب
+
+                    </button>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(ticket);
+
         });
-    </script>
+
+}
+
+
+/* =========================================
+   الرد على العميل
+   ========================================= */
+
+function replyToCustomer(id){
+
+    const reply =
+        prompt(
+            "اكتب رد الموظف:"
+        );
+
+
+    if(!reply || !reply.trim()){
+        return;
+    }
+
+
+    const messages =
+        getMessages();
+
+
+    const original =
+        messages.find(
+            m => m.id === id
+        );
+
+
+    if(!original){
+        return;
+    }
+
+
+    messages.push({
+
+        id:id,
+
+        name:original.name,
+
+        phone:original.phone,
+
+        branch:original.branch,
+
+        service:original.service,
+
+        text:reply.trim(),
+
+        sender:"employee",
+
+        status:"answered",
+
+        time:new Date().toLocaleString("ar-SA")
+
+    });
+
+
+    original.status="answered";
+
+
+    saveMessages(messages);
+
+
+    const currentEmployee =
+        getCurrentEmployee();
+
+
+    loadEmployeeMessages(
+        currentEmployee.branch
+    );
+
+
+    alert(
+        "تم حفظ الرد داخل الموقع."
+    );
+
+}
+
+
+/* =========================================
+   إغلاق الطلب
+   ========================================= */
+
+function closeTicket(id){
+
+    const messages =
+        getMessages();
+
+
+    messages.forEach(m => {
+
+        if(m.id === id){
+
+            m.status="closed";
+
+        }
+
+    });
+
+
+    saveMessages(messages);
+
+
+    const currentEmployee =
+        getCurrentEmployee();
+
+
+    loadEmployeeMessages(
+        currentEmployee.branch
+    );
+
+}
+
+
+/* =========================================
+   الموظف الحالي
+   ========================================= */
+
+function getCurrentEmployee(){
+
+    const email =
+        sessionStorage.getItem(
+            "zajil_employee"
+        );
+
+
+    return employees[email];
+
+}
+
+
+/* =========================================
+   العودة للرئيسية
+   ========================================= */
+
+function goHome(){
+
+    document.getElementById("chatPage")
+        .style.display="none";
+
+
+    document.getElementById("employeePage")
+        .style.display="none";
+
+
+    document.getElementById("homePage")
+        .style.display="block";
+
+}
+
+
+/* =========================================
+   تسجيل الخروج
+   ========================================= */
+
+function logout(){
+
+    sessionStorage.removeItem(
+        "zajil_employee"
+    );
+
+
+    document.getElementById("employeePage")
+        .style.display="none";
+
+
+    document.getElementById("homePage")
+        .style.display="block";
+
+}
+
+
+/* =========================================
+   حماية النصوص
+   ========================================= */
+
+function escapeHTML(text){
+
+    const div =
+        document.createElement("div");
+
+
+    div.textContent =
+        String(text);
+
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================
+   حفظ جلسة الموظف
+   ========================================= */
+
+const oldLogin = login;
+
+
+/*
+   استبدال وظيفة تسجيل الدخول
+   لإضافة جلسة الموظف
+*/
+
+login = function(){
+
+    const email =
+        document.getElementById("email")
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const password =
+        document.getElementById("password")
+        .value;
+
+
+    const employee =
+        employees[email];
+
+
+    const error =
+        document.getElementById("loginError");
+
+
+    if(!employee){
+
+        error.innerText =
+            "البريد الإلكتروني غير مسجل.";
+
+        error.style.display="block";
+
+        return;
+
+    }
+
+
+    if(employee.password !== password){
+
+        error.innerText =
+            "كلمة المرور غير صحيحة.";
+
+        error.style.display="block";
+
+        return;
+
+    }
+
+
+    sessionStorage.setItem(
+        "zajil_employee",
+        email
+    );
+
+
+    closeLogin();
+
+
+    document.getElementById("homePage")
+        .style.display="none";
+
+
+    document.getElementById("chatPage")
+        .style.display="none";
+
+
+    document.getElementById("employeePage")
+        .style.display="block";
+
+
+    document.getElementById("employeeBranch")
+        .innerText =
+        employee.branch === "جميع الفروع"
+        ? "لوحة الإدارة"
+        : "غرفة " + employee.branch;
+
+
+    document.getElementById("employeeInfo")
+        .innerHTML =
+        "👤 " + employee.name +
+        "<br>" +
+        "✉️ " + email;
+
+
+    loadEmployeeMessages(
+        employee.branch
+    );
+
+};
+
+
+/* =========================================
+   تحديث صندوق الموظف تلقائيًا
+   ========================================= */
+
+setInterval(function(){
+
+    const employee =
+        getCurrentEmployee();
+
+
+    if(
+        employee &&
+        document.getElementById("employeePage")
+            .style.display === "block"
+    ){
+
+        loadEmployeeMessages(
+            employee.branch
+        );
+
+    }
+
+},3000);
+
+</script>
+
 </body>
 </html>
