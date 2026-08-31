@@ -1,2 +1,369 @@
-# Zajil-Branch-Service
-Project Description: Zajil Branch Service is a secure digital platform connecting customers directly with local branch staff via dedicated online chat rooms. It enables instant shipping inquiries and Door-to-Door pickup requests while protecting employee privacy by eliminating the use of personal phone numbers.
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Zajil | خدمة العملاء</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,Tahoma,sans-serif;
+}
+
+body{
+    background:#f5f7fa;
+    color:#172b4d;
+}
+
+/* ================= HEADER ================= */
+
+header{
+    background:#0756a8;
+    color:white;
+    padding:14px 22px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    box-shadow:0 3px 15px rgba(0,0,0,.15);
+    position:sticky;
+    top:0;
+    z-index:20;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.logo-icon{
+    width:42px;
+    height:42px;
+    border-radius:10px;
+    background:#ffd400;
+    color:#0756a8;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:23px;
+}
+
+.header-btn{
+    border:0;
+    background:#ffd400;
+    color:#0756a8;
+    padding:11px 17px;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* ================= MAIN ================= */
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:28px 18px;
+}
+
+.hero{
+    background:linear-gradient(135deg,#0756a8,#0d72d4);
+    color:white;
+    border-radius:20px;
+    padding:45px 25px;
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.hero h1{
+    font-size:30px;
+    margin-bottom:12px;
+}
+
+.hero p{
+    line-height:1.9;
+    opacity:.95;
+}
+
+.section-title{
+    color:#0756a8;
+    margin:25px 0 14px;
+}
+
+/* ================= SERVICES ================= */
+
+.services{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:14px;
+}
+
+.service{
+    background:white;
+    padding:21px;
+    border-radius:15px;
+    border:2px solid transparent;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+    cursor:pointer;
+    transition:.2s;
+}
+
+.service:hover{
+    border-color:#ffd400;
+    transform:translateY(-2px);
+}
+
+.service-icon{
+    font-size:32px;
+    margin-bottom:10px;
+}
+
+.service h3{
+    color:#0756a8;
+    margin-bottom:7px;
+}
+
+.service p{
+    color:#667085;
+    font-size:14px;
+    line-height:1.6;
+}
+
+/* ================= QUICK BOX ================= */
+
+.quick-box{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    margin-top:20px;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+}
+
+.quick-box input{
+    width:100%;
+    padding:13px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    margin:10px 0;
+    outline:none;
+}
+
+.primary{
+    width:100%;
+    padding:13px;
+    border:0;
+    border-radius:8px;
+    background:#0756a8;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.yellow{
+    background:#ffd400;
+    color:#0756a8;
+}
+
+/* ================= BRANCHES ================= */
+
+.branches{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:14px;
+}
+
+.branch{
+    background:white;
+    padding:20px;
+    border-radius:14px;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+}
+
+.branch h3{
+    color:#0756a8;
+    margin-bottom:8px;
+}
+
+.online{
+    color:#198754;
+    font-size:13px;
+    margin-bottom:14px;
+}
+
+.branch button{
+    width:100%;
+    padding:11px;
+    border:0;
+    border-radius:8px;
+    background:#ffd400;
+    color:#0756a8;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* ================= CHAT ================= */
+
+.page{
+    display:none;
+}
+
+.chat-page{
+    max-width:850px;
+    margin:25px auto;
+    padding:0 15px;
+}
+
+.chat-box{
+    background:white;
+    border-radius:17px;
+    overflow:hidden;
+    box-shadow:0 5px 25px rgba(0,0,0,.12);
+}
+
+.chat-header{
+    background:#0756a8;
+    color:white;
+    padding:18px;
+}
+
+.chat-header h2{
+    margin-bottom:6px;
+}
+
+.chat-status{
+    color:#ffd400;
+    font-size:13px;
+}
+
+.messages{
+    height:430px;
+    overflow-y:auto;
+    background:#f5f7fa;
+    padding:20px;
+}
+
+.message{
+    max-width:78%;
+    padding:12px 15px;
+    border-radius:14px;
+    margin-bottom:12px;
+    line-height:1.7;
+}
+
+.customer{
+    background:#0756a8;
+    color:white;
+    margin-right:auto;
+}
+
+.agent{
+    background:#ffd400;
+    color:#172b4d;
+    margin-left:auto;
+}
+
+.message small{
+    display:block;
+    font-size:10px;
+    opacity:.7;
+    margin-top:4px;
+}
+
+.chat-input{
+    display:flex;
+    gap:8px;
+    padding:12px;
+}
+
+.chat-input input{
+    flex:1;
+    padding:13px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    outline:none;
+}
+
+.chat-input button{
+    border:0;
+    border-radius:8px;
+    background:#0756a8;
+    color:white;
+    padding:0 20px;
+    cursor:pointer;
+}
+
+/* ================= FORMS ================= */
+
+.form-box{
+    background:white;
+    padding:22px;
+    border-radius:15px;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+}
+
+.form-box input,
+.form-box select,
+.form-box textarea{
+    width:100%;
+    padding:13px;
+    margin-bottom:11px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    outline:none;
+}
+
+.form-box textarea{
+    min-height:110px;
+    resize:vertical;
+}
+
+/* ================= EMPLOYEE PANEL ================= */
+
+.employee-page{
+    max-width:1100px;
+    margin:25px auto;
+    padding:0 18px;
+}
+
+.employee-header{
+    background:#0756a8;
+    color:white;
+    padding:25px;
+    border-radius:16px;
+    margin-bottom:20px;
+}
+
+.employee-header h2{
+    margin-bottom:8px;
+}
+
+.employee-info{
+    line-height:1.8;
+    font-size:14px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:14px;
+    margin-bottom:20px;
+}
+
+.stat{
+    background:white;
+    padding:20px;
+    border-radius:13px;
+    box-shadow:0 3px 12px rgba(0,0,0,.06);
+}
+
+.stat strong{
+    display:block;
+    color:#0756a8;
+    font-size:28px;
+    margin-bottom:
