@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Zajil Branch Customer Service</title>
+<title>Zajil Branch Service</title>
 
 <style>
 
@@ -35,17 +37,18 @@ header{
     align-items:center;
     gap:10px;
     font-weight:bold;
+    font-size:18px;
 }
 
 .logoIcon{
     width:42px;
     height:42px;
-    border-radius:10px;
     background:#ffd400;
     color:#0756a8;
+    border-radius:10px;
     display:flex;
-    align-items:center;
     justify-content:center;
+    align-items:center;
     font-size:22px;
 }
 
@@ -92,7 +95,8 @@ button{
 
 .services{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    grid-template-columns:
+    repeat(auto-fit,minmax(220px,1fr));
     gap:15px;
 }
 
@@ -127,38 +131,60 @@ button{
     font-size:14px;
 }
 
-.branches{
+/* الفروع */
+
+.branchArea{
+    background:white;
+    padding:25px;
+    border-radius:16px;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+}
+
+.branchSearch{
+    width:100%;
+    padding:14px;
+    border:1px solid #ddd;
+    border-radius:9px;
+    margin-bottom:15px;
+    font-size:15px;
+    outline:none;
+}
+
+.branchGrid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:15px;
+    grid-template-columns:
+    repeat(auto-fit,minmax(210px,1fr));
+    gap:12px;
 }
 
 .branch{
-    background:white;
-    padding:20px;
-    border-radius:15px;
-    box-shadow:0 4px 15px rgba(0,0,0,.06);
+    background:#f8fafc;
+    padding:16px;
+    border-radius:11px;
+    border:1px solid #e5e7eb;
 }
 
 .branch h3{
     color:#0756a8;
-    margin-bottom:8px;
+    margin-bottom:7px;
 }
 
 .online{
     color:#198754;
-    font-size:13px;
-    margin-bottom:15px;
+    font-size:12px;
+    margin-bottom:12px;
 }
 
 .branchBtn{
     width:100%;
     background:#ffd400;
     color:#0756a8;
-    padding:12px;
-    border-radius:8px;
+    padding:10px;
+    border-radius:7px;
     font-weight:bold;
 }
+
+/* النموذج */
 
 .formBox{
     background:white;
@@ -202,7 +228,7 @@ button{
     display:none;
 }
 
-/* CHAT */
+/* المحادثة */
 
 .chatPage{
     max-width:850px;
@@ -283,7 +309,7 @@ button{
     border-radius:8px;
 }
 
-/* LOGIN */
+/* تسجيل الدخول */
 
 .modal{
     display:none;
@@ -336,7 +362,7 @@ button{
     font-size:13px;
 }
 
-/* EMPLOYEE */
+/* لوحة الموظف */
 
 .employeePage{
     max-width:1100px;
@@ -353,7 +379,8 @@ button{
 
 .stats{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    grid-template-columns:
+    repeat(auto-fit,minmax(180px,1fr));
     gap:15px;
     margin:20px 0;
 }
@@ -477,6 +504,7 @@ footer{
 }
 
 </style>
+
 </head>
 
 
@@ -485,270 +513,215 @@ footer{
 
 <header>
 
-    <div class="logo">
+<div class="logo">
 
-        <div class="logoIcon">
-            ز
-        </div>
+<div class="logoIcon">
+ز
+</div>
 
-        Zajil Branch Service
+Zajil Branch Service
 
-    </div>
+</div>
 
 
-    <button
-        class="headerBtn"
-        onclick="openLogin()">
+<button
+class="headerBtn"
+onclick="openLogin()">
 
-        دخول الموظفين
+دخول الموظفين
 
-    </button>
+</button>
 
 </header>
 
 
 
-<!-- ================= HOME ================= -->
+<!-- ================= الصفحة الرئيسية ================= -->
 
 <section id="homePage">
 
 <div class="container">
 
 
-    <div class="hero">
+<div class="hero">
 
-        <h1>
-            خدمة عملاء فروع زاجل
-        </h1>
+<h1>
+خدمة عملاء فروع زاجل
+</h1>
 
-        <p>
-            تواصل مع فرعك مباشرة دون الحاجة إلى إعطاء رقم الموظف الشخصي.
-            <br>
-            أرسل استفسارك أو شكواك وسيتم حفظها داخل النظام.
-        </p>
+<p>
 
-    </div>
+تواصل مع الفرع مباشرة دون الحاجة إلى إعطاء رقم الموظف الشخصي.
 
+<br>
 
+أرسل استفسارك أو شكواك وسيتم حفظها داخل النظام.
 
-    <h2 class="title">
-        الخدمات
-    </h2>
+</p>
 
+</div>
 
-    <div class="services">
 
 
-        <div
-            class="service"
-            onclick="showForm('استفسار عن سعر الشحن')">
+<h2 class="title">
+الخدمات
+</h2>
 
-            <div class="serviceIcon">💰</div>
 
-            <h3>
-                سعر الشحن
-            </h3>
+<div class="services">
 
-            <p>
-                اسأل عن تكلفة شحنتك.
-            </p>
 
-        </div>
+<div
+class="service"
+onclick="showForm('استفسار عن سعر الشحن')">
 
+<div class="serviceIcon">
+💰
+</div>
 
+<h3>
+سعر الشحن
+</h3>
 
-        <div
-            class="service"
-            onclick="showForm('تتبع الشحنة')">
+<p>
+استفسر عن تكلفة الشحن.
+</p>
 
-            <div class="serviceIcon">📦</div>
+</div>
 
-            <h3>
-                تتبع الشحنة
-            </h3>
 
-            <p>
-                استفسر عن حالة شحنتك.
-            </p>
 
-        </div>
+<div
+class="service"
+onclick="showForm('تتبع الشحنة')">
 
+<div class="serviceIcon">
+📦
+</div>
 
+<h3>
+تتبع الشحنة
+</h3>
 
-        <div
-            class="service"
-            onclick="showForm('طلب سيارة')">
+<p>
+استفسر عن حالة شحنتك.
+</p>
 
-            <div class="serviceIcon">🚚</div>
+</div>
 
-            <h3>
-                طلب سيارة
-            </h3>
 
-            <p>
-                اطلب سيارة لاستلام البضائع من المنزل.
-            </p>
 
-        </div>
+<div
+class="service"
+onclick="showForm('طلب سيارة')">
 
+<div class="serviceIcon">
+🚚
+</div>
 
+<h3>
+طلب سيارة
+</h3>
 
-        <div
-            class="service"
-            onclick="showForm('مناطق الخدمة')">
+<p>
+اطلب سيارة لاستلام البضائع من المنزل.
+</p>
 
-            <div class="serviceIcon">📍</div>
+</div>
 
-            <h3>
-                مناطق الخدمة
-            </h3>
 
-            <p>
-                اسأل عن المناطق التي يخدمها الفرع.
-            </p>
 
-        </div>
+<div
+class="service"
+onclick="showForm('مناطق الخدمة')">
 
+<div class="serviceIcon">
+📍
+</div>
 
+<h3>
+مناطق الخدمة
+</h3>
 
-        <div
-            class="service"
-            onclick="showForm('شكوى')">
+<p>
+استفسر عن المناطق التي يخدمها الفرع.
+</p>
 
-            <div class="serviceIcon">📝</div>
+</div>
 
-            <h3>
-                تقديم شكوى
-            </h3>
 
-            <p>
-                سجل شكواك واحصل على رقم مرجعي.
-            </p>
 
-        </div>
+<div
+class="service"
+onclick="showForm('شكوى')">
 
+<div class="serviceIcon">
+📝
+</div>
 
+<h3>
+تقديم شكوى
+</h3>
 
-        <div
-            class="service"
-            onclick="showForm('استفسار عام')">
+<p>
+سجل شكواك وتابعها.
+</p>
 
-            <div class="serviceIcon">💬</div>
+</div>
 
-            <h3>
-                استفسار عام
-            </h3>
 
-            <p>
-                أرسل رسالتك إلى خدمة عملاء الفرع.
-            </p>
 
-        </div>
+<div
+class="service"
+onclick="showForm('استفسار عام')">
 
-    </div>
+<div class="serviceIcon">
+💬
+</div>
 
+<h3>
+استفسار عام
+</h3>
 
+<p>
+تواصل مع خدمة العملاء.
+</p>
 
-    <div id="formArea"></div>
+</div>
 
 
+</div>
 
-    <h2 class="title">
-        التواصل مع الفرع
-    </h2>
 
 
-    <div class="branches">
+<div id="formArea"></div>
 
 
-        <div class="branch">
 
-            <h3>
-                فرع تبوك
-            </h3>
+<h2 class="title">
+اختر الفرع
+</h2>
 
-            <div class="online">
-                ● خدمة العملاء متاحة
-            </div>
 
-            <button
-                class="branchBtn"
-                onclick="openChat('فرع تبوك')">
 
-                محادثة مع الفرع
+<div class="branchArea">
 
-            </button>
+<input
+id="branchSearch"
+class="branchSearch"
+placeholder="🔎 ابحث عن الفرع أو المدينة..."
+oninput="filterBranches()"
+>
 
-        </div>
 
+<div
+id="branchGrid"
+class="branchGrid">
 
+</div>
 
-        <div class="branch">
+</div>
 
-            <h3>
-                فرع الرياض
-            </h3>
-
-            <div class="online">
-                ● خدمة العملاء متاحة
-            </div>
-
-            <button
-                class="branchBtn"
-                onclick="openChat('فرع الرياض')">
-
-                محادثة مع الفرع
-
-            </button>
-
-        </div>
-
-
-
-        <div class="branch">
-
-            <h3>
-                فرع جدة
-            </h3>
-
-            <div class="online">
-                ● خدمة العملاء متاحة
-            </div>
-
-            <button
-                class="branchBtn"
-                onclick="openChat('فرع جدة')">
-
-                محادثة مع الفرع
-
-            </button>
-
-        </div>
-
-
-
-        <div class="branch">
-
-            <h3>
-                فرع المدينة
-            </h3>
-
-            <div class="online">
-                ● خدمة العملاء متاحة
-            </div>
-
-            <button
-                class="branchBtn"
-                onclick="openChat('فرع المدينة')">
-
-                محادثة مع الفرع
-
-            </button>
-
-        </div>
-
-
-    </div>
 
 </div>
 
@@ -756,65 +729,68 @@ footer{
 
 
 
-<!-- ================= CHAT ================= -->
+<!-- ================= المحادثة ================= -->
 
 <section id="chatPage" class="page">
 
 <div class="chatPage">
 
+
 <div class="chatBox">
 
 
-    <div class="chatHeader">
+<div class="chatHeader">
 
-        <h2 id="chatBranch">
-            خدمة العملاء
-        </h2>
+<h2 id="chatBranch">
+خدمة العملاء
+</h2>
 
-        <div class="chatStatus">
-            ● الرسائل محفوظة داخل النظام
-        </div>
+<div class="chatStatus">
+● الرسائل محفوظة داخل الموقع
+</div>
 
-    </div>
-
-
-
-    <div
-        id="messages"
-        class="messages">
-
-    </div>
+</div>
 
 
 
-    <div class="chatInput">
+<div
+id="messages"
+class="messages">
 
-        <input
-            id="messageInput"
-            placeholder="اكتب رسالتك..."
-            onkeydown="if(event.key==='Enter') sendMessage()"
-        >
+</div>
 
-        <button onclick="sendMessage()">
-            إرسال
-        </button>
 
-    </div>
+
+<div class="chatInput">
+
+<input
+id="messageInput"
+placeholder="اكتب رسالتك..."
+onkeydown="if(event.key==='Enter')sendMessage()"
+>
+
+<button onclick="sendMessage()">
+إرسال
+</button>
+
+</div>
 
 
 </div>
+
 
 
 <br>
 
 
 <button
-    class="primaryBtn"
-    onclick="goHome()">
+class="primaryBtn"
+onclick="goHome()">
 
-    العودة للرئيسية
+العودة للرئيسية
 
 </button>
+
 
 </div>
 
@@ -822,86 +798,90 @@ footer{
 
 
 
-<!-- ================= EMPLOYEE ================= -->
+<!-- ================= لوحة الموظف ================= -->
 
 <section id="employeePage" class="page">
 
 <div class="employeePage">
 
 
-    <div class="employeeHeader">
+<div class="employeeHeader">
 
-        <h2 id="employeeBranch">
-            غرفة الفرع
-        </h2>
+<h2 id="employeeBranch">
+غرفة الفرع
+</h2>
 
-        <p id="employeeInfo"></p>
+<p id="employeeInfo"></p>
 
-    </div>
-
-
-
-    <div class="stats">
-
-        <div class="stat">
-
-            <strong id="totalMessages">
-                0
-            </strong>
-
-            إجمالي الرسائل
-
-        </div>
-
-
-        <div class="stat">
-
-            <strong id="newMessages">
-                0
-            </strong>
-
-            رسائل جديدة
-
-        </div>
-
-
-        <div class="stat">
-
-            <strong id="openTickets">
-                0
-            </strong>
-
-            طلبات مفتوحة
-
-        </div>
-
-    </div>
+</div>
 
 
 
-    <div class="inbox">
-
-        <h2 class="inboxTitle">
-            📥 رسائل العملاء
-        </h2>
+<div class="stats">
 
 
-        <div id="employeeMessages">
+<div class="stat">
 
-        </div>
+<strong id="totalMessages">
+0
+</strong>
 
-    </div>
+إجمالي الرسائل
+
+</div>
 
 
 
-    <button
-        class="primaryBtn"
-        onclick="logout()"
-        style="margin-top:20px;">
+<div class="stat">
 
-        تسجيل الخروج
+<strong id="newMessages">
+0
+</strong>
 
-    </button>
+رسائل جديدة
+
+</div>
+
+
+
+<div class="stat">
+
+<strong id="openTickets">
+0
+</strong>
+
+طلبات مفتوحة
+
+</div>
+
+
+</div>
+
+
+
+<div class="inbox">
+
+<h2 class="inboxTitle">
+📥 رسائل العملاء
+</h2>
+
+
+<div id="employeeMessages">
+
+</div>
+
+</div>
+
+
+
+<button
+class="primaryBtn"
+onclick="logout()"
+style="margin-top:20px;">
+
+تسجيل الخروج
+
+</button>
 
 
 </div>
@@ -910,63 +890,63 @@ footer{
 
 
 
-<!-- ================= LOGIN ================= -->
+<!-- ================= تسجيل الدخول ================= -->
 
 <div
-    id="loginModal"
-    class="modal">
+id="loginModal"
+class="modal">
 
 
 <div class="loginBox">
 
 
-    <span
-        class="close"
-        onclick="closeLogin()">
+<span
+class="close"
+onclick="closeLogin()">
 
-        ×
-
-    </span>
-
-
-    <h2>
-        دخول الموظفين
-    </h2>
+×
+</span>
 
 
-    <p>
-        أدخل بريدك الإلكتروني وكلمة المرور.
-    </p>
+<h2>
+دخول الموظفين
+</h2>
 
 
-    <div
-        id="loginError"
-        class="error">
-
-    </div>
+<p>
+أدخل البريد الإلكتروني وكلمة المرور.
+</p>
 
 
-    <input
-        id="email"
-        type="email"
-        placeholder="البريد الإلكتروني"
-    >
+<div
+id="loginError"
+class="error">
+
+</div>
 
 
-    <input
-        id="password"
-        type="password"
-        placeholder="كلمة المرور"
-    >
+<input
+id="email"
+type="email"
+placeholder="البريد الإلكتروني"
+>
 
 
-    <button
-        class="primaryBtn"
-        onclick="login()">
+<input
+id="password"
+type="password"
+placeholder="كلمة المرور"
+>
 
-        دخول
 
-    </button>
+<button
+class="primaryBtn"
+onclick="login()">
+
+دخول
+
+</button>
+
 
 </div>
 
@@ -976,7 +956,7 @@ footer{
 
 <footer>
 
-    Zajil Branch Customer Service © 2026
+Zajil Branch Customer Service © 2026
 
 </footer>
 
@@ -984,47 +964,157 @@ footer{
 
 <script>
 
-/* =========================================
-   حسابات الموظفين التجريبية
-   ========================================= */
 
-const employees = {
+/* =====================================
+   جميع الفروع
+   ===================================== */
 
-    "ahmed@gmail.com":{
-        name:"أحمد",
-        branch:"فرع تبوك",
-        password:"123456"
-    },
+const branches = [
 
-    "ali@gmail.com":{
-        name:"علي",
-        branch:"فرع الرياض",
-        password:"123456"
-    },
+"فرع تبوك",
+"فرع القريات",
+"فرع طبرجل",
+"فرع حائل",
+"فرع عرعر",
+"فرع دومة الجندل",
+"فرع حفر الباطن",
+"فرع سكاكا",
+"فرع الدمام",
+"فرع الخبر",
+"فرع الخفجي",
+"فرع الجبيل البلد",
+"فرع الجبيل الصناعية",
+"فرع الأحساء",
+"فرع القطيف",
+"فرع الظهران",
+"فرع الخرج",
+"فرع المجمعة",
+"فرع بريدة",
+"فرع الدوادمي",
+"فرع الرس",
+"فرع عنيزة",
+"فرع الرياض",
+"فرع شقراء",
+"فرع وادي الدواسر",
+"فرع الباحة",
+"فرع جدة",
+"فرع مكة",
+"فرع المدينة المنورة",
+"فرع الطائف",
+"فرع ينبع",
+"فرع أبها",
+"فرع أبو عريش",
+"فرع بيشة",
+"فرع خميس مشيط",
+"فرع جازان",
+"فرع نجران",
+"فرع صامطة",
+"فرع صبيا",
+"فرع النماص"
 
-    "mohammed@gmail.com":{
-        name:"محمد",
-        branch:"فرع جدة",
-        password:"123456"
-    },
+];
 
-    "manager@gmail.com":{
-        name:"المدير",
-        branch:"جميع الفروع",
-        password:"123456"
+
+/* =====================================
+   عرض الفروع
+   ===================================== */
+
+function renderBranches(list){
+
+    const grid =
+        document.getElementById("branchGrid");
+
+    grid.innerHTML="";
+
+
+    if(list.length === 0){
+
+        grid.innerHTML = `
+
+        <div class="noMessages">
+
+        لا يوجد فرع بهذا الاسم.
+
+        </div>
+
+        `;
+
+        return;
+
     }
 
-};
+
+    list.forEach(branch => {
+
+        const card =
+            document.createElement("div");
+
+        card.className="branch";
 
 
-/* =========================================
+        card.innerHTML = `
+
+        <h3>
+        ${escapeHTML(branch)}
+        </h3>
+
+        <div class="online">
+        ● خدمة العملاء متاحة
+        </div>
+
+        <button
+        class="branchBtn"
+        onclick="openChat('${escapeHTML(branch)}')">
+
+        التواصل مع الفرع
+
+        </button>
+
+        `;
+
+
+        grid.appendChild(card);
+
+    });
+
+}
+
+
+/* =====================================
+   البحث عن الفرع
+   ===================================== */
+
+function filterBranches(){
+
+    const value =
+        document.getElementById("branchSearch")
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const result =
+        branches.filter(branch =>
+            branch.toLowerCase()
+            .includes(value)
+        );
+
+
+    renderBranches(result);
+
+}
+
+
+/* =====================================
    قاعدة البيانات المحلية
-   ========================================= */
+   ===================================== */
 
 function getMessages(){
 
     return JSON.parse(
-        localStorage.getItem("zajil_messages") || "[]"
+        localStorage.getItem(
+            "zajil_messages"
+        ) || "[]"
     );
 
 }
@@ -1040,9 +1130,9 @@ function saveMessages(messages){
 }
 
 
-/* =========================================
-   إنشاء النموذج
-   ========================================= */
+/* =====================================
+   الخدمات
+   ===================================== */
 
 function showForm(service){
 
@@ -1052,62 +1142,55 @@ function showForm(service){
 
     area.innerHTML = `
 
-        <div class="formBox">
+    <div class="formBox">
 
-            <h2>
-                ${service}
-            </h2>
-
-            <input
-                id="customerName"
-                placeholder="اسم العميل"
-            >
-
-            <input
-                id="customerPhone"
-                type="tel"
-                placeholder="رقم التواصل"
-            >
-
-            <select id="customerBranch">
-
-                <option value="">
-                    اختر الفرع
-                </option>
-
-                <option>
-                    فرع تبوك
-                </option>
-
-                <option>
-                    فرع الرياض
-                </option>
-
-                <option>
-                    فرع جدة
-                </option>
-
-                <option>
-                    فرع المدينة
-                </option>
-
-            </select>
-
-            <textarea
-                id="customerDetails"
-                placeholder="اكتب تفاصيل طلبك..."
-            ></textarea>
+    <h2>
+    ${escapeHTML(service)}
+    </h2>
 
 
-            <button
-                class="primaryBtn"
-                onclick="submitRequest('${service}')">
+    <input
+    id="customerName"
+    placeholder="اسم العميل"
+    >
 
-                إرسال الطلب
 
-            </button>
+    <input
+    id="customerPhone"
+    type="tel"
+    placeholder="رقم التواصل"
+    >
 
-        </div>
+
+    <select id="customerBranch">
+
+    <option value="">
+    اختر الفرع
+    </option>
+
+    ${branches.map(
+        b => `<option>${escapeHTML(b)}</option>`
+    ).join("")}
+
+    </select>
+
+
+    <textarea
+    id="customerDetails"
+    placeholder="اكتب تفاصيل طلبك..."
+    ></textarea>
+
+
+    <button
+    class="primaryBtn"
+    onclick="submitRequest('${escapeHTML(service)}')">
+
+    إرسال الطلب
+
+    </button>
+
+    </div>
+
     `;
 
 
@@ -1118,9 +1201,9 @@ function showForm(service){
 }
 
 
-/* =========================================
+/* =====================================
    إرسال طلب
-   ========================================= */
+   ===================================== */
 
 function submitRequest(service){
 
@@ -1161,7 +1244,9 @@ function submitRequest(service){
 
     const id =
         "ZJ-" +
-        Date.now().toString().slice(-7);
+        Date.now()
+        .toString()
+        .slice(-7);
 
 
     messages.push({
@@ -1182,7 +1267,8 @@ function submitRequest(service){
 
         status:"new",
 
-        time:new Date().toLocaleString("ar-SA")
+        time:new Date()
+        .toLocaleString("ar-SA")
 
     });
 
@@ -1191,7 +1277,7 @@ function submitRequest(service){
 
 
     alert(
-        "تم إرسال طلبك بنجاح.\n\n" +
+        "تم إرسال الطلب بنجاح.\n\n" +
         "رقم الطلب: " + id
     );
 
@@ -1202,9 +1288,9 @@ function submitRequest(service){
 }
 
 
-/* =========================================
-   فتح المحادثة
-   ========================================= */
+/* =====================================
+   فتح غرفة الفرع
+   ===================================== */
 
 function openChat(branch){
 
@@ -1225,20 +1311,28 @@ function openChat(branch){
         "خدمة عملاء " + branch;
 
 
+    sessionStorage.setItem(
+        "customer_branch",
+        branch
+    );
+
+
     loadChat(branch);
 
 }
 
 
-/* =========================================
-   تحميل الرسائل
-   ========================================= */
+/* =====================================
+   تحميل المحادثة
+   ===================================== */
 
 function loadChat(branch){
 
     const messages =
         getMessages()
-        .filter(m => m.branch === branch);
+        .filter(
+            m => m.branch === branch
+        );
 
 
     const box =
@@ -1252,16 +1346,19 @@ function loadChat(branch){
 
         box.innerHTML = `
 
-            <div class="message employeeMessage">
+        <div class="message employeeMessage">
 
-                مرحبًا بك 👋
+        مرحبًا بك 👋
 
-                <br>
+        <br><br>
 
-                أنت الآن تتواصل مع ${branch}.
-                اكتب رسالتك وسيقوم موظف الفرع بالرد عليك.
+        أنت الآن تتواصل مع ${escapeHTML(branch)}.
 
-            </div>
+        <br>
+
+        اكتب استفسارك وسيقوم موظف الفرع بالرد عليك.
+
+        </div>
 
         `;
 
@@ -1282,11 +1379,15 @@ function loadChat(branch){
             : "message employeeMessage";
 
 
-        div.innerHTML =
-            escapeHTML(m.text) +
-            "<small>" +
-            escapeHTML(m.time) +
-            "</small>";
+        div.innerHTML = `
+
+        ${escapeHTML(m.text)}
+
+        <small>
+        ${escapeHTML(m.time)}
+        </small>
+
+        `;
 
 
         box.appendChild(div);
@@ -1300,9 +1401,9 @@ function loadChat(branch){
 }
 
 
-/* =========================================
+/* =====================================
    إرسال رسالة من العميل
-   ========================================= */
+   ===================================== */
 
 function sendMessage(){
 
@@ -1320,9 +1421,14 @@ function sendMessage(){
 
 
     const branch =
-        document.getElementById("chatBranch")
-        .innerText
-        .replace("خدمة عملاء ","");
+        sessionStorage.getItem(
+            "customer_branch"
+        );
+
+
+    if(!branch){
+        return;
+    }
 
 
     const messages =
@@ -1331,7 +1437,9 @@ function sendMessage(){
 
     const id =
         "ZJ-" +
-        Date.now().toString().slice(-7);
+        Date.now()
+        .toString()
+        .slice(-7);
 
 
     messages.push({
@@ -1352,7 +1460,8 @@ function sendMessage(){
 
         status:"new",
 
-        time:new Date().toLocaleString("ar-SA")
+        time:new Date()
+        .toLocaleString("ar-SA")
 
     });
 
@@ -1368,9 +1477,42 @@ function sendMessage(){
 }
 
 
-/* =========================================
-   دخول الموظف
-   ========================================= */
+/* =====================================
+   الموظفون
+   ===================================== */
+
+const employees = {
+
+"ahmed@gmail.com":{
+    name:"أحمد",
+    branch:"فرع تبوك",
+    password:"123456"
+},
+
+"ali@gmail.com":{
+    name:"علي",
+    branch:"فرع الرياض",
+    password:"123456"
+},
+
+"mohammed@gmail.com":{
+    name:"محمد",
+    branch:"فرع جدة",
+    password:"123456"
+},
+
+"manager@gmail.com":{
+    name:"المدير",
+    branch:"جميع الفروع",
+    password:"123456"
+}
+
+};
+
+
+/* =====================================
+   تسجيل الدخول
+   ===================================== */
 
 function openLogin(){
 
@@ -1437,6 +1579,12 @@ function login(){
     }
 
 
+    sessionStorage.setItem(
+        "zajil_employee",
+        email
+    );
+
+
     closeLogin();
 
 
@@ -1461,23 +1609,25 @@ function login(){
 
     document.getElementById("employeeInfo")
         .innerHTML =
-        "👤 " + employee.name +
+        "👤 " + escapeHTML(employee.name) +
         "<br>" +
-        "✉️ " + email;
+        "✉️ " + escapeHTML(email);
 
 
-    loadEmployeeMessages(employee.branch);
+    loadEmployeeMessages(
+        employee.branch
+    );
 
 }
 
 
-/* =========================================
-   تحميل صندوق الموظف
-   ========================================= */
+/* =====================================
+   رسائل الموظف
+   ===================================== */
 
 function loadEmployeeMessages(branch){
 
-    let messages =
+    const all =
         getMessages();
 
 
@@ -1486,27 +1636,21 @@ function loadEmployeeMessages(branch){
 
     if(branch === "جميع الفروع"){
 
-        visible = messages;
+        visible=all;
 
     }else{
 
         visible =
-            messages.filter(
+            all.filter(
                 m => m.branch === branch
             );
 
     }
 
 
-    const container =
-        document.getElementById("employeeMessages");
-
-
-    container.innerHTML="";
-
-
     document.getElementById("totalMessages")
-        .innerText=visible.length;
+        .innerText =
+        visible.length;
 
 
     document.getElementById("newMessages")
@@ -1523,15 +1667,24 @@ function loadEmployeeMessages(branch){
         ).length;
 
 
+    const container =
+        document.getElementById(
+            "employeeMessages"
+        );
+
+
+    container.innerHTML="";
+
+
     if(visible.length === 0){
 
         container.innerHTML = `
 
-            <div class="noMessages">
+        <div class="noMessages">
 
-                لا توجد رسائل حاليًا.
+        لا توجد رسائل حاليًا.
 
-            </div>
+        </div>
 
         `;
 
@@ -1541,90 +1694,89 @@ function loadEmployeeMessages(branch){
 
 
     visible
-        .slice()
-        .reverse()
-        .forEach(message => {
+    .slice()
+    .reverse()
+    .forEach(message => {
 
-            const ticket =
-                document.createElement("div");
-
-
-            ticket.className="ticket";
+        const ticket =
+            document.createElement("div");
 
 
-            ticket.innerHTML = `
-
-                <div class="ticketTop">
-
-                    <span class="ticketNumber">
-
-                        ${escapeHTML(message.id)}
-
-                    </span>
-
-                    <span class="badge">
-
-                        ${escapeHTML(message.service)}
-
-                    </span>
-
-                </div>
+        ticket.className="ticket";
 
 
-                <strong>
+        ticket.innerHTML = `
 
-                    ${escapeHTML(message.name)}
+        <div class="ticketTop">
 
-                </strong>
+        <span class="ticketNumber">
+        ${escapeHTML(message.id)}
+        </span>
 
+        <span class="badge">
+        ${escapeHTML(message.service)}
+        </span>
 
-                <p class="ticketText">
-
-                    ${escapeHTML(message.text)}
-
-                </p>
-
-
-                <div class="ticketTime">
-
-                    ${escapeHTML(message.time)}
-
-                </div>
+        </div>
 
 
-                <div class="ticketActions">
-
-                    <button
-                        onclick="replyToCustomer('${message.id}')">
-
-                        الرد
-
-                    </button>
+        <strong>
+        ${escapeHTML(message.name)}
+        </strong>
 
 
-                    <button
-                        class="closeTicket"
-                        onclick="closeTicket('${message.id}')">
+        <p class="ticketText">
 
-                        إغلاق الطلب
+        ${escapeHTML(message.text)}
 
-                    </button>
-
-                </div>
-
-            `;
+        </p>
 
 
-            container.appendChild(ticket);
+        <div class="ticketTime">
 
-        });
+        الفرع:
+        ${escapeHTML(message.branch)}
+
+        <br>
+
+        ${escapeHTML(message.time)}
+
+        </div>
+
+
+        <div class="ticketActions">
+
+        <button
+        onclick="replyToCustomer('${message.id}')">
+
+        الرد
+
+        </button>
+
+
+        <button
+        class="closeTicket"
+        onclick="closeTicket('${message.id}')">
+
+        إغلاق
+
+        </button>
+
+        </div>
+
+        `;
+
+
+        container.appendChild(ticket);
+
+    });
 
 }
 
 
-/* =========================================
-   الرد على العميل
-   ========================================= */
+/* =====================================
+   الرد
+   ===================================== */
 
 function replyToCustomer(id){
 
@@ -1672,7 +1824,8 @@ function replyToCustomer(id){
 
         status:"answered",
 
-        time:new Date().toLocaleString("ar-SA")
+        time:new Date()
+        .toLocaleString("ar-SA")
 
     });
 
@@ -1683,12 +1836,12 @@ function replyToCustomer(id){
     saveMessages(messages);
 
 
-    const currentEmployee =
+    const employee =
         getCurrentEmployee();
 
 
     loadEmployeeMessages(
-        currentEmployee.branch
+        employee.branch
     );
 
 
@@ -1699,9 +1852,9 @@ function replyToCustomer(id){
 }
 
 
-/* =========================================
+/* =====================================
    إغلاق الطلب
-   ========================================= */
+   ===================================== */
 
 function closeTicket(id){
 
@@ -1723,20 +1876,20 @@ function closeTicket(id){
     saveMessages(messages);
 
 
-    const currentEmployee =
+    const employee =
         getCurrentEmployee();
 
 
     loadEmployeeMessages(
-        currentEmployee.branch
+        employee.branch
     );
 
 }
 
 
-/* =========================================
+/* =====================================
    الموظف الحالي
-   ========================================= */
+   ===================================== */
 
 function getCurrentEmployee(){
 
@@ -1751,29 +1904,9 @@ function getCurrentEmployee(){
 }
 
 
-/* =========================================
-   العودة للرئيسية
-   ========================================= */
-
-function goHome(){
-
-    document.getElementById("chatPage")
-        .style.display="none";
-
-
-    document.getElementById("employeePage")
-        .style.display="none";
-
-
-    document.getElementById("homePage")
-        .style.display="block";
-
-}
-
-
-/* =========================================
+/* =====================================
    تسجيل الخروج
-   ========================================= */
+   ===================================== */
 
 function logout(){
 
@@ -1792,9 +1925,29 @@ function logout(){
 }
 
 
-/* =========================================
+/* =====================================
+   الرئيسية
+   ===================================== */
+
+function goHome(){
+
+    document.getElementById("chatPage")
+        .style.display="none";
+
+
+    document.getElementById("employeePage")
+        .style.display="none";
+
+
+    document.getElementById("homePage")
+        .style.display="block";
+
+}
+
+
+/* =====================================
    حماية النصوص
-   ========================================= */
+   ===================================== */
 
 function escapeHTML(text){
 
@@ -1811,109 +1964,9 @@ function escapeHTML(text){
 }
 
 
-/* =========================================
-   حفظ جلسة الموظف
-   ========================================= */
-
-const oldLogin = login;
-
-
-/*
-   استبدال وظيفة تسجيل الدخول
-   لإضافة جلسة الموظف
-*/
-
-login = function(){
-
-    const email =
-        document.getElementById("email")
-        .value
-        .trim()
-        .toLowerCase();
-
-
-    const password =
-        document.getElementById("password")
-        .value;
-
-
-    const employee =
-        employees[email];
-
-
-    const error =
-        document.getElementById("loginError");
-
-
-    if(!employee){
-
-        error.innerText =
-            "البريد الإلكتروني غير مسجل.";
-
-        error.style.display="block";
-
-        return;
-
-    }
-
-
-    if(employee.password !== password){
-
-        error.innerText =
-            "كلمة المرور غير صحيحة.";
-
-        error.style.display="block";
-
-        return;
-
-    }
-
-
-    sessionStorage.setItem(
-        "zajil_employee",
-        email
-    );
-
-
-    closeLogin();
-
-
-    document.getElementById("homePage")
-        .style.display="none";
-
-
-    document.getElementById("chatPage")
-        .style.display="none";
-
-
-    document.getElementById("employeePage")
-        .style.display="block";
-
-
-    document.getElementById("employeeBranch")
-        .innerText =
-        employee.branch === "جميع الفروع"
-        ? "لوحة الإدارة"
-        : "غرفة " + employee.branch;
-
-
-    document.getElementById("employeeInfo")
-        .innerHTML =
-        "👤 " + employee.name +
-        "<br>" +
-        "✉️ " + email;
-
-
-    loadEmployeeMessages(
-        employee.branch
-    );
-
-};
-
-
-/* =========================================
-   تحديث صندوق الموظف تلقائيًا
-   ========================================= */
+/* =====================================
+   تحديث رسائل الموظف
+   ===================================== */
 
 setInterval(function(){
 
@@ -1923,8 +1976,9 @@ setInterval(function(){
 
     if(
         employee &&
-        document.getElementById("employeePage")
-            .style.display === "block"
+        document.getElementById(
+            "employeePage"
+        ).style.display === "block"
     ){
 
         loadEmployeeMessages(
@@ -1933,7 +1987,32 @@ setInterval(function(){
 
     }
 
+
+    const branch =
+        sessionStorage.getItem(
+            "customer_branch"
+        );
+
+
+    if(
+        branch &&
+        document.getElementById(
+            "chatPage"
+        ).style.display === "block"
+    ){
+
+        loadChat(branch);
+
+    }
+
 },3000);
+
+
+/* =====================================
+   تشغيل الفروع عند فتح الموقع
+   ===================================== */
+
+renderBranches(branches);
 
 </script>
 
