@@ -60,6 +60,7 @@ header{
 .headerActions{
     display:flex;
     gap:8px;
+    align-items:center;
 }
 
 .headerBtn{
@@ -298,6 +299,9 @@ header{
     background:#0756a8;
     color:white;
     padding:18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
 .chatStatus{
@@ -360,6 +364,62 @@ header{
     border-radius:8px;
 }
 
+/* نمط مركز إشعارات ولوحة طلبات الموظف */
+.notificationBanner{
+    display:none;
+    background:#d97706;
+    color:white;
+    padding:12px;
+    text-align:center;
+    font-weight:bold;
+    font-size:14px;
+    animation:pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { background-color: #d97706; }
+    50% { background-color: #b45309; }
+    100% { background-color: #d97706; }
+}
+
+.badge{
+    background:#dc2626;
+    color:white;
+    border-radius:50%;
+    padding:3px 8px;
+    font-size:12px;
+    margin-right:5px;
+}
+
+.employeeDashboard{
+    background:white;
+    border-radius:15px;
+    padding:20px;
+    margin-bottom:20px;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+}
+
+.requestItem{
+    background:#f8fafc;
+    border-right:4px solid #0756a8;
+    padding:15px;
+    margin-bottom:10px;
+    border-radius:8px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    cursor:pointer;
+}
+
+.requestItem.new{
+    background:#fef3c7;
+    border-right-color:#d97706;
+}
+
+.requestItem:hover{
+    background:#eef2ff;
+}
+
 .modal{
     display:none;
     position:fixed;
@@ -415,6 +475,10 @@ footer{
 
 <body>
 
+<div id="notificationBanner" class="notificationBanner">
+    🔔 لديك طلبات ورسائل جديدة غير مقروءة في الفرع!
+</div>
+
 <div id="languagePage" class="languagePage">
     <div class="languageBox">
         <div class="languageLogo">ز</div>
@@ -435,6 +499,7 @@ footer{
     <div class="headerActions">
         <button class="langBtn" onclick="changeLanguage()">العربية / English</button>
         <button class="headerBtn" onclick="openLogin()">
+            <span id="unreadBadge" class="badge" style="display:none;">0</span>
             <span data-i18n="employeeLogin">دخول الموظفين</span>
         </button>
     </div>
@@ -481,12 +546,27 @@ footer{
 </div>
 </section>
 
+<!-- صفحة الموظف (لوحة التحكم بالطلبات) -->
+<section id="employeePage" class="page container">
+    <h2 class="title">📥 مركز الطلبات والرسائل الواردة (<span id="empBranchTitle">فرع القريات</span>)</h2>
+    <div class="employeeDashboard">
+        <div id="requestsList">
+            <div class="noMessages">جاري تحميل الرسائل والطلبات...</div>
+        </div>
+    </div>
+    <button class="primaryBtn" onclick="goHome()">العودة للرئيسية</button>
+</section>
+
+<!-- صفحة المحادثة -->
 <section id="chatPage" class="page">
 <div class="chatPage">
     <div class="chatBox">
         <div class="chatHeader">
-            <h2 id="chatBranch">خدمة العملاء</h2>
-            <div class="chatStatus" data-i18n="savedMessages">● متصل بـ Supabase</div>
+            <div>
+                <h2 id="chatBranch">خدمة العملاء</h2>
+                <div class="chatStatus" data-i18n="savedMessages">● متصل بـ Supabase</div>
+            </div>
+            <button class="langBtn" onclick="backToEmployeeDashboard()" id="backToDashBtn" style="display:none;">← العودة لمركز الطلبات</button>
         </div>
         <div id="messages" class="messages"></div>
         <div class="chatInput">
@@ -503,9 +583,15 @@ footer{
     <span class="close" onclick="closeLogin()">×</span>
     <h2 data-i18n="employeeLogin">دخول الموظفين</h2>
     <p style="margin:15px 0; color:#666;" data-i18n="loginText">أدخل البيانات للوصول إلى لوحة التحكم الخاصة بفرعك.</p>
+    
+    <label style="display:block; margin-bottom:5px; font-weight:bold; font-size:14px; text-align:right;">اختر الفرع الخاص بك:</label>
+    <select id="employeeBranchSelect" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px; font-size:15px;">
+    </select>
+
     <input id="email" type="email" placeholder="البريد الإلكتروني" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
     <input id="password" type="password" placeholder="كلمة المرور" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
-    <button class="primaryBtn" onclick="closeLogin()">تسجيل الدخول</button>
+    
+    <button class="primaryBtn" onclick="handleEmployeeLogin()">دخول لوحة التحكم والطلبات</button>
 </div>
 </div>
 
@@ -518,6 +604,8 @@ const SUPABASE_URL = 'https://hyyzhgewqkdxywhkbbxs.supabase.co';
 const SUPABASE_KEY = 'Sb_publishable_HCbypT7XNYC_BRgpYYerGw_YFtbnPYw';
 
 let db = null;
+let activeRole = 'customer'; // 'customer' or 'employee'
+let currentEmployeeBranch = 'فرع القريات';
 
 function getSupabaseClient() {
     if (!db) {
@@ -590,52 +678,33 @@ chatWith:"You are now contacting "
 let currentLanguage = localStorage.getItem("zajil_language") || null;
 let lang = currentLanguage || "ar";
 
-/* القائمة المحدثة بالكامل بالفروع الـ 40 */
 let loadedBranches = [
-    "فرع تبوك",
-    "فرع القريات",
-    "فرع طبرجل",
-    "فرع حائل",
-    "فرع عرعر",
-    "فرع دومة الجندل",
-    "فرع حفر الباطن",
-    "فرع سكاكا",
-    "فرع الدمام",
-    "فرع الخبر",
-    "فرع الخفجي",
-    "فرع الجبيل البلد",
-    "فرع الجبيل الصناعية",
-    "فرع الاحساء",
-    "فرع القطيف",
-    "فرع الظهران",
-    "فرع الخرج",
-    "فرع المجمعة",
-    "فرع بريدة",
-    "فرع الدوادمي",
-    "فرع الرس",
-    "فرع عنيزة",
-    "فرع الرياض",
-    "فرع شقراء",
-    "فرع وادي الدواسر",
-    "فرع الباحة",
-    "فرع جدة",
-    "فرع مكة",
-    "فرع المدينة المنورة",
-    "فرع الطائف",
-    "فرع ينبع",
-    "فرع ابها",
-    "فرع ابو عريش",
-    "فرع بيشة",
-    "فرع خميس مشيط",
-    "فرع جازان",
-    "فرع نجران",
-    "فرع صامطة",
-    "فرع صبيا",
-    "فرع النماص"
+    "فرع تبوك", "فرع القريات", "فرع طبرجل", "فرع حائل", "فرع عرعر", "فرع دومة الجندل",
+    "فرع حفر الباطن", "فرع سكاكا", "فرع الدمام", "فرع الخبر", "فرع الخفجي", "فرع الجبيل البلد",
+    "فرع الجبيل الصناعية", "فرع الاحساء", "فرع القطيف", "فرع الظهران", "فرع الخرج", "فرع المجمعة",
+    "فرع بريدة", "فرع الدوادمي", "فرع الرس", "فرع عنيزة", "فرع الرياض", "فرع شقراء",
+    "فرع وادي الدواسر", "فرع الباحة", "فرع جدة", "فرع مكة", "فرع المدينة المنورة", "فرع الطائف",
+    "فرع ينبع", "فرع ابها", "فرع ابو عريش", "فرع بيشة", "فرع خميس مشيط", "فرع جازان",
+    "فرع نجران", "فرع صامطة", "فرع صبيا", "فرع النماص"
 ];
 
 async function initBranches() {
     renderBranches(loadedBranches);
+    populateEmployeeBranchDropdown();
+    // لبدء الفحص الدوري للرسائل والطلبات الجديدة
+    setInterval(checkNewRequestsNotification, 5000);
+}
+
+function populateEmployeeBranchDropdown() {
+    const select = document.getElementById("employeeBranchSelect");
+    select.innerHTML = "";
+    loadedBranches.forEach(b => {
+        const option = document.createElement("option");
+        option.value = b;
+        option.textContent = b;
+        if (b === "فرع القريات") option.selected = true;
+        select.appendChild(option);
+    });
 }
 
 function renderBranches(list){
@@ -679,6 +748,7 @@ function filterBranches(){
 
 function openChat(branch){
     document.getElementById("homePage").style.display="none";
+    document.getElementById("employeePage").style.display="none";
     document.getElementById("chatPage").style.display="block";
 
     document.getElementById("chatBranch").innerText =
@@ -696,15 +766,17 @@ async function sendMessage(){
     const branch = sessionStorage.getItem("customer_branch");
     if(!branch) return;
 
+    const senderRole = activeRole === 'employee' ? 'employee' : 'customer';
+
     const client = getSupabaseClient();
 
-    appendMessage(text, 'customer');
+    appendMessage(text, senderRole);
     input.value = "";
 
     if (client) {
         try {
             await client.from('messages').insert([
-                { branch: branch, text: text, sender: 'customer', status: 'new' }
+                { branch: branch, text: text, sender: senderRole, status: 'new' }
             ]);
         } catch(e) {}
     }
@@ -725,7 +797,7 @@ async function loadChat(branch){
             const { data: messages, error } = await client
                 .from('messages')
                 .select('*')
-                .eq('branch', branch)
+                .or(`branch.eq.${branch},branch.eq.${branch.replace('فرع ', '')}`)
                 .order('created_at', { ascending: true });
 
             if (!error && messages && messages.length > 0) {
@@ -746,6 +818,96 @@ function appendMessage(text, sender, timeStr){
     div.innerHTML = `${escapeHTML(text)}<small>${time}</small>`;
     box.appendChild(div);
     box.scrollTop = box.scrollHeight;
+}
+
+/* تسجيل دخول الموظف وفتح مركز الرسائل والطلبات */
+function handleEmployeeLogin(){
+    currentEmployeeBranch = document.getElementById("employeeBranchSelect").value;
+    activeRole = 'employee';
+    closeLogin();
+
+    document.getElementById("homePage").style.display="none";
+    document.getElementById("chatPage").style.display="none";
+    document.getElementById("employeePage").style.display="block";
+    document.getElementById("empBranchTitle").innerText = currentEmployeeBranch;
+    document.getElementById("backToDashBtn").style.display="block";
+
+    loadEmployeeRequestsDashboard();
+}
+
+/* جلب وعرض طلبات ورسائل الموظف */
+async function loadEmployeeRequestsDashboard() {
+    const container = document.getElementById("requestsList");
+    container.innerHTML = "جاري تحميل الطلبات والرسائل...";
+
+    const client = getSupabaseClient();
+    if(!client) return;
+
+    try {
+        const { data: messages, error } = await client
+            .from('messages')
+            .select('*')
+            .or(`branch.eq.${currentEmployeeBranch},branch.eq.${currentEmployeeBranch.replace('فرع ', '')}`)
+            .order('created_at', { ascending: false });
+
+        if(error || !messages || messages.length === 0) {
+            container.innerHTML = `<div class="noMessages">لا توجد رسائل أو طلبات جديدة حالياً لـ ${currentEmployeeBranch}</div>`;
+            return;
+        }
+
+        container.innerHTML = "";
+        messages.forEach(msg => {
+            const item = document.createElement("div");
+            item.className = `requestItem ${msg.status === 'new' ? 'new' : ''}`;
+            const time = new Date(msg.created_at).toLocaleString();
+            
+            item.innerHTML = `
+                <div>
+                    <strong>المرسل: ${msg.sender === 'customer' ? 'عميل الفرع 👤' : 'الموظف 👔'}</strong>
+                    <p style="margin-top:5px; color:#444;">${escapeHTML(msg.text)}</p>
+                    <small style="color:#888;">${time}</small>
+                </div>
+                <button class="branchBtn" style="width:auto; padding:8px 15px;">متابعة المحادثة</button>
+            `;
+
+            item.onclick = () => openChat(currentEmployeeBranch);
+            container.appendChild(item);
+        });
+
+    } catch(e) {
+        container.innerHTML = `<div class="noMessages">خطأ في جلب البيانات</div>`;
+    }
+}
+
+/* فحص وجود إشعارات جديدة */
+async function checkNewRequestsNotification() {
+    const client = getSupabaseClient();
+    if(!client) return;
+
+    try {
+        const { data, error } = await client
+            .from('messages')
+            .select('id')
+            .eq('branch', currentEmployeeBranch)
+            .eq('status', 'new')
+            .eq('sender', 'customer');
+
+        if(!error && data && data.length > 0) {
+            document.getElementById("notificationBanner").style.display = "block";
+            const badge = document.getElementById("unreadBadge");
+            badge.style.display = "inline-block";
+            badge.innerText = data.length;
+        } else {
+            document.getElementById("notificationBanner").style.display = "none";
+            document.getElementById("unreadBadge").style.display = "none";
+        }
+    } catch(e) {}
+}
+
+function backToEmployeeDashboard() {
+    document.getElementById("chatPage").style.display="none";
+    document.getElementById("employeePage").style.display="block";
+    loadEmployeeRequestsDashboard();
 }
 
 function selectLanguage(selected){
@@ -786,8 +948,11 @@ function closeLogin(){
 }
 
 function goHome(){
+    activeRole = 'customer';
+    document.getElementById("employeePage").style.display="none";
     document.getElementById("chatPage").style.display="none";
     document.getElementById("homePage").style.display="block";
+    document.getElementById("backToDashBtn").style.display="none";
 }
 
 function escapeHTML(text){
