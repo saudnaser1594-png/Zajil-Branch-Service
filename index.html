@@ -161,22 +161,31 @@ header{
     outline:none;
 }
 
+/* تحسين الشبكة لضمان ظهور اسم الفرع كاملاً دون اقتطاع */
 .branchGrid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
-    gap:12px;
+    grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+    gap:15px;
 }
 
 .branch{
     background:#f8fafc;
-    padding:16px;
+    padding:18px;
     border-radius:11px;
     border:1px solid #e5e7eb;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    min-height:130px;
 }
 
 .branch h3{
     color:#0756a8;
-    margin-bottom:7px;
+    margin-bottom:8px;
+    font-size:16px;
+    word-break:break-word;
+    white-space:normal;
+    line-height:1.4;
 }
 
 .online{
@@ -372,17 +381,6 @@ header{
     border-radius:17px;
 }
 
-.loginBox h2{
-    color:#0756a8;
-    margin-bottom:10px;
-}
-
-.loginBox p{
-    color:#667085;
-    line-height:1.7;
-    margin-bottom:15px;
-}
-
 .close{
     float:left;
     font-size:25px;
@@ -453,22 +451,22 @@ footer{
     <h2 class="title" data-i18n="servicesTitle">الخدمات</h2>
 
     <div class="services">
-        <div class="service" onclick="alert('اختر الفرع أولاً للبدء')">
+        <div class="service" onclick="alert('اختر الفرع أولاً من الأسفل للبدء بالمحادثة')">
             <div class="serviceIcon">💰</div>
             <h3 data-i18n="shippingPrice">سعر الشحن</h3>
             <p data-i18n="shippingPriceDesc">استفسر عن تكلفة الشحن.</p>
         </div>
-        <div class="service" onclick="alert('اختر الفرع أولاً للبدء')">
+        <div class="service" onclick="alert('اختر الفرع أولاً من الأسفل للبدء بالمحادثة')">
             <div class="serviceIcon">📦</div>
             <h3 data-i18n="tracking">تتبع الشحنة</h3>
             <p data-i18n="trackingDesc">استفسر عن حالة شحنتك.</p>
         </div>
-        <div class="service" onclick="alert('اختر الفرع أولاً للبدء')">
+        <div class="service" onclick="alert('اختر الفرع أولاً من الأسفل للبدء بالمحادثة')">
             <div class="serviceIcon">🚚</div>
             <h3 data-i18n="vehicle">طلب سيارة</h3>
             <p data-i18n="vehicleDesc">اطلب سيارة لاستلام البضائع من المنزل.</p>
         </div>
-        <div class="service" onclick="alert('اختر الفرع أولاً للبدء')">
+        <div class="service" onclick="alert('اختر الفرع أولاً من الأسفل للبدء بالمحادثة')">
             <div class="serviceIcon">📍</div>
             <h3 data-i18n="areas">مناطق الخدمة</h3>
             <p data-i18n="areasDesc">استفسر عن المناطق التي يخدمها الفرع.</p>
@@ -507,10 +505,10 @@ footer{
 <div class="loginBox">
     <span class="close" onclick="closeLogin()">×</span>
     <h2 data-i18n="employeeLogin">دخول الموظفين</h2>
-    <p data-i18n="loginText">أدخل البريد الإلكتروني وكلمة المرور.</p>
-    <input id="email" type="email" placeholder="البريد الإلكتروني">
-    <input id="password" type="password" placeholder="كلمة المرور">
-    <button class="primaryBtn" onclick="closeLogin(); alert('خاصية الموظفين قيد التطوير');">دخول</button>
+    <p style="margin:10px 0; color:#666;" data-i18n="loginText">أدخل البريد الإلكتروني وكلمة المرور.</p>
+    <input id="email" type="email" placeholder="البريد الإلكتروني" style="width:100%; padding:10px; margin-bottom:10px;">
+    <input id="password" type="password" placeholder="كلمة المرور" style="width:100%; padding:10px; margin-bottom:10px;">
+    <button class="primaryBtn" onclick="closeLogin(); alert('خاصية دخول الموظفين قيد التطوير');">دخول</button>
 </div>
 </div>
 
@@ -520,7 +518,7 @@ footer{
 
 <script>
 /* ==================================================
-   إعداد الاتصال الآمن بـ Supabase
+   إعداد الاتصال بـ Supabase
 ================================================== */
 const SUPABASE_URL = 'https://hyyzhgewqkdxywhkbbxs.supabase.co';
 const SUPABASE_KEY = 'Sb_publishable_HCbypT7XNYC_BRgpYYerGw_YFtbnPYw';
@@ -601,9 +599,34 @@ chatWith:"You are now contacting "
 let currentLanguage = localStorage.getItem("zajil_language") || null;
 let lang = currentLanguage || "ar";
 
+/* قائمة كاملة ومفصلة لكافة فروع المملكة */
 let loadedBranches = [
-    "فرع تبوك", "فرع القريات", "فرع طبرجل", "فرع حائل", "فرع عرعر",
-    "فرع دومة الجندل", "فرع حفر الباطن", "فرع سكاكا", "فرع الدمام", "فرع الخبر"
+    "فرع القريات - الرئيسي",
+    "فرع سكاكا - الجوف",
+    "فرع طبرجل",
+    "فرع عرعر",
+    "فرع طريف",
+    "فرع تبوك - الرئيسي",
+    "فرع ضباء",
+    "فرع حائل - الرئيسي",
+    "فرع حفر الباطن",
+    "فرع الرياض - الملز",
+    "فرع الرياض - السلي",
+    "فرع الرياض - الصحافة",
+    "فرع جدة - طريق المدينة",
+    "فرع جدة - حي الصفا",
+    "فرع مكة المكرمة - الشوقية",
+    "فرع المدينة المنورة - الدائري",
+    "فرع الدمام - الرئيسي",
+    "فرع الخبر - الشارع السادس",
+    "فرع الأحساء - الهفوف",
+    "فرع الجبيل - البلد",
+    "فرع قصيم - بريدة",
+    "فرع قصيم - عنيزة",
+    "فرع أبها - طريق الخميس",
+    "فرع خميس مشيط - المنتزه",
+    "فرع جازان - الرئيسي",
+    "فرع نجران - طريق الملك عبدالعزيز"
 ];
 
 /* ==================================================
@@ -618,7 +641,7 @@ async function initBranches() {
                 loadedBranches = data.map(b => b.name_ar || b.name_en || b.name);
             }
         } catch(e) {
-            console.log("استخدام القائمة الاحتياطية للفروع");
+            console.log("استخدام قائمة الفروع الكاملة الاحتياطية");
         }
     }
     renderBranches(loadedBranches);
@@ -636,13 +659,23 @@ function renderBranches(list){
     list.forEach(branch => {
         const card = document.createElement("div");
         card.className="branch";
-        card.innerHTML = `
-            <h3>${escapeHTML(branch)}</h3>
-            <div class="online">${translations[lang].serviceAvailable}</div>
-            <button class="branchBtn" onclick="openChat('${escapeHTML(branch)}')">
-                ${translations[lang].contactBranch}
-            </button>
-        `;
+        
+        const h3 = document.createElement("h3");
+        h3.textContent = branch;
+
+        const onlineDiv = document.createElement("div");
+        onlineDiv.className = "online";
+        onlineDiv.textContent = translations[lang].serviceAvailable;
+
+        const btn = document.createElement("button");
+        btn.className = "branchBtn";
+        btn.textContent = translations[lang].contactBranch;
+        btn.onclick = function() { openChat(branch); };
+
+        card.appendChild(h3);
+        card.appendChild(onlineDiv);
+        card.appendChild(btn);
+
         grid.appendChild(card);
     });
 }
@@ -677,14 +710,15 @@ async function sendMessage(){
 
     const client = getSupabaseClient();
 
-    // إضافة الرسالة في الواجهة أولاً لسرعة التجربة
     appendMessage(text, 'customer');
     input.value = "";
 
     if (client) {
-        await client.from('messages').insert([
-            { branch: branch, text: text, sender: 'customer', status: 'new' }
-        ]);
+        try {
+            await client.from('messages').insert([
+                { branch: branch, text: text, sender: 'customer', status: 'new' }
+            ]);
+        } catch(e) {}
     }
 }
 
