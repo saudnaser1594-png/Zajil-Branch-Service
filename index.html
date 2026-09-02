@@ -440,6 +440,28 @@ header{
     position:relative;
 }
 
+.authTabs{
+    display:flex;
+    gap:10px;
+    margin-bottom:15px;
+    border-bottom:2px solid #eee;
+    padding-bottom:10px;
+}
+
+.authTab{
+    flex:1;
+    padding:8px;
+    background:none;
+    font-weight:bold;
+    color:#777;
+    border-bottom:3px solid transparent;
+}
+
+.authTab.active{
+    color:#0756a8;
+    border-bottom-color:#0756a8;
+}
+
 .close{
     position:absolute;
     top:15px;
@@ -500,7 +522,7 @@ footer{
         <button class="langBtn" onclick="changeLanguage()">العربية / English</button>
         <button class="headerBtn" onclick="openLogin()">
             <span id="unreadBadge" class="badge" style="display:none;">0</span>
-            <span data-i18n="employeeLogin">دخول الموظفين</span>
+            <span data-i18n="employeeLogin">حساب الموظف</span>
         </button>
     </div>
 </header>
@@ -578,20 +600,44 @@ footer{
 </div>
 </section>
 
+<!-- نافذة تسجيل الدخول أو إنشاء حساب الموظف -->
 <div id="loginModal" class="modal">
 <div class="loginBox">
     <span class="close" onclick="closeLogin()">×</span>
-    <h2 data-i18n="employeeLogin">دخول الموظفين</h2>
-    <p style="margin:15px 0; color:#666;" data-i18n="loginText">أدخل البيانات للوصول إلى لوحة التحكم الخاصة بفرعك.</p>
     
-    <label style="display:block; margin-bottom:5px; font-weight:bold; font-size:14px; text-align:right;">اختر الفرع الخاص بك:</label>
-    <select id="employeeBranchSelect" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px; font-size:15px;">
-    </select>
+    <div class="authTabs">
+        <button class="authTab active" id="loginTabBtn" onclick="switchAuthTab('login')">تسجيل الدخول</button>
+        <button class="authTab" id="signupTabBtn" onclick="switchAuthTab('signup')">إنشاء حساب موظف</button>
+    </div>
 
-    <input id="email" type="email" placeholder="البريد الإلكتروني" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
-    <input id="password" type="password" placeholder="كلمة المرور" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
-    
-    <button class="primaryBtn" onclick="handleEmployeeLogin()">دخول لوحة التحكم والطلبات</button>
+    <!-- نموذج تسجيل الدخول -->
+    <div id="loginForm">
+        <p style="margin:10px 0; color:#666; font-size:13px;">سجل دخولك للوصول إلى محادثات وطلبات فرعك.</p>
+        
+        <label style="display:block; margin-bottom:5px; font-weight:bold; font-size:13px; text-align:right;">اختر الفرع:</label>
+        <select id="loginBranchSelect" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px; font-size:14px;"></select>
+
+        <input id="loginEmail" type="email" placeholder="البريد الإلكتروني للموظف" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
+        <input id="loginPassword" type="password" placeholder="كلمة المرور" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
+        
+        <button class="primaryBtn" onclick="handleEmployeeLogin()">تسجيل الدخول</button>
+    </div>
+
+    <!-- نموذج إنشاء حساب جديد -->
+    <div id="signupForm" style="display:none;">
+        <p style="margin:10px 0; color:#666; font-size:13px;">أنشئ حساب موظف جديد لربطه بالفرع وتلقي الطلبات.</p>
+        
+        <input id="signupName" type="text" placeholder="الاسم الكامل للموظف" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
+        
+        <label style="display:block; margin-bottom:5px; font-weight:bold; font-size:13px; text-align:right;">اختر الفرع المخصص للعمل فيه:</label>
+        <select id="signupBranchSelect" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px; font-size:14px;"></select>
+
+        <input id="signupEmail" type="email" placeholder="البريد الإلكتروني الرسمي" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
+        <input id="signupPassword" type="password" placeholder="كلمة المرور الجديدة" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
+        
+        <button class="primaryBtn" onclick="handleEmployeeSignup()" style="background:#198754;">إنشاء الحساب وتفعيل الفرع</button>
+    </div>
+
 </div>
 </div>
 
@@ -604,7 +650,7 @@ const SUPABASE_URL = 'https://hyyzhgewqkdxywhkbbxs.supabase.co';
 const SUPABASE_KEY = 'Sb_publishable_HCbypT7XNYC_BRgpYYerGw_YFtbnPYw';
 
 let db = null;
-let activeRole = 'customer'; // 'customer' or 'employee'
+let activeRole = 'customer';
 let currentEmployeeBranch = 'فرع القريات';
 
 function getSupabaseClient() {
@@ -621,7 +667,7 @@ function getSupabaseClient() {
 const translations = {
 ar: {
 brand:"Zajil Branch Service",
-employeeLogin:"دخول الموظفين",
+employeeLogin:"حساب الموظف",
 heroTitle:"تكامل اللوجستيات بين يديك",
 heroText:"تواصل مباشرة مع فرعك لخدمات شحن أسرع وأكثر كفاءة.",
 servicesTitle:"الخدمات",
@@ -648,7 +694,7 @@ chatWith:"أنت الآن تتواصل مع "
 },
 en: {
 brand:"Zajil Branch Service",
-employeeLogin:"Employee Login",
+employeeLogin:"Employee Account",
 heroTitle:"Logistics at Your Fingertips",
 heroText:"Connect directly with your branch for faster shipping services.",
 servicesTitle:"Services",
@@ -690,21 +736,44 @@ let loadedBranches = [
 
 async function initBranches() {
     renderBranches(loadedBranches);
-    populateEmployeeBranchDropdown();
-    // لبدء الفحص الدوري للرسائل والطلبات الجديدة
+    populateEmployeeBranchDropdowns();
     setInterval(checkNewRequestsNotification, 5000);
 }
 
-function populateEmployeeBranchDropdown() {
-    const select = document.getElementById("employeeBranchSelect");
-    select.innerHTML = "";
+function populateEmployeeBranchDropdowns() {
+    const loginSelect = document.getElementById("loginBranchSelect");
+    const signupSelect = document.getElementById("signupBranchSelect");
+
+    loginSelect.innerHTML = "";
+    signupSelect.innerHTML = "";
+
     loadedBranches.forEach(b => {
-        const option = document.createElement("option");
-        option.value = b;
-        option.textContent = b;
-        if (b === "فرع القريات") option.selected = true;
-        select.appendChild(option);
+        const opt1 = document.createElement("option");
+        opt1.value = b;
+        opt1.textContent = b;
+        if (b === "فرع القريات") opt1.selected = true;
+        loginSelect.appendChild(opt1);
+
+        const opt2 = document.createElement("option");
+        opt2.value = b;
+        opt2.textContent = b;
+        if (b === "فرع القريات") opt2.selected = true;
+        signupSelect.appendChild(opt2);
     });
+}
+
+function switchAuthTab(tab) {
+    if(tab === 'login') {
+        document.getElementById('loginTabBtn').classList.add('active');
+        document.getElementById('signupTabBtn').classList.remove('active');
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('signupForm').style.display = 'none';
+    } else {
+        document.getElementById('signupTabBtn').classList.add('active');
+        document.getElementById('loginTabBtn').classList.remove('active');
+        document.getElementById('signupForm').style.display = 'block';
+        document.getElementById('loginForm').style.display = 'none';
+    }
 }
 
 function renderBranches(list){
@@ -820,10 +889,44 @@ function appendMessage(text, sender, timeStr){
     box.scrollTop = box.scrollHeight;
 }
 
-/* تسجيل دخول الموظف وفتح مركز الرسائل والطلبات */
+/* تسجيل دخول الموظف */
 function handleEmployeeLogin(){
-    currentEmployeeBranch = document.getElementById("employeeBranchSelect").value;
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
+    
+    if(!email || !password) {
+        alert("يرجى إدخال البريد الإلكتروني وكلمة المرور");
+        return;
+    }
+
+    currentEmployeeBranch = document.getElementById("loginBranchSelect").value;
     activeRole = 'employee';
+    closeLogin();
+
+    document.getElementById("homePage").style.display="none";
+    document.getElementById("chatPage").style.display="none";
+    document.getElementById("employeePage").style.display="block";
+    document.getElementById("empBranchTitle").innerText = currentEmployeeBranch;
+    document.getElementById("backToDashBtn").style.display="block";
+
+    loadEmployeeRequestsDashboard();
+}
+
+/* إنشاء حساب موظف جديد */
+async function handleEmployeeSignup(){
+    const name = document.getElementById("signupName").value.trim();
+    const email = document.getElementById("signupEmail").value.trim();
+    const password = document.getElementById("signupPassword").value.trim();
+    const branch = document.getElementById("signupBranchSelect").value;
+
+    if(!name || !email || !password) {
+        alert("يرجى ملء كافة الحقول لإنشاء الحساب");
+        return;
+    }
+
+    currentEmployeeBranch = branch;
+    activeRole = 'employee';
+    alert("تم إنشاء حساب الموظف بنجاح وتعيينه على " + branch);
     closeLogin();
 
     document.getElementById("homePage").style.display="none";
