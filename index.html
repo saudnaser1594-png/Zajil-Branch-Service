@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Zajil Branch Service</title>
+<title>Zajil Branch Service - Secure Auth</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 
@@ -364,33 +364,6 @@ header{
     border-radius:8px;
 }
 
-/* نمط مركز إشعارات ولوحة طلبات الموظف */
-.notificationBanner{
-    display:none;
-    background:#d97706;
-    color:white;
-    padding:12px;
-    text-align:center;
-    font-weight:bold;
-    font-size:14px;
-    animation:pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% { background-color: #d97706; }
-    50% { background-color: #b45309; }
-    100% { background-color: #d97706; }
-}
-
-.badge{
-    background:#dc2626;
-    color:white;
-    border-radius:50%;
-    padding:3px 8px;
-    font-size:12px;
-    margin-right:5px;
-}
-
 .employeeDashboard{
     background:white;
     border-radius:15px;
@@ -411,15 +384,6 @@ header{
     cursor:pointer;
 }
 
-.requestItem.new{
-    background:#fef3c7;
-    border-right-color:#d97706;
-}
-
-.requestItem:hover{
-    background:#eef2ff;
-}
-
 .modal{
     display:none;
     position:fixed;
@@ -433,7 +397,7 @@ header{
 
 .loginBox{
     width:100%;
-    max-width:430px;
+    max-width:460px;
     background:white;
     padding:25px;
     border-radius:17px;
@@ -471,6 +435,27 @@ header{
     color:#333;
 }
 
+.verifyBadge{
+    display:inline-block;
+    background:#10b981;
+    color:white;
+    padding:3px 8px;
+    border-radius:6px;
+    font-size:11px;
+    margin-right:6px;
+}
+
+.forgotLink{
+    display:block;
+    text-align:left;
+    color:#0756a8;
+    font-size:12px;
+    margin-top:-5px;
+    margin-bottom:12px;
+    cursor:pointer;
+    text-decoration:underline;
+}
+
 .noMessages{
     text-align:center;
     padding:40px;
@@ -483,23 +468,10 @@ footer{
     padding:30px;
     font-size:13px;
 }
-
-@media(max-width:600px){
-    .hero h1{ font-size:24px; }
-    .logo{ font-size:14px; }
-    .headerActions{ flex-direction:column; }
-    .headerBtn, .langBtn{ padding:8px; font-size:11px; }
-    .languageChoices{ grid-template-columns:1fr; }
-    .chatInput button{ padding:0 12px; }
-}
 </style>
 </head>
 
 <body>
-
-<div id="notificationBanner" class="notificationBanner">
-    🔔 لديك طلبات ورسائل جديدة غير مقروءة في الفرع!
-</div>
 
 <div id="languagePage" class="languagePage">
     <div class="languageBox">
@@ -521,7 +493,6 @@ footer{
     <div class="headerActions">
         <button class="langBtn" onclick="changeLanguage()">العربية / English</button>
         <button class="headerBtn" onclick="openLogin()">
-            <span id="unreadBadge" class="badge" style="display:none;">0</span>
             <span data-i18n="employeeLogin">حساب الموظف</span>
         </button>
     </div>
@@ -568,9 +539,12 @@ footer{
 </div>
 </section>
 
-<!-- صفحة الموظف (لوحة التحكم بالطلبات) -->
 <section id="employeePage" class="page container">
-    <h2 class="title">📥 مركز الطلبات والرسائل الواردة (<span id="empBranchTitle">فرع القريات</span>)</h2>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+        <h2 class="title" style="margin:0;">📥 مركز الطلبات والرسائل الواردة (<span id="empBranchTitle">فرع القريات</span>)</h2>
+        <span class="verifyBadge">✓ موظف موثق رسمياً</span>
+    </div>
+    
     <div class="employeeDashboard">
         <div id="requestsList">
             <div class="noMessages">جاري تحميل الرسائل والطلبات...</div>
@@ -579,7 +553,6 @@ footer{
     <button class="primaryBtn" onclick="goHome()">العودة للرئيسية</button>
 </section>
 
-<!-- صفحة المحادثة -->
 <section id="chatPage" class="page">
 <div class="chatPage">
     <div class="chatBox">
@@ -600,42 +573,58 @@ footer{
 </div>
 </section>
 
-<!-- نافذة تسجيل الدخول أو إنشاء حساب الموظف -->
+<!-- نافذة تسجيل الدخول للموظف -->
 <div id="loginModal" class="modal">
 <div class="loginBox">
     <span class="close" onclick="closeLogin()">×</span>
     
-    <div class="authTabs">
+    <div class="authTabs" id="authTabsHeader">
         <button class="authTab active" id="loginTabBtn" onclick="switchAuthTab('login')">تسجيل الدخول</button>
-        <button class="authTab" id="signupTabBtn" onclick="switchAuthTab('signup')">إنشاء حساب موظف</button>
+        <button class="authTab" id="signupTabBtn" onclick="switchAuthTab('signup')">تسجيل موظف جديد</button>
     </div>
 
     <!-- نموذج تسجيل الدخول -->
     <div id="loginForm">
-        <p style="margin:10px 0; color:#666; font-size:13px;">سجل دخولك للوصول إلى محادثات وطلبات فرعك.</p>
+        <p style="margin:10px 0; color:#666; font-size:13px;">أدخل بيانات حسابك الوظيفي المعتمد للوصول للطلبات.</p>
         
         <label style="display:block; margin-bottom:5px; font-weight:bold; font-size:13px; text-align:right;">اختر الفرع:</label>
         <select id="loginBranchSelect" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px; font-size:14px;"></select>
 
-        <input id="loginEmail" type="email" placeholder="البريد الإلكتروني للموظف" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
-        <input id="loginPassword" type="password" placeholder="كلمة المرور" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
+        <input id="loginEmail" type="email" placeholder="البريد الإلكتروني الرسمي" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
+        <input id="loginPassword" type="password" placeholder="كلمة المرور" style="width:100%; padding:12px; margin-bottom:8px; border:1px solid #ccc; border-radius:8px;">
         
-        <button class="primaryBtn" onclick="handleEmployeeLogin()">تسجيل الدخول</button>
+        <span class="forgotLink" onclick="showForgotPassword()">هل نسيت كلمة المرور؟</span>
+
+        <button class="primaryBtn" id="loginSubmitBtn" onclick="handleEmployeeLogin()">التحقق وتسجيل الدخول</button>
     </div>
 
-    <!-- نموذج إنشاء حساب جديد -->
+    <!-- نموذج استعادة كلمة المرور عبر الإيميل -->
+    <div id="forgotForm" style="display:none;">
+        <h3 style="color:#0756a8; margin-bottom:10px;">استعادة كلمة المرور</h3>
+        <p style="margin:10px 0; color:#666; font-size:13px;">أدخل بريدك الإلكتروني المسجل في النظام، وسنرسل لك رابط/كود تعيين كلمة مرور جديدة.</p>
+        
+        <input id="resetEmail" type="email" placeholder="أدخل بريدك الإلكتروني الشخصي/الرسمي" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
+        
+        <button class="primaryBtn" onclick="handleResetPassword()" style="background:#10b981;">إرسال كود الاستعادة للإيميل</button>
+        <button class="primaryBtn" onclick="hideForgotPassword()" style="background:#6c757d; margin-top:6px;">إلغاء والعودة</button>
+    </div>
+
+    <!-- نموذج إنشاء حساب جديد موثق -->
     <div id="signupForm" style="display:none;">
-        <p style="margin:10px 0; color:#666; font-size:13px;">أنشئ حساب موظف جديد لربطه بالفرع وتلقي الطلبات.</p>
+        <p style="margin:10px 0; color:#666; font-size:13px;">يتطلب التسجيل إدخال كود تفعيل الفرع والرقم الوظيفي للتأكد من هويتك.</p>
         
-        <input id="signupName" type="text" placeholder="الاسم الكامل للموظف" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
-        
-        <label style="display:block; margin-bottom:5px; font-weight:bold; font-size:13px; text-align:right;">اختر الفرع المخصص للعمل فيه:</label>
+        <input id="signupName" type="text" placeholder="الاسم الرباعي للموظف" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
+        <input id="signupEmpId" type="text" placeholder="الرقم الوظيفي الخاص بك" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
+
+        <label style="display:block; margin-bottom:5px; font-weight:bold; font-size:13px; text-align:right;">الفرع المخصص للعمل فيه:</label>
         <select id="signupBranchSelect" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px; font-size:14px;"></select>
 
-        <input id="signupEmail" type="email" placeholder="البريد الإلكتروني الرسمي" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
-        <input id="signupPassword" type="password" placeholder="كلمة المرور الجديدة" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
+        <input id="signupPasscode" type="password" placeholder="كود التفعيل الأمني للفرع (مثال: ZAJIL2026)" style="width:100%; padding:12px; margin-bottom:12px; border:2px solid #0756a8; border-radius:8px; background:#f0f7ff;">
+
+        <input id="signupEmail" type="email" placeholder="البريد الإلكتروني للعمل" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
+        <input id="signupPassword" type="password" placeholder="كلمة المرور الحصينة" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
         
-        <button class="primaryBtn" onclick="handleEmployeeSignup()" style="background:#198754;">إنشاء الحساب وتفعيل الفرع</button>
+        <button class="primaryBtn" id="signupSubmitBtn" onclick="handleEmployeeSignup()" style="background:#198754;">توثيق الهوية وإنشاء الحساب</button>
     </div>
 
 </div>
@@ -653,6 +642,13 @@ let db = null;
 let activeRole = 'customer';
 let currentEmployeeBranch = 'فرع القريات';
 
+const BRANCH_SECURITY_CODES = {
+    "DEFAULT": "ZAJIL2026",
+    "فرع القريات": "QURAYYAT_700",
+    "فرع الرياض": "RIYADH_100",
+    "فرع جدة": "JEDDAH_200"
+};
+
 function getSupabaseClient() {
     if (!db) {
         if (window.supabase && typeof window.supabase.createClient === 'function') {
@@ -667,7 +663,7 @@ function getSupabaseClient() {
 const translations = {
 ar: {
 brand:"Zajil Branch Service",
-employeeLogin:"حساب الموظف",
+employeeLogin:"حساب الموظف المعتمد",
 heroTitle:"تكامل اللوجستيات بين يديك",
 heroText:"تواصل مباشرة مع فرعك لخدمات شحن أسرع وأكثر كفاءة.",
 servicesTitle:"الخدمات",
@@ -685,7 +681,6 @@ savedMessages:"● متصل بـ Supabase",
 writeMessage:"اكتب رسالتك...",
 send:"إرسال",
 backHome:"العودة للرئيسية",
-loginText:"أدخل البيانات للوصول إلى لوحة التحكم الخاصة بفرعك.",
 contactBranch:"التواصل مع الفرع",
 serviceAvailable:"● خدمة العملاء متاحة",
 noBranch:"لا يوجد فرع بهذا الاسم.",
@@ -694,7 +689,7 @@ chatWith:"أنت الآن تتواصل مع "
 },
 en: {
 brand:"Zajil Branch Service",
-employeeLogin:"Employee Account",
+employeeLogin:"Verified Employee Account",
 heroTitle:"Logistics at Your Fingertips",
 heroText:"Connect directly with your branch for faster shipping services.",
 servicesTitle:"Services",
@@ -712,7 +707,6 @@ savedMessages:"● Connected to Supabase",
 writeMessage:"Write your message...",
 send:"Send",
 backHome:"Back to Home",
-loginText:"Enter credentials to access your branch dashboard.",
 contactBranch:"Contact Branch",
 serviceAvailable:"● Customer service available",
 noBranch:"No branch found.",
@@ -737,7 +731,6 @@ let loadedBranches = [
 async function initBranches() {
     renderBranches(loadedBranches);
     populateEmployeeBranchDropdowns();
-    setInterval(checkNewRequestsNotification, 5000);
 }
 
 function populateEmployeeBranchDropdowns() {
@@ -763,6 +756,7 @@ function populateEmployeeBranchDropdowns() {
 }
 
 function switchAuthTab(tab) {
+    hideForgotPassword();
     if(tab === 'login') {
         document.getElementById('loginTabBtn').classList.add('active');
         document.getElementById('signupTabBtn').classList.remove('active');
@@ -774,6 +768,19 @@ function switchAuthTab(tab) {
         document.getElementById('signupForm').style.display = 'block';
         document.getElementById('loginForm').style.display = 'none';
     }
+}
+
+function showForgotPassword() {
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('signupForm').style.display = 'none';
+    document.getElementById('authTabsHeader').style.display = 'none';
+    document.getElementById('forgotForm').style.display = 'block';
+}
+
+function hideForgotPassword() {
+    document.getElementById('forgotForm').style.display = 'none';
+    document.getElementById('authTabsHeader').style.display = 'flex';
+    document.getElementById('loginForm').style.display = 'block';
 }
 
 function renderBranches(list){
@@ -832,11 +839,8 @@ async function sendMessage(){
     const text = input.value.trim();
     if(!text) return;
 
-    const branch = sessionStorage.getItem("customer_branch");
-    if(!branch) return;
-
+    const branch = sessionStorage.getItem("customer_branch") || currentEmployeeBranch;
     const senderRole = activeRole === 'employee' ? 'employee' : 'customer';
-
     const client = getSupabaseClient();
 
     appendMessage(text, senderRole);
@@ -866,14 +870,18 @@ async function loadChat(branch){
             const { data: messages, error } = await client
                 .from('messages')
                 .select('*')
-                .or(`branch.eq.${branch},branch.eq.${branch.replace('فرع ', '')}`)
                 .order('created_at', { ascending: true });
 
             if (!error && messages && messages.length > 0) {
-                box.innerHTML = "";
-                messages.forEach(m => {
-                    appendMessage(m.text, m.sender, m.created_at);
-                });
+                const cleanBranch = branch.replace('فرع ', '').trim();
+                const filtered = messages.filter(m => m.branch && m.branch.includes(cleanBranch));
+
+                if(filtered.length > 0) {
+                    box.innerHTML = "";
+                    filtered.forEach(m => {
+                        appendMessage(m.text, m.sender, m.created_at);
+                    });
+                }
             }
         } catch(e) {}
     }
@@ -889,53 +897,147 @@ function appendMessage(text, sender, timeStr){
     box.scrollTop = box.scrollHeight;
 }
 
-/* تسجيل دخول الموظف */
-function handleEmployeeLogin(){
+/* تسجيل الدخول مع التحقق الصارم من كلمة المرور عبر Supabase */
+async function handleEmployeeLogin(){
     const email = document.getElementById("loginEmail").value.trim();
     const password = document.getElementById("loginPassword").value.trim();
+    const loginBtn = document.getElementById("loginSubmitBtn");
     
     if(!email || !password) {
-        alert("يرجى إدخال البريد الإلكتروني وكلمة المرور");
+        alert("⚠️ يرجى أدخال البريد الإلكتروني وكلمة المرور الخاصة بحسابك");
         return;
     }
 
-    currentEmployeeBranch = document.getElementById("loginBranchSelect").value;
-    activeRole = 'employee';
-    closeLogin();
+    loginBtn.innerText = "جاري التحقق من كلمة المرور...";
+    loginBtn.disabled = true;
 
-    document.getElementById("homePage").style.display="none";
-    document.getElementById("chatPage").style.display="none";
-    document.getElementById("employeePage").style.display="block";
-    document.getElementById("empBranchTitle").innerText = currentEmployeeBranch;
-    document.getElementById("backToDashBtn").style.display="block";
+    const client = getSupabaseClient();
+    
+    if(client) {
+        try {
+            // المصادقة الفعلية مع قاعدة البيانات والتحقق من كلمة المرور
+            const { data, error } = await client.auth.signInWithPassword({
+                email: email,
+                password: password,
+            });
 
-    loadEmployeeRequestsDashboard();
+            if (error) {
+                alert("❌ فشل الدخول: كلمة المرور أو البريد الإلكتروني غير صحيح!\nيرجى إعادة المحاولة أو اضغط على (نسيت كلمة المرور).");
+                loginBtn.innerText = "التحقق وتسجيل الدخول";
+                loginBtn.disabled = false;
+                return;
+            }
+
+            // تم الدخول بنجاح
+            currentEmployeeBranch = document.getElementById("loginBranchSelect").value;
+            activeRole = 'employee';
+            
+            alert(`✅ مرحباً بك! تم التحقق من كلمة المرور بنجاح.`);
+            closeLogin();
+
+            document.getElementById("homePage").style.display="none";
+            document.getElementById("chatPage").style.display="none";
+            document.getElementById("employeePage").style.display="block";
+            document.getElementById("empBranchTitle").innerText = currentEmployeeBranch;
+            document.getElementById("backToDashBtn").style.display="block";
+
+            loadEmployeeRequestsDashboard();
+
+        } catch(err) {
+            alert("حدث خطأ في الاتصال بالسيرفر. يرجى المحاولة لاحقاً.");
+        }
+    } else {
+        alert("لم يتم العثور على الاتصال بقاعدة البيانات.");
+    }
+
+    loginBtn.innerText = "التحقق وتسجيل الدخول";
+    loginBtn.disabled = false;
 }
 
-/* إنشاء حساب موظف جديد */
-async function handleEmployeeSignup(){
-    const name = document.getElementById("signupName").value.trim();
-    const email = document.getElementById("signupEmail").value.trim();
-    const password = document.getElementById("signupPassword").value.trim();
-    const branch = document.getElementById("signupBranchSelect").value;
-
-    if(!name || !email || !password) {
-        alert("يرجى ملء كافة الحقول لإنشاء الحساب");
+/* طلب استعادة كلمة المرور وإرسال كود للإيميل */
+async function handleResetPassword() {
+    const email = document.getElementById("resetEmail").value.trim();
+    if(!email) {
+        alert("⚠️ يرجى كتابة البريد الإلكتروني لإرسال كود/رابط الاستعادة");
         return;
     }
 
-    currentEmployeeBranch = branch;
-    activeRole = 'employee';
-    alert("تم إنشاء حساب الموظف بنجاح وتعيينه على " + branch);
-    closeLogin();
+    const client = getSupabaseClient();
+    if(client) {
+        try {
+            const { data, error } = await client.auth.resetPasswordForEmail(email, {
+                redirectTo: window.location.href,
+            });
 
-    document.getElementById("homePage").style.display="none";
-    document.getElementById("chatPage").style.display="none";
-    document.getElementById("employeePage").style.display="block";
-    document.getElementById("empBranchTitle").innerText = currentEmployeeBranch;
-    document.getElementById("backToDashBtn").style.display="block";
+            if (error) {
+                alert("❌ تعذر إرسال الرسالة: " + error.message);
+            } else {
+                alert("📩 تم إرسال رسالة وكود استعادة كلمة المرور إلى بريدك الإلكتروني بنجاح!\nيرجى التوجه لإيميلك واتباع الخطوات.");
+                hideForgotPassword();
+            }
+        } catch(e) {
+            alert("حدث خطأ أثناء الطلب.");
+        }
+    }
+}
 
-    loadEmployeeRequestsDashboard();
+/* التوثيق وإنشاء حساب جديد عبر Supabase Auth */
+async function handleEmployeeSignup(){
+    const name = document.getElementById("signupName").value.trim();
+    const empId = document.getElementById("signupEmpId").value.trim();
+    const branch = document.getElementById("signupBranchSelect").value;
+    const passcode = document.getElementById("signupPasscode").value.trim();
+    const email = document.getElementById("signupEmail").value.trim();
+    const password = document.getElementById("signupPassword").value.trim();
+    const signupBtn = document.getElementById("signupSubmitBtn");
+
+    if(!name || !empId || !passcode || !email || !password) {
+        alert("⚠️ جميع الحقول مطلوبة لتوثيق هوية الموظف");
+        return;
+    }
+
+    // التحقق من كود الفرع الأمني
+    const validCode = BRANCH_SECURITY_CODES[branch] || BRANCH_SECURITY_CODES["DEFAULT"];
+    if(passcode !== validCode) {
+        alert("❌ كود التفعيل الأمني للفرع غير صحيح! أطلب الكود من المشرف لتأكيد هويتك.");
+        return;
+    }
+
+    signupBtn.innerText = "جاري إنشاء وتوثيق الحساب...";
+    signupBtn.disabled = true;
+
+    const client = getSupabaseClient();
+    if(client) {
+        try {
+            const { data, error } = await client.auth.signUp({
+                email: email,
+                password: password,
+                options: {
+                    data: {
+                        full_name: name,
+                        employee_id: empId,
+                        branch: branch
+                    }
+                }
+            });
+
+            if(error) {
+                alert("❌ خطأ أثناء إنشاء الحساب: " + error.message);
+                signupBtn.innerText = "توثيق الهوية وإنشاء الحساب";
+                signupBtn.disabled = false;
+                return;
+            }
+
+            alert(`✅ تم إنشاء حسابك بنجاح للفرع (${branch})!\nيمكنك الان تسجيل الدخول بكلمة المرور الخاصة بك.`);
+            switchAuthTab('login');
+
+        } catch(e) {
+            alert("حدث خطأ غير متوقع.");
+        }
+    }
+
+    signupBtn.innerText = "توثيق الهوية وإنشاء الحساب";
+    signupBtn.disabled = false;
 }
 
 /* جلب وعرض طلبات ورسائل الموظف */
@@ -944,24 +1046,34 @@ async function loadEmployeeRequestsDashboard() {
     container.innerHTML = "جاري تحميل الطلبات والرسائل...";
 
     const client = getSupabaseClient();
-    if(!client) return;
+    if(!client) {
+        container.innerHTML = `<div class="noMessages">عذراً، لم يتم الاتصال بقاعدة البيانات.</div>`;
+        return;
+    }
 
     try {
         const { data: messages, error } = await client
             .from('messages')
             .select('*')
-            .or(`branch.eq.${currentEmployeeBranch},branch.eq.${currentEmployeeBranch.replace('فرع ', '')}`)
             .order('created_at', { ascending: false });
 
-        if(error || !messages || messages.length === 0) {
-            container.innerHTML = `<div class="noMessages">لا توجد رسائل أو طلبات جديدة حالياً لـ ${currentEmployeeBranch}</div>`;
+        if(error) {
+            container.innerHTML = `<div class="noMessages">خطأ أثناء جلب البيانات: ${escapeHTML(error.message)}</div>`;
+            return;
+        }
+
+        const cleanBranch = currentEmployeeBranch.replace('فرع ', '').trim();
+        const branchMessages = messages ? messages.filter(m => m.branch && m.branch.includes(cleanBranch)) : [];
+
+        if(branchMessages.length === 0) {
+            container.innerHTML = `<div class="noMessages">لا توجد رسائل أو طلبات مسجلة حالياً لـ ${currentEmployeeBranch}</div>`;
             return;
         }
 
         container.innerHTML = "";
-        messages.forEach(msg => {
+        branchMessages.forEach(msg => {
             const item = document.createElement("div");
-            item.className = `requestItem ${msg.status === 'new' ? 'new' : ''}`;
+            item.className = "requestItem";
             const time = new Date(msg.created_at).toLocaleString();
             
             item.innerHTML = `
@@ -970,7 +1082,7 @@ async function loadEmployeeRequestsDashboard() {
                     <p style="margin-top:5px; color:#444;">${escapeHTML(msg.text)}</p>
                     <small style="color:#888;">${time}</small>
                 </div>
-                <button class="branchBtn" style="width:auto; padding:8px 15px;">متابعة المحادثة</button>
+                <button class="branchBtn" style="width:auto; padding:8px 15px;">فتح المحادثة</button>
             `;
 
             item.onclick = () => openChat(currentEmployeeBranch);
@@ -978,33 +1090,8 @@ async function loadEmployeeRequestsDashboard() {
         });
 
     } catch(e) {
-        container.innerHTML = `<div class="noMessages">خطأ في جلب البيانات</div>`;
+        container.innerHTML = `<div class="noMessages">خطأ غير متوقع في جلب البيانات</div>`;
     }
-}
-
-/* فحص وجود إشعارات جديدة */
-async function checkNewRequestsNotification() {
-    const client = getSupabaseClient();
-    if(!client) return;
-
-    try {
-        const { data, error } = await client
-            .from('messages')
-            .select('id')
-            .eq('branch', currentEmployeeBranch)
-            .eq('status', 'new')
-            .eq('sender', 'customer');
-
-        if(!error && data && data.length > 0) {
-            document.getElementById("notificationBanner").style.display = "block";
-            const badge = document.getElementById("unreadBadge");
-            badge.style.display = "inline-block";
-            badge.innerText = data.length;
-        } else {
-            document.getElementById("notificationBanner").style.display = "none";
-            document.getElementById("unreadBadge").style.display = "none";
-        }
-    } catch(e) {}
 }
 
 function backToEmployeeDashboard() {
