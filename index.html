@@ -1,1167 +1,389 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خدمة فرع الزاجل | Zajil Branch Service</title>
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --primary-color: #0d47a1;
+            --accent-color: #00897b;
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+        }
 
-<title>Zajil Branch Service - Secure Auth</title>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+        }
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+        header {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
 
-<style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:Arial,Tahoma,sans-serif;
-}
+        .header-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
 
-body{
-    background:#f4f7fa;
-    color:#17324d;
-}
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+        }
 
-button{
-    cursor:pointer;
-    border:0;
-}
+        .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
 
-header{
-    background:#0756a8;
-    color:white;
-    padding:14px 20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    box-shadow:0 3px 12px rgba(0,0,0,.15);
-}
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
 
-.logo{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-weight:bold;
-    font-size:18px;
-}
+        .modal {
+            background: #fff;
+            width: 90%;
+            max-width: 450px;
+            border-radius: 12px;
+            padding: 25px;
+            position: relative;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
 
-.logoIcon{
-    width:42px;
-    height:42px;
-    background:#ffd400;
-    color:#0756a8;
-    border-radius:10px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:22px;
-}
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
 
-.headerActions{
-    display:flex;
-    gap:8px;
-    align-items:center;
-}
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 20px;
+        }
 
-.headerBtn{
-    background:#ffd400;
-    color:#0756a8;
-    padding:11px 16px;
-    border-radius:8px;
-    font-weight:bold;
-}
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: #777;
+        }
 
-.langBtn{
-    background:white;
-    color:#0756a8;
-    padding:11px 14px;
-    border-radius:8px;
-    font-weight:bold;
-}
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+        }
 
-.container{
-    max-width:1100px;
-    margin:auto;
-    padding:25px 18px;
-}
+        .form-group {
+            margin-bottom: 15px;
+            text-align: right;
+        }
 
-.hero{
-    background:linear-gradient(135deg,#0756a8,#0c72d4);
-    color:white;
-    border-radius:20px;
-    padding:45px 25px;
-    text-align:center;
-}
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
 
-.hero h1{
-    font-size:30px;
-    margin-bottom:12px;
-}
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 0.95rem;
+        }
 
-.hero p{
-    line-height:1.9;
-}
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--accent-color);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
 
-.title{
-    color:#0756a8;
-    margin:25px 0 15px;
-}
+        .btn:hover {
+            background-color: #00695c;
+        }
 
-.services{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:15px;
-}
-
-.service{
-    background:white;
-    padding:22px;
-    border-radius:15px;
-    border:2px solid transparent;
-    box-shadow:0 4px 15px rgba(0,0,0,.06);
-    cursor:pointer;
-    transition:.2s;
-}
-
-.service:hover{
-    border-color:#ffd400;
-    transform:translateY(-2px);
-}
-
-.serviceIcon{
-    font-size:32px;
-    margin-bottom:10px;
-}
-
-.service h3{
-    color:#0756a8;
-    margin-bottom:7px;
-}
-
-.service p{
-    color:#667085;
-    line-height:1.6;
-    font-size:14px;
-}
-
-.branchArea{
-    background:white;
-    padding:25px;
-    border-radius:16px;
-    box-shadow:0 4px 15px rgba(0,0,0,.06);
-}
-
-.branchSearch{
-    width:100%;
-    padding:14px;
-    border:1px solid #ddd;
-    border-radius:9px;
-    margin-bottom:15px;
-    font-size:15px;
-    outline:none;
-}
-
-.branchGrid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
-    gap:15px;
-}
-
-.branch{
-    background:#f8fafc;
-    padding:18px;
-    border-radius:11px;
-    border:1px solid #e5e7eb;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    min-height:130px;
-}
-
-.branch h3{
-    color:#0756a8;
-    margin-bottom:8px;
-    font-size:16px;
-    word-break:break-word;
-    white-space:normal;
-    line-height:1.4;
-}
-
-.online{
-    color:#198754;
-    font-size:12px;
-    margin-bottom:12px;
-}
-
-.branchBtn{
-    width:100%;
-    background:#ffd400;
-    color:#0756a8;
-    padding:10px;
-    border-radius:7px;
-    font-weight:bold;
-}
-
-.primaryBtn{
-    width:100%;
-    padding:13px;
-    margin-top:8px;
-    background:#0756a8;
-    color:white;
-    border-radius:8px;
-    font-weight:bold;
-}
-
-.page{
-    display:none;
-}
-
-.languagePage{
-    position:fixed;
-    inset:0;
-    background:linear-gradient(135deg,#0756a8,#0c72d4);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    z-index:9999;
-}
-
-.languageBox{
-    background:white;
-    width:100%;
-    max-width:500px;
-    padding:35px;
-    border-radius:22px;
-    text-align:center;
-    box-shadow:0 10px 35px rgba(0,0,0,.2);
-}
-
-.languageLogo{
-    width:65px;
-    height:65px;
-    margin:0 auto 15px;
-    border-radius:15px;
-    background:#ffd400;
-    color:#0756a8;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:32px;
-    font-weight:bold;
-}
-
-.languageBox h1{
-    color:#0756a8;
-    margin-bottom:10px;
-}
-
-.languageBox p{
-    color:#667085;
-    margin-bottom:25px;
-}
-
-.languageChoices{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:15px;
-}
-
-.languageChoice{
-    padding:20px;
-    border:2px solid #e5e7eb;
-    background:#f8fafc;
-    border-radius:14px;
-    font-size:18px;
-    font-weight:bold;
-    color:#0756a8;
-}
-
-.languageChoice:hover{
-    border-color:#ffd400;
-    background:#fffbea;
-}
-
-.chatPage{
-    max-width:850px;
-    margin:25px auto;
-    padding:0 15px;
-}
-
-.chatBox{
-    background:white;
-    border-radius:17px;
-    overflow:hidden;
-    box-shadow:0 5px 20px rgba(0,0,0,.1);
-}
-
-.chatHeader{
-    background:#0756a8;
-    color:white;
-    padding:18px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-
-.chatStatus{
-    color:#ffd400;
-    font-size:13px;
-    margin-top:5px;
-}
-
-.messages{
-    height:430px;
-    overflow-y:auto;
-    background:#f3f5f7;
-    padding:20px;
-}
-
-.message{
-    max-width:80%;
-    padding:12px 15px;
-    border-radius:14px;
-    margin-bottom:12px;
-    line-height:1.7;
-}
-
-.customerMessage{
-    background:#0756a8;
-    color:white;
-    margin-right:auto;
-}
-
-.employeeMessage{
-    background:#ffd400;
-    color:#17324d;
-    margin-left:auto;
-}
-
-.message small{
-    display:block;
-    font-size:10px;
-    margin-top:5px;
-    opacity:.7;
-}
-
-.chatInput{
-    display:flex;
-    gap:8px;
-    padding:12px;
-}
-
-.chatInput input{
-    flex:1;
-    padding:13px;
-    border:1px solid #ddd;
-    border-radius:8px;
-}
-
-.chatInput button{
-    background:#0756a8;
-    color:white;
-    padding:0 20px;
-    border-radius:8px;
-}
-
-.employeeDashboard{
-    background:white;
-    border-radius:15px;
-    padding:20px;
-    margin-bottom:20px;
-    box-shadow:0 4px 15px rgba(0,0,0,.06);
-}
-
-.requestItem{
-    background:#f8fafc;
-    border-right:4px solid #0756a8;
-    padding:15px;
-    margin-bottom:10px;
-    border-radius:8px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    cursor:pointer;
-}
-
-.modal{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.55);
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    z-index:10000;
-}
-
-.loginBox{
-    width:100%;
-    max-width:460px;
-    background:white;
-    padding:25px;
-    border-radius:17px;
-    position:relative;
-}
-
-.authTabs{
-    display:flex;
-    gap:10px;
-    margin-bottom:15px;
-    border-bottom:2px solid #eee;
-    padding-bottom:10px;
-}
-
-.authTab{
-    flex:1;
-    padding:8px;
-    background:none;
-    font-weight:bold;
-    color:#777;
-    border-bottom:3px solid transparent;
-}
-
-.authTab.active{
-    color:#0756a8;
-    border-bottom-color:#0756a8;
-}
-
-.close{
-    position:absolute;
-    top:15px;
-    left:20px;
-    font-size:25px;
-    cursor:pointer;
-    color:#333;
-}
-
-.verifyBadge{
-    display:inline-block;
-    background:#10b981;
-    color:white;
-    padding:3px 8px;
-    border-radius:6px;
-    font-size:11px;
-    margin-right:6px;
-}
-
-.forgotLink{
-    display:block;
-    text-align:left;
-    color:#0756a8;
-    font-size:12px;
-    margin-top:-5px;
-    margin-bottom:12px;
-    cursor:pointer;
-    text-decoration:underline;
-}
-
-.noMessages{
-    text-align:center;
-    padding:40px;
-    color:#888;
-}
-
-footer{
-    text-align:center;
-    color:#777;
-    padding:30px;
-    font-size:13px;
-}
-</style>
+        .info-text {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+    </style>
 </head>
-
 <body>
 
-<div id="languagePage" class="languagePage">
-    <div class="languageBox">
-        <div class="languageLogo">ز</div>
-        <h1>Zajil Branch Service</h1>
-        <p>اختر اللغة / Choose your language</p>
-        <div class="languageChoices">
-            <button class="languageChoice" onclick="selectLanguage('ar')">🇸🇦 العربية</button>
-            <button class="languageChoice" onclick="selectLanguage('en')">🇬🇧 English</button>
+    <header>
+        <div class="header-title">منصة خدمة فرع الزاجل</div>
+        <div>
+            <button onclick="openModal()" style="background: transparent; border: 1px solid #fff; color: #fff; padding: 6px 12px; border-radius: 4px; cursor: pointer;">بوابة الموظفين</button>
         </div>
-    </div>
-</div>
+    </header>
 
-<header>
-    <div class="logo">
-        <div class="logoIcon">ز</div>
-        <span data-i18n="brand">Zajil Branch Service</span>
-    </div>
-    <div class="headerActions">
-        <button class="langBtn" onclick="changeLanguage()">العربية / English</button>
-        <button class="headerBtn" onclick="openLogin()">
-            <span data-i18n="employeeLogin">حساب الموظف</span>
-        </button>
-    </div>
-</header>
-
-<section id="homePage">
-<div class="container">
-    <div class="hero">
-        <h1 data-i18n="heroTitle">تكامل اللوجستيات بين يديك</h1>
-        <p data-i18n="heroText">تواصل مباشرة مع فرعك لخدمات شحن أسرع وأكثر كفاءة.</p>
-    </div>
-
-    <h2 class="title" data-i18n="servicesTitle">الخدمات</h2>
-
-    <div class="services">
-        <div class="service" onclick="alert('اختر الفرع أولاً من الأسفل للبدء بالمحادثة')">
-            <div class="serviceIcon">💰</div>
-            <h3 data-i18n="shippingPrice">سعر الشحن</h3>
-            <p data-i18n="shippingPriceDesc">استفسر عن تكلفة الشحن.</p>
-        </div>
-        <div class="service" onclick="alert('اختر الفرع أولاً من الأسفل للبدء بالمحادثة')">
-            <div class="serviceIcon">📦</div>
-            <h3 data-i18n="tracking">تتبع الشحنة</h3>
-            <p data-i18n="trackingDesc">استفسر عن حالة شحنتك.</p>
-        </div>
-        <div class="service" onclick="alert('اختر الفرع أولاً من الأسفل للبدء بالمحادثة')">
-            <div class="serviceIcon">🚚</div>
-            <h3 data-i18n="vehicle">طلب سيارة</h3>
-            <p data-i18n="vehicleDesc">اطلب سيارة لاستلام البضائع من المنزل.</p>
-        </div>
-        <div class="service" onclick="alert('اختر الفرع أولاً من الأسفل للبدء بالمحادثة')">
-            <div class="serviceIcon">📍</div>
-            <h3 data-i18n="areas">مناطق الخدمة</h3>
-            <p data-i18n="areasDesc">استفسر عن المناطق التي يخدمها الفرع.</p>
+    <div class="container">
+        <div class="card">
+            <h2>مرحباً بك في خدمة الفروع</h2>
+            <p>يمكنك استخدام هذه المنصة المخصصة لإدارة العمليات وطلبات خدمة العملاء بفرعك.</p>
         </div>
     </div>
 
-    <h2 class="title" data-i18n="branchesTitle">اختر الفرع</h2>
-
-    <div class="branchArea">
-        <input id="branchSearch" class="branchSearch" data-i18n-placeholder="searchBranch" placeholder="🔎 ابحث عن الفرع أو المدينة..." oninput="filterBranches()">
-        <div id="branchGrid" class="branchGrid"></div>
-    </div>
-</div>
-</section>
-
-<section id="employeePage" class="page container">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-        <h2 class="title" style="margin:0;">📥 مركز الطلبات والرسائل الواردة (<span id="empBranchTitle">فرع القريات</span>)</h2>
-        <span class="verifyBadge">✓ موظف موثق رسمياً</span>
-    </div>
-    
-    <div class="employeeDashboard">
-        <div id="requestsList">
-            <div class="noMessages">جاري تحميل الرسائل والطلبات...</div>
-        </div>
-    </div>
-    <button class="primaryBtn" onclick="goHome()">العودة للرئيسية</button>
-</section>
-
-<section id="chatPage" class="page">
-<div class="chatPage">
-    <div class="chatBox">
-        <div class="chatHeader">
-            <div>
-                <h2 id="chatBranch">خدمة العملاء</h2>
-                <div class="chatStatus" data-i18n="savedMessages">● متصل بـ Supabase</div>
+    <!-- نافذة التسجيل وتسجيل الدخول -->
+    <div id="authModal" class="modal-overlay" style="display: flex;">
+        <div class="modal">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            
+            <div class="tabs">
+                <button class="tab-btn" id="loginTabBtn" onclick="switchTab('login')">تسجيل الدخول</button>
+                <button class="tab-btn active" id="signupTabBtn" onclick="switchTab('signup')">تسجيل موظف جديد</button>
             </div>
-            <button class="langBtn" onclick="backToEmployeeDashboard()" id="backToDashBtn" style="display:none;">← العودة لمركز الطلبات</button>
-        </div>
-        <div id="messages" class="messages"></div>
-        <div class="chatInput">
-            <input id="messageInput" data-i18n-placeholder="writeMessage" placeholder="اكتب رسالتك..." onkeydown="if(event.key==='Enter')sendMessage()">
-            <button onclick="sendMessage()" data-i18n="send">إرسال</button>
-        </div>
-    </div>
-    <button class="primaryBtn" onclick="goHome()" data-i18n="backHome">العودة للرئيسية</button>
-</div>
-</section>
 
-<!-- نافذة تسجيل الدخول للموظف -->
-<div id="loginModal" class="modal">
-<div class="loginBox">
-    <span class="close" onclick="closeLogin()">×</span>
-    
-    <div class="authTabs" id="authTabsHeader">
-        <button class="authTab active" id="loginTabBtn" onclick="switchAuthTab('login')">تسجيل الدخول</button>
-        <button class="authTab" id="signupTabBtn" onclick="switchAuthTab('signup')">تسجيل موظف جديد</button>
-    </div>
-
-    <!-- نموذج تسجيل الدخول -->
-    <div id="loginForm">
-        <p style="margin:10px 0; color:#666; font-size:13px;">أدخل بيانات حسابك الوظيفي المعتمد للوصول للطلبات.</p>
-        
-        <label style="display:block; margin-bottom:5px; font-weight:bold; font-size:13px; text-align:right;">اختر الفرع:</label>
-        <select id="loginBranchSelect" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px; font-size:14px;"></select>
-
-        <input id="loginEmail" type="email" placeholder="البريد الإلكتروني الرسمي" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
-        <input id="loginPassword" type="password" placeholder="كلمة المرور" style="width:100%; padding:12px; margin-bottom:8px; border:1px solid #ccc; border-radius:8px;">
-        
-        <span class="forgotLink" onclick="showForgotPassword()">هل نسيت كلمة المرور؟</span>
-
-        <button class="primaryBtn" id="loginSubmitBtn" onclick="handleEmployeeLogin()">التحقق وتسجيل الدخول</button>
-    </div>
-
-    <!-- نموذج استعادة كلمة المرور عبر الإيميل -->
-    <div id="forgotForm" style="display:none;">
-        <h3 style="color:#0756a8; margin-bottom:10px;">استعادة كلمة المرور</h3>
-        <p style="margin:10px 0; color:#666; font-size:13px;">أدخل بريدك الإلكتروني المسجل في النظام، وسنرسل لك رابط/كود تعيين كلمة مرور جديدة.</p>
-        
-        <input id="resetEmail" type="email" placeholder="أدخل بريدك الإلكتروني الشخصي/الرسمي" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
-        
-        <button class="primaryBtn" onclick="handleResetPassword()" style="background:#10b981;">إرسال كود الاستعادة للإيميل</button>
-        <button class="primaryBtn" onclick="hideForgotPassword()" style="background:#6c757d; margin-top:6px;">إلغاء والعودة</button>
-    </div>
-
-    <!-- نموذج إنشاء حساب جديد موثق -->
-    <div id="signupForm" style="display:none;">
-        <p style="margin:10px 0; color:#666; font-size:13px;">يتطلب التسجيل إدخال كود تفعيل الفرع والرقم الوظيفي للتأكد من هويتك.</p>
-        
-        <input id="signupName" type="text" placeholder="الاسم الرباعي للموظف" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
-        <input id="signupEmpId" type="text" placeholder="الرقم الوظيفي الخاص بك" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
-
-        <label style="display:block; margin-bottom:5px; font-weight:bold; font-size:13px; text-align:right;">الفرع المخصص للعمل فيه:</label>
-        <select id="signupBranchSelect" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px; font-size:14px;"></select>
-
-        <input id="signupPasscode" type="password" placeholder="كود التفعيل الأمني للفرع (مثال: ZAJIL2026)" style="width:100%; padding:12px; margin-bottom:12px; border:2px solid #0756a8; border-radius:8px; background:#f0f7ff;">
-
-        <input id="signupEmail" type="email" placeholder="البريد الإلكتروني للعمل" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
-        <input id="signupPassword" type="password" placeholder="كلمة المرور الحصينة" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
-        
-        <button class="primaryBtn" id="signupSubmitBtn" onclick="handleEmployeeSignup()" style="background:#198754;">توثيق الهوية وإنشاء الحساب</button>
-    </div>
-
-</div>
-</div>
-
-<footer>
-    Zajil Branch Service © 2026
-</footer>
-
-<script>
-const SUPABASE_URL = 'https://hyyzhgewqkdxywhkbbxs.supabase.co';
-const SUPABASE_KEY = 'Sb_publishable_HCbypT7XNYC_BRgpYYerGw_YFtbnPYw';
-
-let db = null;
-let activeRole = 'customer';
-let currentEmployeeBranch = 'فرع القريات';
-
-const BRANCH_SECURITY_CODES = {
-    "DEFAULT": "ZAJIL2026",
-    "فرع القريات": "QURAYYAT_700",
-    "فرع الرياض": "RIYADH_100",
-    "فرع جدة": "JEDDAH_200"
-};
-
-function getSupabaseClient() {
-    if (!db) {
-        if (window.supabase && typeof window.supabase.createClient === 'function') {
-            db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        } else if (typeof createClient === 'function') {
-            db = createClient(SUPABASE_URL, SUPABASE_KEY);
-        }
-    }
-    return db;
-}
-
-const translations = {
-ar: {
-brand:"Zajil Branch Service",
-employeeLogin:"حساب الموظف المعتمد",
-heroTitle:"تكامل اللوجستيات بين يديك",
-heroText:"تواصل مباشرة مع فرعك لخدمات شحن أسرع وأكثر كفاءة.",
-servicesTitle:"الخدمات",
-shippingPrice:"سعر الشحن",
-shippingPriceDesc:"استفسر عن تكلفة الشحن.",
-tracking:"تتبع الشحنة",
-trackingDesc:"استفسر عن حالة شحنتك.",
-vehicle:"طلب سيارة",
-vehicleDesc:"اطلب سيارة لاستلام البضائع من المنزل.",
-areas:"مناطق الخدمة",
-areasDesc:"استفسر عن المناطق التي يخدمها الفرع.",
-branchesTitle:"اختر الفرع",
-searchBranch:"🔎 ابحث عن الفرع أو المدينة...",
-savedMessages:"● متصل بـ Supabase",
-writeMessage:"اكتب رسالتك...",
-send:"إرسال",
-backHome:"العودة للرئيسية",
-contactBranch:"التواصل مع الفرع",
-serviceAvailable:"● خدمة العملاء متاحة",
-noBranch:"لا يوجد فرع بهذا الاسم.",
-welcome:"مرحبًا بك 👋",
-chatWith:"أنت الآن تتواصل مع "
-},
-en: {
-brand:"Zajil Branch Service",
-employeeLogin:"Verified Employee Account",
-heroTitle:"Logistics at Your Fingertips",
-heroText:"Connect directly with your branch for faster shipping services.",
-servicesTitle:"Services",
-shippingPrice:"Shipping Price",
-shippingPriceDesc:"Ask about shipping costs.",
-tracking:"Shipment Tracking",
-trackingDesc:"Ask about your shipment status.",
-vehicle:"Vehicle Request",
-vehicleDesc:"Request a vehicle to collect goods.",
-areas:"Service Areas",
-areasDesc:"Ask about the areas served.",
-branchesTitle:"Select a Branch",
-searchBranch:"🔎 Search branch or city...",
-savedMessages:"● Connected to Supabase",
-writeMessage:"Write your message...",
-send:"Send",
-backHome:"Back to Home",
-contactBranch:"Contact Branch",
-serviceAvailable:"● Customer service available",
-noBranch:"No branch found.",
-welcome:"Welcome 👋",
-chatWith:"You are now contacting "
-}
-};
-
-let currentLanguage = localStorage.getItem("zajil_language") || null;
-let lang = currentLanguage || "ar";
-
-let loadedBranches = [
-    "فرع تبوك", "فرع القريات", "فرع طبرجل", "فرع حائل", "فرع عرعر", "فرع دومة الجندل",
-    "فرع حفر الباطن", "فرع سكاكا", "فرع الدمام", "فرع الخبر", "فرع الخفجي", "فرع الجبيل البلد",
-    "فرع الجبيل الصناعية", "فرع الاحساء", "فرع القطيف", "فرع الظهران", "فرع الخرج", "فرع المجمعة",
-    "فرع بريدة", "فرع الدوادمي", "فرع الرس", "فرع عنيزة", "فرع الرياض", "فرع شقراء",
-    "فرع وادي الدواسر", "فرع الباحة", "فرع جدة", "فرع مكة", "فرع المدينة المنورة", "فرع الطائف",
-    "فرع ينبع", "فرع ابها", "فرع ابو عريش", "فرع بيشة", "فرع خميس مشيط", "فرع جازان",
-    "فرع نجران", "فرع صامطة", "فرع صبيا", "فرع النماص"
-];
-
-async function initBranches() {
-    renderBranches(loadedBranches);
-    populateEmployeeBranchDropdowns();
-}
-
-function populateEmployeeBranchDropdowns() {
-    const loginSelect = document.getElementById("loginBranchSelect");
-    const signupSelect = document.getElementById("signupBranchSelect");
-
-    loginSelect.innerHTML = "";
-    signupSelect.innerHTML = "";
-
-    loadedBranches.forEach(b => {
-        const opt1 = document.createElement("option");
-        opt1.value = b;
-        opt1.textContent = b;
-        if (b === "فرع القريات") opt1.selected = true;
-        loginSelect.appendChild(opt1);
-
-        const opt2 = document.createElement("option");
-        opt2.value = b;
-        opt2.textContent = b;
-        if (b === "فرع القريات") opt2.selected = true;
-        signupSelect.appendChild(opt2);
-    });
-}
-
-function switchAuthTab(tab) {
-    hideForgotPassword();
-    if(tab === 'login') {
-        document.getElementById('loginTabBtn').classList.add('active');
-        document.getElementById('signupTabBtn').classList.remove('active');
-        document.getElementById('loginForm').style.display = 'block';
-        document.getElementById('signupForm').style.display = 'none';
-    } else {
-        document.getElementById('signupTabBtn').classList.add('active');
-        document.getElementById('loginTabBtn').classList.remove('active');
-        document.getElementById('signupForm').style.display = 'block';
-        document.getElementById('loginForm').style.display = 'none';
-    }
-}
-
-function showForgotPassword() {
-    document.getElementById('loginForm').style.display = 'none';
-    document.getElementById('signupForm').style.display = 'none';
-    document.getElementById('authTabsHeader').style.display = 'none';
-    document.getElementById('forgotForm').style.display = 'block';
-}
-
-function hideForgotPassword() {
-    document.getElementById('forgotForm').style.display = 'none';
-    document.getElementById('authTabsHeader').style.display = 'flex';
-    document.getElementById('loginForm').style.display = 'block';
-}
-
-function renderBranches(list){
-    const grid = document.getElementById("branchGrid");
-    grid.innerHTML="";
-
-    if(!list || list.length === 0){
-        grid.innerHTML = `<div class="noMessages">${translations[lang].noBranch}</div>`;
-        return;
-    }
-
-    list.forEach(branch => {
-        const card = document.createElement("div");
-        card.className="branch";
-        
-        const h3 = document.createElement("h3");
-        h3.textContent = branch;
-
-        const onlineDiv = document.createElement("div");
-        onlineDiv.className = "online";
-        onlineDiv.textContent = translations[lang].serviceAvailable;
-
-        const btn = document.createElement("button");
-        btn.className = "branchBtn";
-        btn.textContent = translations[lang].contactBranch;
-        btn.onclick = function() { openChat(branch); };
-
-        card.appendChild(h3);
-        card.appendChild(onlineDiv);
-        card.appendChild(btn);
-
-        grid.appendChild(card);
-    });
-}
-
-function filterBranches(){
-    const value = document.getElementById("branchSearch").value.trim().toLowerCase();
-    const result = loadedBranches.filter(branch => branch.toLowerCase().includes(value));
-    renderBranches(result);
-}
-
-function openChat(branch){
-    document.getElementById("homePage").style.display="none";
-    document.getElementById("employeePage").style.display="none";
-    document.getElementById("chatPage").style.display="block";
-
-    document.getElementById("chatBranch").innerText =
-        lang === "ar" ? "خدمة عملاء " + branch : "Customer Service - " + branch;
-
-    sessionStorage.setItem("customer_branch", branch);
-    loadChat(branch);
-}
-
-async function sendMessage(){
-    const input = document.getElementById("messageInput");
-    const text = input.value.trim();
-    if(!text) return;
-
-    const branch = sessionStorage.getItem("customer_branch") || currentEmployeeBranch;
-    const senderRole = activeRole === 'employee' ? 'employee' : 'customer';
-    const client = getSupabaseClient();
-
-    appendMessage(text, senderRole);
-    input.value = "";
-
-    if (client) {
-        try {
-            await client.from('messages').insert([
-                { branch: branch, text: text, sender: senderRole, status: 'new' }
-            ]);
-        } catch(e) {}
-    }
-}
-
-async function loadChat(branch){
-    const box = document.getElementById("messages");
-    box.innerHTML = `
-        <div class="message employeeMessage">
-            ${translations[lang].welcome}<br><br>
-            ${translations[lang].chatWith} ${escapeHTML(branch)}.
-        </div>
-    `;
-
-    const client = getSupabaseClient();
-    if (client) {
-        try {
-            const { data: messages, error } = await client
-                .from('messages')
-                .select('*')
-                .order('created_at', { ascending: true });
-
-            if (!error && messages && messages.length > 0) {
-                const cleanBranch = branch.replace('فرع ', '').trim();
-                const filtered = messages.filter(m => m.branch && m.branch.includes(cleanBranch));
-
-                if(filtered.length > 0) {
-                    box.innerHTML = "";
-                    filtered.forEach(m => {
-                        appendMessage(m.text, m.sender, m.created_at);
-                    });
-                }
-            }
-        } catch(e) {}
-    }
-}
-
-function appendMessage(text, sender, timeStr){
-    const box = document.getElementById("messages");
-    const div = document.createElement("div");
-    div.className = sender === "customer" ? "message customerMessage" : "message employeeMessage";
-    const time = timeStr ? new Date(timeStr).toLocaleTimeString() : new Date().toLocaleTimeString();
-    div.innerHTML = `${escapeHTML(text)}<small>${time}</small>`;
-    box.appendChild(div);
-    box.scrollTop = box.scrollHeight;
-}
-
-/* تسجيل الدخول مع التحقق الصارم من كلمة المرور عبر Supabase */
-async function handleEmployeeLogin(){
-    const email = document.getElementById("loginEmail").value.trim();
-    const password = document.getElementById("loginPassword").value.trim();
-    const loginBtn = document.getElementById("loginSubmitBtn");
-    
-    if(!email || !password) {
-        alert("⚠️ يرجى أدخال البريد الإلكتروني وكلمة المرور الخاصة بحسابك");
-        return;
-    }
-
-    loginBtn.innerText = "جاري التحقق من كلمة المرور...";
-    loginBtn.disabled = true;
-
-    const client = getSupabaseClient();
-    
-    if(client) {
-        try {
-            // المصادقة الفعلية مع قاعدة البيانات والتحقق من كلمة المرور
-            const { data, error } = await client.auth.signInWithPassword({
-                email: email,
-                password: password,
-            });
-
-            if (error) {
-                alert("❌ فشل الدخول: كلمة المرور أو البريد الإلكتروني غير صحيح!\nيرجى إعادة المحاولة أو اضغط على (نسيت كلمة المرور).");
-                loginBtn.innerText = "التحقق وتسجيل الدخول";
-                loginBtn.disabled = false;
-                return;
-            }
-
-            // تم الدخول بنجاح
-            currentEmployeeBranch = document.getElementById("loginBranchSelect").value;
-            activeRole = 'employee';
-            
-            alert(`✅ مرحباً بك! تم التحقق من كلمة المرور بنجاح.`);
-            closeLogin();
-
-            document.getElementById("homePage").style.display="none";
-            document.getElementById("chatPage").style.display="none";
-            document.getElementById("employeePage").style.display="block";
-            document.getElementById("empBranchTitle").innerText = currentEmployeeBranch;
-            document.getElementById("backToDashBtn").style.display="block";
-
-            loadEmployeeRequestsDashboard();
-
-        } catch(err) {
-            alert("حدث خطأ في الاتصال بالسيرفر. يرجى المحاولة لاحقاً.");
-        }
-    } else {
-        alert("لم يتم العثور على الاتصال بقاعدة البيانات.");
-    }
-
-    loginBtn.innerText = "التحقق وتسجيل الدخول";
-    loginBtn.disabled = false;
-}
-
-/* طلب استعادة كلمة المرور وإرسال كود للإيميل */
-async function handleResetPassword() {
-    const email = document.getElementById("resetEmail").value.trim();
-    if(!email) {
-        alert("⚠️ يرجى كتابة البريد الإلكتروني لإرسال كود/رابط الاستعادة");
-        return;
-    }
-
-    const client = getSupabaseClient();
-    if(client) {
-        try {
-            const { data, error } = await client.auth.resetPasswordForEmail(email, {
-                redirectTo: window.location.href,
-            });
-
-            if (error) {
-                alert("❌ تعذر إرسال الرسالة: " + error.message);
-            } else {
-                alert("📩 تم إرسال رسالة وكود استعادة كلمة المرور إلى بريدك الإلكتروني بنجاح!\nيرجى التوجه لإيميلك واتباع الخطوات.");
-                hideForgotPassword();
-            }
-        } catch(e) {
-            alert("حدث خطأ أثناء الطلب.");
-        }
-    }
-}
-
-/* التوثيق وإنشاء حساب جديد عبر Supabase Auth */
-async function handleEmployeeSignup(){
-    const name = document.getElementById("signupName").value.trim();
-    const empId = document.getElementById("signupEmpId").value.trim();
-    const branch = document.getElementById("signupBranchSelect").value;
-    const passcode = document.getElementById("signupPasscode").value.trim();
-    const email = document.getElementById("signupEmail").value.trim();
-    const password = document.getElementById("signupPassword").value.trim();
-    const signupBtn = document.getElementById("signupSubmitBtn");
-
-    if(!name || !empId || !passcode || !email || !password) {
-        alert("⚠️ جميع الحقول مطلوبة لتوثيق هوية الموظف");
-        return;
-    }
-
-    // التحقق من كود الفرع الأمني
-    const validCode = BRANCH_SECURITY_CODES[branch] || BRANCH_SECURITY_CODES["DEFAULT"];
-    if(passcode !== validCode) {
-        alert("❌ كود التفعيل الأمني للفرع غير صحيح! أطلب الكود من المشرف لتأكيد هويتك.");
-        return;
-    }
-
-    signupBtn.innerText = "جاري إنشاء وتوثيق الحساب...";
-    signupBtn.disabled = true;
-
-    const client = getSupabaseClient();
-    if(client) {
-        try {
-            const { data, error } = await client.auth.signUp({
-                email: email,
-                password: password,
-                options: {
-                    data: {
-                        full_name: name,
-                        employee_id: empId,
-                        branch: branch
-                    }
-                }
-            });
-
-            if(error) {
-                alert("❌ خطأ أثناء إنشاء الحساب: " + error.message);
-                signupBtn.innerText = "توثيق الهوية وإنشاء الحساب";
-                signupBtn.disabled = false;
-                return;
-            }
-
-            alert(`✅ تم إنشاء حسابك بنجاح للفرع (${branch})!\nيمكنك الان تسجيل الدخول بكلمة المرور الخاصة بك.`);
-            switchAuthTab('login');
-
-        } catch(e) {
-            alert("حدث خطأ غير متوقع.");
-        }
-    }
-
-    signupBtn.innerText = "توثيق الهوية وإنشاء الحساب";
-    signupBtn.disabled = false;
-}
-
-/* جلب وعرض طلبات ورسائل الموظف */
-async function loadEmployeeRequestsDashboard() {
-    const container = document.getElementById("requestsList");
-    container.innerHTML = "جاري تحميل الطلبات والرسائل...";
-
-    const client = getSupabaseClient();
-    if(!client) {
-        container.innerHTML = `<div class="noMessages">عذراً، لم يتم الاتصال بقاعدة البيانات.</div>`;
-        return;
-    }
-
-    try {
-        const { data: messages, error } = await client
-            .from('messages')
-            .select('*')
-            .order('created_at', { ascending: false });
-
-        if(error) {
-            container.innerHTML = `<div class="noMessages">خطأ أثناء جلب البيانات: ${escapeHTML(error.message)}</div>`;
-            return;
-        }
-
-        const cleanBranch = currentEmployeeBranch.replace('فرع ', '').trim();
-        const branchMessages = messages ? messages.filter(m => m.branch && m.branch.includes(cleanBranch)) : [];
-
-        if(branchMessages.length === 0) {
-            container.innerHTML = `<div class="noMessages">لا توجد رسائل أو طلبات مسجلة حالياً لـ ${currentEmployeeBranch}</div>`;
-            return;
-        }
-
-        container.innerHTML = "";
-        branchMessages.forEach(msg => {
-            const item = document.createElement("div");
-            item.className = "requestItem";
-            const time = new Date(msg.created_at).toLocaleString();
-            
-            item.innerHTML = `
-                <div>
-                    <strong>المرسل: ${msg.sender === 'customer' ? 'عميل الفرع 👤' : 'الموظف 👔'}</strong>
-                    <p style="margin-top:5px; color:#444;">${escapeHTML(msg.text)}</p>
-                    <small style="color:#888;">${time}</small>
+            <!-- نموذج تسجيل موظف جديد -->
+            <form id="signupForm" onsubmit="handleEmployeeSignup(event)">
+                <div class="info-text">
+                    يتطلب التسجيل إدخال كود تفعيل الفرع والرقم الوظيفي للتأكد من هويتك.
                 </div>
-                <button class="branchBtn" style="width:auto; padding:8px 15px;">فتح المحادثة</button>
-            `;
 
-            item.onclick = () => openChat(currentEmployeeBranch);
-            container.appendChild(item);
-        });
+                <div class="form-group">
+                    <label>الاسم الكامل</label>
+                    <input type="text" id="signupName" placeholder="سعود الدهام" required>
+                </div>
 
-    } catch(e) {
-        container.innerHTML = `<div class="noMessages">خطأ غير متوقع في جلب البيانات</div>`;
-    }
-}
+                <div class="form-group">
+                    <label>الفرع</label>
+                    <select id="signupBranch" required>
+                        <option value="QURAYYAT">فرع القريات</option>
+                        <option value="RIYADH">فرع الرياض</option>
+                        <option value="JEDDAH">فرع جدة</option>
+                        <option value="OTHER">فرع آخر</option>
+                    </select>
+                </div>
 
-function backToEmployeeDashboard() {
-    document.getElementById("chatPage").style.display="none";
-    document.getElementById("employeePage").style.display="block";
-    loadEmployeeRequestsDashboard();
-}
+                <div class="form-group">
+                    <label>كود التفعيل الأمني للفرع</label>
+                    <input type="text" id="signupPasscode" placeholder="أدخل كود التفعيل" required>
+                </div>
 
-function selectLanguage(selected){
-    lang = selected;
-    localStorage.setItem("zajil_language", selected);
-    applyLanguage();
-    document.getElementById("languagePage").style.display="none";
-}
+                <div class="form-group">
+                    <label>البريد الإلكتروني</label>
+                    <input type="email" id="signupEmail" placeholder="saudnaser1594@gmail.com" required>
+                </div>
 
-function changeLanguage(){
-    lang = lang === "ar" ? "en" : "ar";
-    localStorage.setItem("zajil_language", lang);
-    applyLanguage();
-    renderBranches(loadedBranches);
-}
+                <div class="form-group">
+                    <label>كلمة المرور</label>
+                    <input type="password" id="signupPassword" placeholder="••••••••" required minlength="6">
+                </div>
 
-function applyLanguage(){
-    document.documentElement.lang = lang;
-    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+                <button type="submit" id="submitBtn" class="btn">توثيق الهوية وإنشاء الحساب</button>
+            </form>
 
-    document.querySelectorAll("[data-i18n]").forEach(element => {
-        const key = element.getAttribute("data-i18n");
-        if(translations[lang][key]) element.innerText = translations[lang][key];
-    });
+            <!-- نموذج تسجيل الدخول -->
+            <form id="loginForm" onsubmit="handleEmployeeLogin(event)" style="display: none;">
+                <div class="form-group">
+                    <label>البريد الإلكتروني</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>كلمة المرور</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn">تسجيل الدخول</button>
+            </form>
+        </div>
+    </div>
 
-    document.querySelectorAll("[data-i18n-placeholder]").forEach(element => {
-        const key = element.getAttribute("data-i18n-placeholder");
-        if(translations[lang][key]) element.placeholder = translations[lang][key];
-    });
-}
+    <script>
+        // ==========================================
+        // 1. تهيئة Supabase (تأكد من استبدال المفاتيح الصحيحة)
+        // ==========================================
+        const SUPABASE_URL = "https://YOUR_SUPABASE_PROJECT_ID.supabase.co"; 
+        const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY"; 
 
-function openLogin(){ 
-    document.getElementById("loginModal").style.display="flex"; 
-}
+        // إنشاء العميل مع التحقق من المفتاح
+        let _supabase = null;
+        if (SUPABASE_URL !== "https://YOUR_SUPABASE_PROJECT_ID.supabase.co" && SUPABASE_ANON_KEY !== "YOUR_SUPABASE_ANON_KEY") {
+            _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
 
-function closeLogin(){ 
-    document.getElementById("loginModal").style.display="none"; 
-}
+        // ==========================================
+        // 2. أكواد الأمان المعتمدة لكل فرع
+        // ==========================================
+        const BRANCH_SECURITY_CODES = {
+            "QURAYYAT": "QURAYYAT_700",
+            "RIYADH": "RIYADH_100",
+            "JEDDAH": "JEDDAH_200",
+            "DEFAULT": "ZAJIL2026"
+        };
 
-function goHome(){
-    activeRole = 'customer';
-    document.getElementById("employeePage").style.display="none";
-    document.getElementById("chatPage").style.display="none";
-    document.getElementById("homePage").style.display="block";
-    document.getElementById("backToDashBtn").style.display="none";
-}
+        // ==========================================
+        // 3. معالجة إنشاء حساب موظف جديد
+        // ==========================================
+        async function handleEmployeeSignup(e) {
+            e.preventDefault();
 
-function escapeHTML(text){
-    const div = document.createElement("div");
-    div.textContent = String(text);
-    return div.innerHTML;
-}
+            if (!_supabase) {
+                alert("❌ خطأ في إعدادات الاتصال: يرجى وضع SUPABASE_URL و SUPABASE_ANON_KEY الصحيحين في الكود.");
+                return;
+            }
 
-if(currentLanguage){
-    document.getElementById("languagePage").style.display="none";
-    applyLanguage();
-} else {
-    document.getElementById("languagePage").style.display="flex";
-}
+            const name = document.getElementById('signupName').value.trim();
+            const branch = document.getElementById('signupBranch').value;
+            const passcode = document.getElementById('signupPasscode').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const submitBtn = document.getElementById('submitBtn');
 
-window.addEventListener('DOMContentLoaded', () => {
-    initBranches();
-});
-</script>
+            // أ) التحقق من كود التفعيل الأمني للفرع
+            const validCode = BRANCH_SECURITY_CODES[branch] || BRANCH_SECURITY_CODES["DEFAULT"];
+            if (passcode !== validCode) {
+                alert("❌ كود التفعيل الأمني للفرع غير صحيح! أطلب الكود من المشرف لتأكيد هويتك.");
+                return;
+            }
 
+            try {
+                submitBtn.innerText = "جاري إنشاء وتوثيق الحساب...";
+                submitBtn.disabled = true;
+
+                // ب) إنشاء الحساب عبر Supabase Auth
+                const { data, error } = await _supabase.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            full_name: name,
+                            branch: branch
+                        }
+                    }
+                });
+
+                if (error) throw error;
+
+                // ج) حفظ بيانات الموظف في جدول employees
+                if (data.user) {
+                    const { error: dbError } = await _supabase
+                        .from('employees')
+                        .insert([
+                            { 
+                                id: data.user.id, 
+                                name: name, 
+                                branch: branch, 
+                                email: email 
+                            }
+                        ]);
+
+                    if (dbError) console.warn("ملاحظة في حفظ البيانات الإضافية:", dbError.message);
+                }
+
+                alert("✅ تم إنشاء الحساب وتوثيقه بنجاح!");
+                closeModal();
+
+            } catch (err) {
+                alert("❌ خطأ أثناء إنشاء الحساب: " + err.message);
+            } finally {
+                submitBtn.innerText = "توثيق الهوية وإنشاء الحساب";
+                submitBtn.disabled = false;
+            }
+        }
+
+        // ==========================================
+        // 4. معالجة تسجيل الدخول
+        // ==========================================
+        async function handleEmployeeLogin(e) {
+            e.preventDefault();
+
+            if (!_supabase) {
+                alert("❌ يرجى ضبط مفاتيح Supabase أولاً.");
+                return;
+            }
+
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const { data, error } = await _supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+                if (error) throw error;
+
+                alert("✅ تم تسجيل الدخول بنجاح!");
+                closeModal();
+            } catch (err) {
+                alert("❌ خطأ في تسجيل الدخول: " + err.message);
+            }
+        }
+
+        // ==========================================
+        // 5. التبديل بين التبويبات والتحكم بالنافذة
+        // ==========================================
+        function switchTab(tab) {
+            const signupForm = document.getElementById('signupForm');
+            const loginForm = document.getElementById('loginForm');
+            const signupBtn = document.getElementById('signupTabBtn');
+            const loginBtn = document.getElementById('loginTabBtn');
+
+            if (tab === 'signup') {
+                signupForm.style.display = 'block';
+                loginForm.style.display = 'none';
+                signupBtn.classList.add('active');
+                loginBtn.classList.remove('active');
+            } else {
+                signupForm.style.display = 'none';
+                loginForm.style.display = 'block';
+                loginBtn.classList.add('active');
+                signupBtn.classList.remove('active');
+            }
+        }
+
+        function openModal() {
+            document.getElementById('authModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('authModal').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
