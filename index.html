@@ -235,16 +235,13 @@
 
     <script>
         // ==========================================
-        // 1. تهيئة Supabase (تأكد من استبدال المفاتيح الصحيحة)
+        // 1. تهيئة Supabase
         // ==========================================
-        const SUPABASE_URL = "https://YOUR_SUPABASE_PROJECT_ID.supabase.co"; 
-        const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY"; 
+        // استبدل YOUR_PROJECT_ID برابط مشروعك الحقيقي (مثال: https://xyz.supabase.co)
+        const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co"; 
+        const SUPABASE_ANON_KEY = "Sb_publishable_HCbypT7XNYC_BRgpYYerGw_YFtbnPYw"; 
 
-        // إنشاء العميل مع التحقق من المفتاح
-        let _supabase = null;
-        if (SUPABASE_URL !== "https://YOUR_SUPABASE_PROJECT_ID.supabase.co" && SUPABASE_ANON_KEY !== "YOUR_SUPABASE_ANON_KEY") {
-            _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        }
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ==========================================
         // 2. أكواد الأمان المعتمدة لكل فرع
@@ -262,11 +259,6 @@
         async function handleEmployeeSignup(e) {
             e.preventDefault();
 
-            if (!_supabase) {
-                alert("❌ خطأ في إعدادات الاتصال: يرجى وضع SUPABASE_URL و SUPABASE_ANON_KEY الصحيحين في الكود.");
-                return;
-            }
-
             const name = document.getElementById('signupName').value.trim();
             const branch = document.getElementById('signupBranch').value;
             const passcode = document.getElementById('signupPasscode').value.trim();
@@ -274,7 +266,7 @@
             const password = document.getElementById('signupPassword').value;
             const submitBtn = document.getElementById('submitBtn');
 
-            // أ) التحقق من كود التفعيل الأمني للفرع
+            // التحقق من كود التفعيل الأمني للفرع
             const validCode = BRANCH_SECURITY_CODES[branch] || BRANCH_SECURITY_CODES["DEFAULT"];
             if (passcode !== validCode) {
                 alert("❌ كود التفعيل الأمني للفرع غير صحيح! أطلب الكود من المشرف لتأكيد هويتك.");
@@ -285,7 +277,7 @@
                 submitBtn.innerText = "جاري إنشاء وتوثيق الحساب...";
                 submitBtn.disabled = true;
 
-                // ب) إنشاء الحساب عبر Supabase Auth
+                // إنشاء الحساب عبر Supabase Auth
                 const { data, error } = await _supabase.auth.signUp({
                     email: email,
                     password: password,
@@ -299,7 +291,7 @@
 
                 if (error) throw error;
 
-                // ج) حفظ بيانات الموظف في جدول employees
+                // حفظ بيانات الموظف في جدول employees
                 if (data.user) {
                     const { error: dbError } = await _supabase
                         .from('employees')
@@ -331,11 +323,6 @@
         // ==========================================
         async function handleEmployeeLogin(e) {
             e.preventDefault();
-
-            if (!_supabase) {
-                alert("❌ يرجى ضبط مفاتيح Supabase أولاً.");
-                return;
-            }
 
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
