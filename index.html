@@ -7,7 +7,6 @@
 
 <title>Zajil Branch Service</title>
 
-<!-- مكتبة Supabase JS CDN -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 
 <style>
@@ -161,7 +160,6 @@ header{
     outline:none;
 }
 
-/* تحسين الشبكة لضمان ظهور اسم الفرع كاملاً دون اقتطاع */
 .branchGrid{
     display:grid;
     grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
@@ -370,7 +368,7 @@ header{
     align-items:center;
     justify-content:center;
     padding:20px;
-    z-index:100;
+    z-index:10000;
 }
 
 .loginBox{
@@ -379,12 +377,16 @@ header{
     background:white;
     padding:25px;
     border-radius:17px;
+    position:relative;
 }
 
 .close{
-    float:left;
+    position:absolute;
+    top:15px;
+    left:20px;
     font-size:25px;
     cursor:pointer;
+    color:#333;
 }
 
 .noMessages{
@@ -413,7 +415,6 @@ footer{
 
 <body>
 
-<!-- اختيار اللغة -->
 <div id="languagePage" class="languagePage">
     <div class="languageBox">
         <div class="languageLogo">ز</div>
@@ -426,7 +427,6 @@ footer{
     </div>
 </div>
 
-<!-- الهيدر -->
 <header>
     <div class="logo">
         <div class="logoIcon">ز</div>
@@ -440,7 +440,6 @@ footer{
     </div>
 </header>
 
-<!-- الصفحة الرئيسية -->
 <section id="homePage">
 <div class="container">
     <div class="hero">
@@ -482,13 +481,12 @@ footer{
 </div>
 </section>
 
-<!-- المحادثة -->
 <section id="chatPage" class="page">
 <div class="chatPage">
     <div class="chatBox">
         <div class="chatHeader">
             <h2 id="chatBranch">خدمة العملاء</h2>
-            <div class="chatStatus" data-i18n="savedMessages">● قاعدة البيانات حية ومربوطة بـ Supabase</div>
+            <div class="chatStatus" data-i18n="savedMessages">● متصل بـ Supabase</div>
         </div>
         <div id="messages" class="messages"></div>
         <div class="chatInput">
@@ -500,15 +498,14 @@ footer{
 </div>
 </section>
 
-<!-- تسجيل الدخول -->
 <div id="loginModal" class="modal">
 <div class="loginBox">
     <span class="close" onclick="closeLogin()">×</span>
     <h2 data-i18n="employeeLogin">دخول الموظفين</h2>
-    <p style="margin:10px 0; color:#666;" data-i18n="loginText">أدخل البريد الإلكتروني وكلمة المرور.</p>
-    <input id="email" type="email" placeholder="البريد الإلكتروني" style="width:100%; padding:10px; margin-bottom:10px;">
-    <input id="password" type="password" placeholder="كلمة المرور" style="width:100%; padding:10px; margin-bottom:10px;">
-    <button class="primaryBtn" onclick="closeLogin(); alert('خاصية دخول الموظفين قيد التطوير');">دخول</button>
+    <p style="margin:15px 0; color:#666;" data-i18n="loginText">أدخل البيانات للوصول إلى لوحة التحكم الخاصة بفرعك.</p>
+    <input id="email" type="email" placeholder="البريد الإلكتروني" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
+    <input id="password" type="password" placeholder="كلمة المرور" style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
+    <button class="primaryBtn" onclick="closeLogin()">تسجيل الدخول</button>
 </div>
 </div>
 
@@ -517,9 +514,6 @@ footer{
 </footer>
 
 <script>
-/* ==================================================
-   إعداد الاتصال بـ Supabase
-================================================== */
 const SUPABASE_URL = 'https://hyyzhgewqkdxywhkbbxs.supabase.co';
 const SUPABASE_KEY = 'Sb_publishable_HCbypT7XNYC_BRgpYYerGw_YFtbnPYw';
 
@@ -536,9 +530,6 @@ function getSupabaseClient() {
     return db;
 }
 
-/* ==================================================
-   اللغات
-================================================== */
 const translations = {
 ar: {
 brand:"Zajil Branch Service",
@@ -560,7 +551,7 @@ savedMessages:"● متصل بـ Supabase",
 writeMessage:"اكتب رسالتك...",
 send:"إرسال",
 backHome:"العودة للرئيسية",
-loginText:"أدخل البريد الإلكتروني وكلمة المرور.",
+loginText:"أدخل البيانات للوصول إلى لوحة التحكم الخاصة بفرعك.",
 contactBranch:"التواصل مع الفرع",
 serviceAvailable:"● خدمة العملاء متاحة",
 noBranch:"لا يوجد فرع بهذا الاسم.",
@@ -587,7 +578,7 @@ savedMessages:"● Connected to Supabase",
 writeMessage:"Write your message...",
 send:"Send",
 backHome:"Back to Home",
-loginText:"Enter your email and password.",
+loginText:"Enter credentials to access your branch dashboard.",
 contactBranch:"Contact Branch",
 serviceAvailable:"● Customer service available",
 noBranch:"No branch found.",
@@ -599,51 +590,51 @@ chatWith:"You are now contacting "
 let currentLanguage = localStorage.getItem("zajil_language") || null;
 let lang = currentLanguage || "ar";
 
-/* قائمة كاملة ومفصلة لكافة فروع المملكة */
+/* القائمة المحدثة بالكامل بالفروع الـ 40 */
 let loadedBranches = [
-    "فرع القريات - الرئيسي",
-    "فرع سكاكا - الجوف",
+    "فرع تبوك",
+    "فرع القريات",
     "فرع طبرجل",
+    "فرع حائل",
     "فرع عرعر",
-    "فرع طريف",
-    "فرع تبوك - الرئيسي",
-    "فرع ضباء",
-    "فرع حائل - الرئيسي",
+    "فرع دومة الجندل",
     "فرع حفر الباطن",
-    "فرع الرياض - الملز",
-    "فرع الرياض - السلي",
-    "فرع الرياض - الصحافة",
-    "فرع جدة - طريق المدينة",
-    "فرع جدة - حي الصفا",
-    "فرع مكة المكرمة - الشوقية",
-    "فرع المدينة المنورة - الدائري",
-    "فرع الدمام - الرئيسي",
-    "فرع الخبر - الشارع السادس",
-    "فرع الأحساء - الهفوف",
-    "فرع الجبيل - البلد",
-    "فرع قصيم - بريدة",
-    "فرع قصيم - عنيزة",
-    "فرع أبها - طريق الخميس",
-    "فرع خميس مشيط - المنتزه",
-    "فرع جازان - الرئيسي",
-    "فرع نجران - طريق الملك عبدالعزيز"
+    "فرع سكاكا",
+    "فرع الدمام",
+    "فرع الخبر",
+    "فرع الخفجي",
+    "فرع الجبيل البلد",
+    "فرع الجبيل الصناعية",
+    "فرع الاحساء",
+    "فرع القطيف",
+    "فرع الظهران",
+    "فرع الخرج",
+    "فرع المجمعة",
+    "فرع بريدة",
+    "فرع الدوادمي",
+    "فرع الرس",
+    "فرع عنيزة",
+    "فرع الرياض",
+    "فرع شقراء",
+    "فرع وادي الدواسر",
+    "فرع الباحة",
+    "فرع جدة",
+    "فرع مكة",
+    "فرع المدينة المنورة",
+    "فرع الطائف",
+    "فرع ينبع",
+    "فرع ابها",
+    "فرع ابو عريش",
+    "فرع بيشة",
+    "فرع خميس مشيط",
+    "فرع جازان",
+    "فرع نجران",
+    "فرع صامطة",
+    "فرع صبيا",
+    "فرع النماص"
 ];
 
-/* ==================================================
-   جلب الفروع
-================================================== */
 async function initBranches() {
-    const client = getSupabaseClient();
-    if (client) {
-        try {
-            const { data, error } = await client.from('branches').select('*');
-            if (!error && data && data.length > 0) {
-                loadedBranches = data.map(b => b.name_ar || b.name_en || b.name);
-            }
-        } catch(e) {
-            console.log("استخدام قائمة الفروع الكاملة الاحتياطية");
-        }
-    }
     renderBranches(loadedBranches);
 }
 
@@ -686,9 +677,6 @@ function filterBranches(){
     renderBranches(result);
 }
 
-/* ==================================================
-   فتح شاشة الفرع والمحادثات
-================================================== */
 function openChat(branch){
     document.getElementById("homePage").style.display="none";
     document.getElementById("chatPage").style.display="block";
@@ -760,9 +748,6 @@ function appendMessage(text, sender, timeStr){
     box.scrollTop = box.scrollHeight;
 }
 
-/* ==================================================
-   التنقل واللغات
-================================================== */
 function selectLanguage(selected){
     lang = selected;
     localStorage.setItem("zajil_language", selected);
@@ -792,8 +777,13 @@ function applyLanguage(){
     });
 }
 
-function openLogin(){ document.getElementById("loginModal").style.display="flex"; }
-function closeLogin(){ document.getElementById("loginModal").style.display="none"; }
+function openLogin(){ 
+    document.getElementById("loginModal").style.display="flex"; 
+}
+
+function closeLogin(){ 
+    document.getElementById("loginModal").style.display="none"; 
+}
 
 function goHome(){
     document.getElementById("chatPage").style.display="none";
@@ -806,9 +796,6 @@ function escapeHTML(text){
     return div.innerHTML;
 }
 
-/* ==================================================
-   التشغيل
-================================================== */
 if(currentLanguage){
     document.getElementById("languagePage").style.display="none";
     applyLanguage();
