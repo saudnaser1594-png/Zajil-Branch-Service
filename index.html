@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>خدمة فرع الزاجل | Zajil Branch Service</title>
-    <!-- Supabase JS Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --primary-color: #0d47a1;
@@ -235,15 +233,7 @@
 
     <script>
         // ==========================================
-        // 1. تهيئة Supabase بالروابط الصحيحة
-        // ==========================================
-        const SUPABASE_URL = "https://hyyzhgewqkdxywhkbbxs.supabase.co"; 
-        const SUPABASE_ANON_KEY = "Sb_publishable_HCbypT7XNYC_BRgpYYerGw_YFtbnPYw"; 
-
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        // ==========================================
-        // 2. أكواد الأمان المعتمدة لكل فرع
+        // 1. أكواد الأمان المعتمدة لكل فرع
         // ==========================================
         const BRANCH_SECURITY_CODES = {
             "QURAYYAT": "QURAYYAT_700",
@@ -253,9 +243,9 @@
         };
 
         // ==========================================
-        // 3. معالجة إنشاء حساب موظف جديد
+        // 2. معالجة إنشاء حساب موظف جديد
         // ==========================================
-        async function handleEmployeeSignup(e) {
+        function handleEmployeeSignup(e) {
             e.preventDefault();
 
             const name = document.getElementById('signupName').value.trim();
@@ -263,7 +253,6 @@
             const passcode = document.getElementById('signupPasscode').value.trim();
             const email = document.getElementById('signupEmail').value.trim();
             const password = document.getElementById('signupPassword').value;
-            const submitBtn = document.getElementById('submitBtn');
 
             // التحقق من كود التفعيل الأمني للفرع
             const validCode = BRANCH_SECURITY_CODES[branch] || BRANCH_SECURITY_CODES["DEFAULT"];
@@ -272,77 +261,39 @@
                 return;
             }
 
-            try {
-                submitBtn.innerText = "جاري إنشاء وتوثيق الحساب...";
-                submitBtn.disabled = true;
+            // حفظ بيانات الموظف محلياً
+            const employeeData = { name, branch, email, password };
+            localStorage.setItem('employee_' + email, JSON.stringify(employeeData));
 
-                // إنشاء الحساب عبر Supabase Auth
-                const { data, error } = await _supabase.auth.signUp({
-                    email: email,
-                    password: password,
-                    options: {
-                        data: {
-                            full_name: name,
-                            branch: branch
-                        }
-                    }
-                });
-
-                if (error) throw error;
-
-                // حفظ بيانات الموظف في جدول employees
-                if (data.user) {
-                    const { error: dbError } = await _supabase
-                        .from('employees')
-                        .insert([
-                            { 
-                                id: data.user.id, 
-                                name: name, 
-                                branch: branch, 
-                                email: email 
-                            }
-                        ]);
-
-                    if (dbError) console.warn("ملاحظة في حفظ البيانات الإضافية:", dbError.message);
-                }
-
-                alert("✅ تم إنشاء الحساب وتوثيقه بنجاح!");
-                closeModal();
-
-            } catch (err) {
-                alert("❌ خطأ أثناء إنشاء الحساب: " + err.message);
-            } finally {
-                submitBtn.innerText = "توثيق الهوية وإنشاء الحساب";
-                submitBtn.disabled = false;
-            }
+            alert("✅ تم إنشاء الحساب وتوثيقه بنجاح!");
+            closeModal();
         }
 
         // ==========================================
-        // 4. معالجة تسجيل الدخول
+        // 3. معالجة تسجيل الدخول
         // ==========================================
-        async function handleEmployeeLogin(e) {
+        function handleEmployeeLogin(e) {
             e.preventDefault();
 
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
 
-            try {
-                const { data, error } = await _supabase.auth.signInWithPassword({
-                    email: email,
-                    password: password
-                });
+            const storedUser = localStorage.getItem('employee_' + email);
 
-                if (error) throw error;
-
-                alert("✅ تم تسجيل الدخول بنجاح!");
-                closeModal();
-            } catch (err) {
-                alert("❌ خطأ في تسجيل الدخول: " + err.message);
+            if (storedUser) {
+                const userData = JSON.parse(storedUser);
+                if (userData.password === password) {
+                    alert("✅ تم تسجيل الدخول بنجاح! مرحباً بك " + userData.name);
+                    closeModal();
+                    return;
+                }
             }
+
+            alert("❌ البريد الإلكتروني أو كلمة المرور غير صحيحة.");
         }
 
         // ==========================================
-        // 5. التبديل بين التبويبات والتحكم بالنافذة
+        // 4. التحكم بالواجهة والتبويب
         // ==========================================
         function switchTab(tab) {
             const signupForm = document.getElementById('signupForm');
