@@ -4,1060 +4,206 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Zajil Branch Service</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 
 <style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:Arial,Tahoma,sans-serif;
-}
-
-body{
-    background:#f4f7fa;
-    color:#17324d;
-}
-
-button{
-    cursor:pointer;
-    border:0;
-}
+*{ box-sizing:border-box; margin:0; padding:0; font-family:Arial,Tahoma,sans-serif; }
+body{ background:#f4f7fa; color:#17324d; }
+button{ cursor:pointer; border:0; }
 
 header{
-    background:#0756a8;
-    color:white;
-    padding:14px 20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+    background:#0756a8; color:white; padding:14px 20px;
+    display:flex; justify-content:space-between; align-items:center;
     box-shadow:0 3px 12px rgba(0,0,0,.15);
 }
-
-.logo{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-weight:bold;
-    font-size:18px;
-}
-
-.logoIcon{
-    width:42px;
-    height:42px;
-    background:#ffd400;
-    color:#0756a8;
-    border-radius:10px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:22px;
-}
-
-.headerActions{
-    display:flex;
-    gap:8px;
-}
-
-.headerBtn{
-    background:#ffd400;
-    color:#0756a8;
-    padding:11px 16px;
-    border-radius:8px;
-    font-weight:bold;
-}
-
-.langBtn{
-    background:white;
-    color:#0756a8;
-    padding:11px 14px;
-    border-radius:8px;
-    font-weight:bold;
-}
-
-.container{
-    max-width:1100px;
-    margin:auto;
-    padding:25px 18px;
-}
-
-.hero{
-    background:linear-gradient(135deg,#0756a8,#0c72d4);
-    color:white;
-    border-radius:20px;
-    padding:40px 25px;
-    text-align:center;
-}
-
-.hero h1{
-    font-size:30px;
-    margin-bottom:12px;
-}
-
-.hero p{
-    line-height:1.9;
-}
-
-.title{
-    color:#0756a8;
-    margin:25px 0 15px;
-}
-
-.services{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:15px;
-}
-
-.service{
-    background:white;
-    padding:22px;
-    border-radius:15px;
-    border:2px solid transparent;
-    box-shadow:0 4px 15px rgba(0,0,0,.06);
-    cursor:pointer;
-    transition:.2s;
-}
-
-.service:hover{
-    border-color:#ffd400;
-    transform:translateY(-2px);
-}
-
-.serviceIcon{
-    font-size:32px;
-    margin-bottom:10px;
-}
-
-.service h3{
-    color:#0756a8;
-    margin-bottom:7px;
-}
-
-.service p{
-    color:#667085;
-    line-height:1.6;
-    font-size:14px;
-}
-
-.branchArea{
-    background:white;
-    padding:25px;
-    border-radius:16px;
-    box-shadow:0 4px 15px rgba(0,0,0,.06);
-}
-
-.branchSearch{
-    width:100%;
-    padding:14px;
-    border:1px solid #ddd;
-    border-radius:9px;
-    margin-bottom:15px;
-    font-size:15px;
-    outline:none;
-}
-
-.branchGrid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-    gap:15px;
-}
-
-.branch{
-    background:#f8fafc;
-    padding:18px;
-    border-radius:11px;
-    border:1px solid #e5e7eb;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    min-height:145px;
-}
-
-.branch h3{
-    color:#0756a8;
-    margin-bottom:8px;
-    font-size:16px;
-    line-height:1.4;
-}
-
-.online{
-    color:#198754;
-    font-size:12px;
-    margin-bottom:12px;
-}
-
-.branchBtn{
-    width:100%;
-    background:#ffd400;
-    color:#0756a8;
-    padding:10px;
-    border-radius:7px;
-    font-weight:bold;
-}
-
-.primaryBtn{
-    width:100%;
-    padding:13px;
-    margin-top:8px;
-    background:#0756a8;
-    color:white;
-    border-radius:8px;
-    font-weight:bold;
-}
-
-.secondaryBtn{
-    width:100%;
-    padding:12px;
-    margin-top:8px;
-    background:#eef4fb;
-    color:#0756a8;
-    border-radius:8px;
-    font-weight:bold;
-}
-
-.page{
-    display:none;
-}
-
-.languagePage{
-    position:fixed;
-    inset:0;
-    background:linear-gradient(135deg,#0756a8,#0c72d4);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    z-index:9999;
-}
-
-.languageBox{
-    background:white;
-    width:100%;
-    max-width:500px;
-    padding:35px;
-    border-radius:22px;
-    text-align:center;
-    box-shadow:0 10px 35px rgba(0,0,0,.2);
-}
-
-.languageLogo{
-    width:65px;
-    height:65px;
-    margin:0 auto 15px;
-    border-radius:15px;
-    background:#ffd400;
-    color:#0756a8;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:32px;
-    font-weight:bold;
-}
-
-.languageBox h1{
-    color:#0756a8;
-    margin-bottom:10px;
-}
-
-.languageBox p{
-    color:#667085;
-    margin-bottom:25px;
-}
-
-.languageChoices{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:15px;
-}
-
-.languageChoice{
-    padding:20px;
-    border:2px solid #e5e7eb;
-    background:#f8fafc;
-    border-radius:14px;
-    font-size:18px;
-    font-weight:bold;
-    color:#0756a8;
-}
-
-.orderBox{
-    background:white;
-    padding:25px;
-    border-radius:16px;
-    box-shadow:0 4px 15px rgba(0,0,0,.06);
-    margin-top:25px;
-}
-
-.formGroup{
-    margin-bottom:15px;
-}
-
-.formGroup label{
-    display:block;
-    margin-bottom:7px;
-    font-weight:bold;
-    color:#17324d;
-}
-
-.formGroup input,
-.formGroup select,
-.formGroup textarea{
-    width:100%;
-    padding:13px;
-    border:1px solid #d5d9df;
-    border-radius:8px;
-    font-size:15px;
-    outline:none;
-}
-
-.formGroup textarea{
-    min-height:100px;
-    resize:vertical;
-}
-
-.orderNumber{
-    background:#eef6ff;
-    border:2px dashed #0756a8;
-    color:#0756a8;
-    padding:18px;
-    border-radius:12px;
-    text-align:center;
-    margin-bottom:18px;
-}
-
-.orderNumber strong{
-    display:block;
-    font-size:24px;
-    margin-top:8px;
-    direction:ltr;
-}
-
-.chatPage{
-    max-width:850px;
-    margin:25px auto;
-    padding:0 15px;
-}
-
-.chatBox{
-    background:white;
-    border-radius:17px;
-    overflow:hidden;
-    box-shadow:0 5px 20px rgba(0,0,0,.1);
-}
-
-.chatHeader{
-    background:#0756a8;
-    color:white;
-    padding:18px;
-}
-
-.chatHeader h2{
-    margin-bottom:8px;
-}
-
-.chatInfo{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    margin-top:10px;
-}
-
-.chatTag{
-    background:rgba(255,255,255,.15);
-    padding:6px 9px;
-    border-radius:6px;
-    font-size:12px;
-}
-
-.chatStatus{
-    color:#ffd400;
-    font-size:13px;
-    margin-top:5px;
-}
-
-.messages{
-    height:430px;
-    overflow-y:auto;
-    background:#f3f5f7;
-    padding:20px;
-}
-
-.message{
-    max-width:80%;
-    padding:12px 15px;
-    border-radius:14px;
-    margin-bottom:12px;
-    line-height:1.7;
-    word-break:break-word;
-}
-
-.customerMessage{
-    background:#0756a8;
-    color:white;
-    margin-right:auto;
-}
-
-.employeeMessage{
-    background:#ffd400;
-    color:#17324d;
-    margin-left:auto;
-}
-
-.message small{
-    display:block;
-    font-size:10px;
-    margin-top:5px;
-    opacity:.7;
-}
-
-.chatInput{
-    display:flex;
-    gap:8px;
-    padding:12px;
-}
-
-.chatInput input{
-    flex:1;
-    padding:13px;
-    border:1px solid #ddd;
-    border-radius:8px;
-    outline:none;
-}
-
-.chatInput button{
-    background:#0756a8;
-    color:white;
-    padding:0 20px;
-    border-radius:8px;
-}
-
-.statusBox{
-    padding:12px;
-    background:#f8fafc;
-    border-top:1px solid #eee;
-}
-
-.statusBox select{
-    padding:8px;
-    border:1px solid #ddd;
-    border-radius:7px;
-}
-
-.modal{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.55);
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    z-index:10000;
-}
-
-.loginBox{
-    width:100%;
-    max-width:430px;
-    background:white;
-    padding:25px;
-    border-radius:17px;
-    position:relative;
-}
-
-.close{
-    position:absolute;
-    top:15px;
-    left:20px;
-    font-size:25px;
-    cursor:pointer;
-    color:#333;
-}
-
-.employeeDashboard{
-    max-width:1100px;
-    margin:25px auto;
-    padding:0 15px;
-}
-
-.dashboardCard{
-    background:white;
-    padding:22px;
-    border-radius:16px;
-    box-shadow:0 4px 15px rgba(0,0,0,.07);
-    margin-bottom:18px;
-}
-
-.requestList{
-    display:grid;
-    gap:12px;
-}
-
-.requestItem{
-    background:#f8fafc;
-    border:1px solid #e5e7eb;
-    border-radius:12px;
-    padding:15px;
-    cursor:pointer;
-}
-
-.requestItem:hover{
-    border-color:#0756a8;
-}
-
-.requestTop{
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-    margin-bottom:8px;
-}
-
-.requestNumber{
-    color:#0756a8;
-    font-weight:bold;
-    direction:ltr;
-}
-
-.requestType{
-    font-size:13px;
-    color:#666;
-}
-
-.requestStatus{
-    display:inline-block;
-    padding:5px 8px;
-    border-radius:6px;
-    font-size:11px;
-    background:#e8f7ed;
-    color:#198754;
-}
-
-.noMessages{
-    text-align:center;
-    padding:40px;
-    color:#888;
-}
-
-.hidden{
-    display:none !important;
-}
-
-footer{
-    text-align:center;
-    color:#777;
-    padding:30px;
-    font-size:13px;
-}
-
-@media(max-width:600px){
-    .hero h1{
-        font-size:24px;
-    }
-
-    .logo{
-        font-size:14px;
-    }
-
-    .headerActions{
-        flex-direction:column;
-    }
-
-    .headerBtn,
-    .langBtn{
-        padding:8px;
-        font-size:11px;
-    }
-
-    .languageChoices{
-        grid-template-columns:1fr;
-    }
-
-    .chatInput button{
-        padding:0 12px;
-    }
-
-    .message{
-        max-width:90%;
-    }
-
-    .requestTop{
-        flex-direction:column;
-    }
-}
+.logo{ display:flex; align-items:center; gap:10px; font-weight:bold; font-size:18px; }
+.logoIcon{ width:42px; height:42px; background:#ffd400; color:#0756a8; border-radius:10px; display:flex; justify-content:center; align-items:center; font-size:22px; }
+.headerActions{ display:flex; gap:8px; }
+.headerBtn{ background:#ffd400; color:#0756a8; padding:11px 16px; border-radius:8px; font-weight:bold; }
+
+.container{ max-width:1100px; margin:auto; padding:25px 18px; }
+.hero{ background:linear-gradient(135deg,#0756a8,#0c72d4); color:white; border-radius:20px; padding:40px 25px; text-align:center; }
+.hero h1{ font-size:28px; margin-bottom:10px; }
+
+.title{ color:#0756a8; margin:25px 0 15px; }
+
+.trackSection {
+    background: white; padding: 20px; border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,.06); margin-top: 20px;
+}
+.trackBox { display: flex; gap: 10px; margin-top: 10px; }
+.trackBox input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 15px; }
+
+.branchArea{ background:white; padding:25px; border-radius:16px; box-shadow:0 4px 15px rgba(0,0,0,.06); margin-top:20px;}
+.branchSearch{ width:100%; padding:14px; border:1px solid #ddd; border-radius:9px; margin-bottom:15px; font-size:15px; outline:none; }
+.branchGrid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:15px; }
+.branch{ background:#f8fafc; padding:18px; border-radius:11px; border:1px solid #e5e7eb; display:flex; flex-direction:column; justify-content:space-between; min-height:130px; }
+.branch h3{ color:#0756a8; margin-bottom:8px; font-size:16px; }
+.online{ color:#198754; font-size:12px; margin-bottom:12px; }
+.branchBtn{ width:100%; background:#ffd400; color:#0756a8; padding:10px; border-radius:7px; font-weight:bold; }
+
+.primaryBtn{ width:100%; padding:13px; margin-top:8px; background:#0756a8; color:white; border-radius:8px; font-weight:bold; }
+.page{ display:none; }
+
+.chatPage{ max-width:850px; margin:25px auto; padding:0 15px; }
+.chatBox{ background:white; border-radius:17px; overflow:hidden; box-shadow:0 5px 20px rgba(0,0,0,.1); }
+.chatHeader{ background:#0756a8; color:white; padding:18px; display:flex; justify-content:space-between; align-items:center; }
+.messages{ height:400px; overflow-y:auto; background:#f3f5f7; padding:20px; }
+.message{ max-width:80%; padding:12px 15px; border-radius:14px; margin-bottom:12px; line-height:1.6; word-wrap: break-word; }
+.customerMessage{ background:#0756a8; color:white; margin-right:auto; }
+.employeeMessage{ background:#ffd400; color:#17324d; margin-left:auto; }
+.message small{ display:block; font-size:10px; margin-top:5px; opacity:.7; }
+.chatInput{ display:flex; gap:8px; padding:12px; background:white; }
+.chatInput input{ flex:1; padding:13px; border:1px solid #ddd; border-radius:8px; }
+.chatInput button{ background:#0756a8; color:white; padding:0 20px; border-radius:8px; font-weight:bold; }
+
+.dashboardArea { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,.06); margin-top: 20px; }
+.orderCard { background: #f8fafc; border: 1px solid #e5e7eb; border-right: 5px solid #0756a8; border-radius: 10px; padding: 15px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+.orderCard h4 { color: #0756a8; }
+
+.modal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); align-items:center; justify-content:center; padding:20px; z-index:10000; }
+.modalBox{ width:100%; max-width:450px; background:white; padding:25px; border-radius:17px; position:relative; }
+.close{ position:absolute; top:15px; left:20px; font-size:25px; cursor:pointer; color:#333; }
+.noMessages{ text-align:center; padding:40px; color:#888; }
+.formGroup { margin-bottom: 12px; }
+.formGroup label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #0756a8; }
+.formGroup input, .formGroup select { width: 100%; padding: 11px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; }
+
+footer{ text-align:center; color:#777; padding:30px; font-size:13px; }
 </style>
 </head>
 
 <body>
 
-<div id="languagePage" class="languagePage">
-    <div class="languageBox">
-        <div class="languageLogo">ز</div>
-        <h1>Zajil Branch Service</h1>
-        <p>اختر اللغة / Choose your language</p>
-
-        <div class="languageChoices">
-            <button class="languageChoice" onclick="selectLanguage('ar')">
-                🇸🇦 العربية
-            </button>
-
-            <button class="languageChoice" onclick="selectLanguage('en')">
-                🇬🇧 English
-            </button>
-        </div>
-    </div>
-</div>
-
 <header>
-
     <div class="logo">
         <div class="logoIcon">ز</div>
         <span>Zajil Branch Service</span>
     </div>
-
     <div class="headerActions">
-        <button class="langBtn" onclick="changeLanguage()">
-            العربية / English
-        </button>
-
-        <button class="headerBtn" onclick="openLogin()">
-            <span data-i18n="employeeLogin">دخول الموظفين</span>
-        </button>
+        <button id="loginHeaderBtn" class="headerBtn" onclick="openLogin()">دخول الموظفين</button>
     </div>
-
 </header>
 
 <section id="homePage">
-
 <div class="container">
-
     <div class="hero">
-
-        <h1 data-i18n="heroTitle">
-            تكامل اللوجستيات بين يديك
-        </h1>
-
-        <p data-i18n="heroText">
-            تواصل مباشرة مع فرعك لخدمات شحن أسرع وأكثر كفاءة.
-        </p>
-
+        <h1>خدمة الشحن والتواصل المباشر مع الفروع</h1>
+        <p>قدم طلبك أو استفسارك مباشرة واحصل على رقم طلب لمتابعة المحادثة في أي وقت.</p>
     </div>
 
-    <h2 class="title" data-i18n="servicesTitle">
-        الخدمات
-    </h2>
-
-    <div class="services">
-
-        <div class="service" onclick="selectService('shipping_price')">
-
-            <div class="serviceIcon">💰</div>
-
-            <h3 data-i18n="shippingPrice">
-                سعر الشحن
-            </h3>
-
-            <p data-i18n="shippingPriceDesc">
-                استفسر عن تكلفة الشحن.
-            </p>
-
+    <div class="trackSection">
+        <h3>🔍 متابعة طلب أو استفسار سابق</h3>
+        <p style="font-size: 13px; color: #666; margin-top: 4px;">أدخل رقم الطلب للوصول المباشر لسجل الرسائل:</p>
+        <div class="trackBox">
+            <input type="text" id="trackOrderInput" placeholder="مثال: ZAJIL-948201">
+            <button class="headerBtn" onclick="trackCustomerOrder()">فتح المحادثة</button>
         </div>
-
-        <div class="service" onclick="selectService('tracking')">
-
-            <div class="serviceIcon">📦</div>
-
-            <h3 data-i18n="tracking">
-                تتبع الشحنة
-            </h3>
-
-            <p data-i18n="trackingDesc">
-                استفسر عن حالة شحنتك.
-            </p>
-
-        </div>
-
-        <div class="service" onclick="selectService('vehicle')">
-
-            <div class="serviceIcon">🚚</div>
-
-            <h3 data-i18n="vehicle">
-                طلب سيارة
-            </h3>
-
-            <p data-i18n="vehicleDesc">
-                اطلب سيارة لاستلام البضائع من موقعك.
-            </p>
-
-        </div>
-
-        <div class="service" onclick="selectService('general')">
-
-            <div class="serviceIcon">💬</div>
-
-            <h3 data-i18n="generalInquiry">
-                استفسار عام
-            </h3>
-
-            <p data-i18n="generalInquiryDesc">
-                تواصل مع خدمة العملاء لأي استفسار.
-            </p>
-
-        </div>
-
-        <div class="service" onclick="selectService('other')">
-
-            <div class="serviceIcon">📋</div>
-
-            <h3 data-i18n="otherService">
-                خدمة أخرى
-            </h3>
-
-            <p data-i18n="otherServiceDesc">
-                أرسل طلبك أو استفسارك للفرع.
-            </p>
-
-        </div>
-
     </div>
 
-    <h2 class="title" data-i18n="branchesTitle">
-        اختر الفرع
-    </h2>
+    <h2 class="title">اختر الفرع لتقديم طلب جديد</h2>
 
     <div class="branchArea">
-
-        <input
-            id="branchSearch"
-            class="branchSearch"
-            placeholder="🔎 ابحث عن الفرع أو المدينة..."
-            oninput="filterBranches()"
-        >
-
+        <input id="branchSearch" class="branchSearch" placeholder="🔎 ابحث عن الفرع أو المدينة..." oninput="filterBranches()">
         <div id="branchGrid" class="branchGrid"></div>
-
     </div>
-
-    <div class="orderBox">
-
-        <h2 class="title" style="margin-top:0" data-i18n="reviewOrder">
-            مراجعة طلب سابق
-        </h2>
-
-        <div class="formGroup">
-
-            <label data-i18n="orderNumberLabel">
-                رقم الطلب
-            </label>
-
-            <input
-                id="existingOrderNumber"
-                placeholder="مثال: ZJ-20260903-4821"
-            >
-
-        </div>
-
-        <button
-            class="primaryBtn"
-            onclick="findExistingOrder()"
-            data-i18n="reviewButton"
-        >
-            مراجعة الطلب
-        </button>
-
-    </div>
-
 </div>
-
 </section>
 
-<section id="newOrderPage" class="page">
-
-<div class="container">
-
-    <div class="orderBox">
-
-        <h2 class="title" style="margin-top:0" data-i18n="createRequest">
-            إنشاء طلب أو استفسار
-        </h2>
-
-        <div class="formGroup">
-
-            <label data-i18n="selectedBranch">
-                الفرع
-            </label>
-
-            <input id="selectedBranch" readonly>
-
-        </div>
-
-        <div class="formGroup">
-
-            <label data-i18n="requestType">
-                نوع الطلب
-            </label>
-
-            <select id="requestType">
-
-                <option value="shipping_price">
-                    سعر الشحن
-                </option>
-
-                <option value="tracking">
-                    تتبع الشحنة
-                </option>
-
-                <option value="vehicle">
-                    طلب سيارة تحميل واستلام
-                </option>
-
-                <option value="general">
-                    استفسار عام
-                </option>
-
-                <option value="other">
-                    خدمة أخرى
-                </option>
-
-            </select>
-
-        </div>
-
-        <div class="formGroup">
-
-            <label data-i18n="customerName">
-                اسم العميل
-            </label>
-
-            <input
-                id="customerName"
-                placeholder="اكتب اسمك"
-            >
-
-        </div>
-
-        <div class="formGroup">
-
-            <label data-i18n="customerPhone">
-                رقم الجوال
-            </label>
-
-            <input
-                id="customerPhone"
-                type="tel"
-                placeholder="05xxxxxxxx"
-            >
-
-        </div>
-
-        <div class="formGroup">
-
-            <label data-i18n="message">
-                الرسالة
-            </label>
-
-            <textarea
-                id="initialMessage"
-                placeholder="اكتب طلبك أو استفسارك..."
-            ></textarea>
-
-        </div>
-
-        <button
-            class="primaryBtn"
-            onclick="createOrder()"
-            data-i18n="createOrderButton"
-        >
-            إنشاء الطلب
-        </button>
-
-        <button
-            class="secondaryBtn"
-            onclick="goHome()"
-            data-i18n="backHome"
-        >
-            العودة للرئيسية
-        </button>
-
+<!-- نموذج إنشاء طلب جديد للعميل -->
+<div id="orderModal" class="modal">
+<div class="modalBox">
+    <span class="close" onclick="closeOrderModal()">×</span>
+    <h2>تقديم طلب / استفسار جديد</h2>
+    <p id="selectedBranchTitle" style="margin:8px 0 15px; color:#666; font-size: 14px;"></p>
+    
+    <div class="formGroup">
+        <label>نوع الطلب / الاستفسار</label>
+        <select id="requestTypeSelect">
+            <option value="استفسار عن سعر الشحن">💰 استفسار عن سعر الشحن</option>
+            <option value="تتبع شحنة">📦 تتبع شحنة</option>
+            <option value="طلب سيارات/استلام من المنزل">🚚 طلب سيارة لاستلام بضائع</option>
+            <option value="مناطق الخدمة والتغطية">📍 نطاق ومناطق الخدمة</option>
+            <option value="استفسار عام">💬 استفسار عام</option>
+        </select>
     </div>
 
+    <div class="formGroup">
+        <label>اسم العميل (اختياري)</label>
+        <input type="text" id="custNameInput" placeholder="أدخل اسمك">
+    </div>
+
+    <div class="formGroup">
+        <label>رقم الجوال (اختياري)</label>
+        <input type="tel" id="custPhoneInput" placeholder="05xxxxxxxx">
+    </div>
+
+    <button class="primaryBtn" onclick="submitNewOrder()">بدء المحادثة ومتابعة الطلب</button>
+</div>
 </div>
 
-</section>
-
+<!-- صفحة المحادثة المباشرة -->
 <section id="chatPage" class="page">
-
 <div class="chatPage">
-
     <div class="chatBox">
-
         <div class="chatHeader">
-
-            <h2 id="chatBranch">
-                خدمة العملاء
-            </h2>
-
-            <div class="chatStatus">
-                ● <span data-i18n="liveConnection">
-                    المحادثة مباشرة
-                </span>
+            <div>
+                <h2 id="chatBranch">خدمة العملاء</h2>
+                <div id="chatReqType" style="font-size: 13px; color: #fff; opacity:0.9;"></div>
+                <div id="chatOrderId" style="color: #ffd400; font-size: 13px; margin-top: 2px;">رقم الطلب: -</div>
             </div>
-
-            <div class="chatInfo">
-
-                <div class="chatTag">
-                    <span data-i18n="orderNumberLabel">
-                        رقم الطلب
-                    </span>:
-                    <span id="chatOrderNumber"></span>
-                </div>
-
-                <div class="chatTag">
-                    <span data-i18n="requestType">
-                        نوع الطلب
-                    </span>:
-                    <span id="chatRequestType"></span>
-                </div>
-
-            </div>
-
+            <button onclick="copyOrderId()" style="background: rgba(255,255,255,0.2); color: white; padding: 6px 10px; border-radius: 6px; font-size: 12px;">نسخ رقم الطلب</button>
         </div>
-
+        
         <div id="messages" class="messages"></div>
 
         <div class="chatInput">
-
-            <input
-                id="messageInput"
-                placeholder="اكتب رسالتك..."
-                onkeydown="if(event.key==='Enter')sendMessage()"
-            >
-
-            <button
-                onclick="sendMessage()"
-                data-i18n="send"
-            >
-                إرسال
-            </button>
-
+            <input id="messageInput" placeholder="اكتب رسالتك..." onkeydown="if(event.key==='Enter')sendMessage()">
+            <button onclick="sendMessage()">إرسال</button>
         </div>
-
-        <div class="statusBox">
-
-            <label data-i18n="requestStatus">
-                حالة الطلب
-            </label>
-
-            <select id="customerStatus" disabled>
-
-                <option value="new">
-                    جديد
-                </option>
-
-                <option value="processing">
-                    قيد المعالجة
-                </option>
-
-                <option value="completed">
-                    مكتمل
-                </option>
-
-            </select>
-
-        </div>
-
     </div>
-
-    <button
-        class="primaryBtn"
-        onclick="goHome()"
-        data-i18n="backHome"
-    >
-        العودة للرئيسية
-    </button>
-
+    <button class="primaryBtn" onclick="goHome()">العودة للرئيسية</button>
 </div>
-
 </section>
 
+<!-- لوحة تحكم الموظف -->
 <section id="employeeDashboard" class="page">
-
-<div class="employeeDashboard">
-
-    <div class="dashboardCard">
-
-        <h2 class="title" style="margin-top:0">
-            لوحة الموظف
-        </h2>
-
-        <p id="employeeBranchText"></p>
-
-        <button
-            class="secondaryBtn"
-            onclick="employeeLogout()"
-        >
-            تسجيل الخروج
-        </button>
-
+<div class="container">
+    <div class="dashboardArea">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h2>لوحة طلبيات واستفسارات: <span id="empBranchName" style="color:#0756a8;">-</span></h2>
+            <button class="headerBtn" style="background:#d32f2f; color:white;" onclick="logoutEmployee()">تسجيل الخروج</button>
+        </div>
+        <h3>قائمة الطلبات الواردة</h3>
+        <div id="employeeOrdersList" style="margin-top:15px;">
+            <p class="noMessages">جاري تحميل الطلبات...</p>
+        </div>
     </div>
-
-    <div class="dashboardCard">
-
-        <h3 class="title" style="margin-top:0">
-            الطلبات والمحادثات
-        </h3>
-
-        <div id="employeeRequests" class="requestList"></div>
-
-    </div>
-
+    <button class="primaryBtn" onclick="goHome()">العودة للرئيسية</button>
 </div>
-
 </section>
 
+<!-- تسجيل دخول الموظفين -->
 <div id="loginModal" class="modal">
-
-<div class="loginBox">
-
+<div class="modalBox">
     <span class="close" onclick="closeLogin()">×</span>
-
-    <h2 data-i18n="employeeLogin">
-        دخول الموظفين
-    </h2>
-
-    <p style="margin:15px 0;color:#666;">
-        أدخل البريد الإلكتروني وكلمة المرور.
-    </p>
-
-    <input
-        id="email"
-        type="email"
-        placeholder="البريد الإلكتروني"
-        style="width:100%;padding:12px;margin-bottom:12px;border:1px solid #ccc;border-radius:8px;"
-    >
-
-    <input
-        id="password"
-        type="password"
-        placeholder="كلمة المرور"
-        style="width:100%;padding:12px;margin-bottom:12px;border:1px solid #ccc;border-radius:8px;"
-    >
-
-    <button
-        class="primaryBtn"
-        onclick="employeeLogin()"
-    >
-        تسجيل الدخول
-    </button>
-
-    <div
-        id="loginError"
-        style="color:#dc3545;margin-top:12px;text-align:center;"
-    ></div>
-
+    <h2>دخول الموظفين</h2>
+    <p style="margin:15px 0; color:#666; font-size: 14px;">حدد الفرع للوصول إلى الطلبات الواردة.</p>
+    
+    <div class="formGroup">
+        <select id="employeeBranchSelect">
+            <option value="">اختر الفرع التابع له...</option>
+        </select>
+    </div>
+    <div class="formGroup">
+        <input id="email" type="email" placeholder="البريد الإلكتروني">
+    </div>
+    <div class="formGroup">
+        <input id="password" type="password" placeholder="كلمة المرور">
+    </div>
+    <button class="primaryBtn" onclick="loginEmployee()">تسجيل الدخول</button>
 </div>
-
 </div>
 
 <footer>
@@ -1065,1729 +211,347 @@ footer{
 </footer>
 
 <script>
-
-const SUPABASE_URL =
-'https://hyyzhgewqkdxywhkbbxs.supabase.co';
-
-const SUPABASE_KEY =
-'Sb_publishable_HCbypT7XNYC_BRgpYYerGw_YFtbnPYw';
+const SUPABASE_URL = 'https://hyyzhgewqkdxywhkbbxs.supabase.co';
+const SUPABASE_KEY = 'Sb_publishable_HCbypT7XNYC_BRgpYYerGw_YFtbnPYw';
 
 let db = null;
-
-let currentLanguage =
-localStorage.getItem("zajil_language") || null;
-
-let lang =
-currentLanguage || "ar";
-
 let currentOrder = null;
+let currentEmployeeBranch = null;
+let isUserEmployee = false;
+let activeChannel = null;
+let selectedBranchForOrder = null;
 
-let realtimeChannel = null;
-
-let employeeUser = null;
-
-let employeeBranch = null;
-
-
-/* =========================
-   SUPABASE
-========================= */
-
-function getSupabaseClient(){
-
-    if(!db){
-
-        if(
-            window.supabase &&
-            typeof window.supabase.createClient === "function"
-        ){
-
-            db =
-            window.supabase.createClient(
-                SUPABASE_URL,
-                SUPABASE_KEY
-            );
-
+function getSupabaseClient() {
+    if (!db) {
+        if (window.supabase && typeof window.supabase.createClient === 'function') {
+            db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        } else if (typeof createClient === 'function') {
+            db = createClient(SUPABASE_URL, SUPABASE_KEY);
         }
-
     }
-
     return db;
 }
 
-
-/* =========================
-   TRANSLATIONS
-========================= */
-
-const translations = {
-
-ar:{
-
-employeeLogin:"دخول الموظفين",
-
-heroTitle:"تكامل اللوجستيات بين يديك",
-
-heroText:
-"تواصل مباشرة مع فرعك لخدمات شحن أسرع وأكثر كفاءة.",
-
-servicesTitle:"الخدمات",
-
-shippingPrice:"سعر الشحن",
-
-shippingPriceDesc:
-"استفسر عن تكلفة الشحن.",
-
-tracking:"تتبع الشحنة",
-
-trackingDesc:
-"استفسر عن حالة شحنتك.",
-
-vehicle:"طلب سيارة",
-
-vehicleDesc:
-"اطلب سيارة لتحميل واستلام البضائع من موقعك.",
-
-generalInquiry:"استفسار عام",
-
-generalInquiryDesc:
-"تواصل مع خدمة العملاء لأي استفسار.",
-
-otherService:"خدمة أخرى",
-
-otherServiceDesc:
-"أرسل طلبك أو استفسارك للفرع.",
-
-branchesTitle:"اختر الفرع",
-
-searchBranch:
-"🔎 ابحث عن الفرع أو المدينة...",
-
-contactBranch:
-"إنشاء طلب",
-
-reviewOrder:
-"مراجعة طلب سابق",
-
-orderNumberLabel:
-"رقم الطلب",
-
-reviewButton:
-"مراجعة الطلب",
-
-createRequest:
-"إنشاء طلب أو استفسار",
-
-selectedBranch:
-"الفرع",
-
-requestType:
-"نوع الطلب",
-
-customerName:
-"اسم العميل",
-
-customerPhone:
-"رقم الجوال",
-
-message:
-"الرسالة",
-
-createOrderButton:
-"إنشاء الطلب",
-
-backHome:
-"العودة للرئيسية",
-
-liveConnection:
-"المحادثة مباشرة",
-
-send:
-"إرسال",
-
-requestStatus:
-"حالة الطلب",
-
-noBranch:
-"لا يوجد فرع بهذا الاسم.",
-
-noMessages:
-"لا توجد رسائل.",
-
-newRequest:
-"طلب جديد",
-
-processing:
-"قيد المعالجة",
-
-completed:
-"مكتمل",
-
-invalidOrder:
-"لم يتم العثور على هذا الطلب.",
-
-orderCreated:
-"تم إنشاء الطلب بنجاح."
-
-},
-
-en:{
-
-employeeLogin:"Employee Login",
-
-heroTitle:
-"Logistics at Your Fingertips",
-
-heroText:
-"Connect directly with your branch for faster shipping services.",
-
-servicesTitle:"Services",
-
-shippingPrice:"Shipping Price",
-
-shippingPriceDesc:
-"Ask about shipping costs.",
-
-tracking:"Shipment Tracking",
-
-trackingDesc:
-"Ask about your shipment status.",
-
-vehicle:"Vehicle Request",
-
-vehicleDesc:
-"Request a vehicle to collect goods from your location.",
-
-generalInquiry:"General Inquiry",
-
-generalInquiryDesc:
-"Contact customer service for any inquiry.",
-
-otherService:"Other Service",
-
-otherServiceDesc:
-"Send your request or inquiry to the branch.",
-
-branchesTitle:"Select a Branch",
-
-searchBranch:
-"🔎 Search branch or city...",
-
-contactBranch:
-"Create Request",
-
-reviewOrder:
-"Review Previous Request",
-
-orderNumberLabel:
-"Order Number",
-
-reviewButton:
-"Review Request",
-
-createRequest:
-"Create Request or Inquiry",
-
-selectedBranch:
-"Branch",
-
-requestType:
-"Request Type",
-
-customerName:
-"Customer Name",
-
-customerPhone:
-"Phone Number",
-
-message:
-"Message",
-
-createOrderButton:
-"Create Request",
-
-backHome:
-"Back to Home",
-
-liveConnection:
-"Live Conversation",
-
-send:
-"Send",
-
-requestStatus:
-"Request Status",
-
-noBranch:
-"No branch found.",
-
-noMessages:
-"No messages.",
-
-newRequest:
-"New",
-
-processing:
-"Processing",
-
-completed:
-"Completed",
-
-invalidOrder:
-"Request not found.",
-
-orderCreated:
-"Request created successfully."
-
-}
-
-};
-
-
-/* =========================
-   BRANCHES
-========================= */
-
-let loadedBranches = [
-
-"فرع تبوك",
-"فرع القريات",
-"فرع طبرجل",
-"فرع حائل",
-"فرع عرعر",
-"فرع دومة الجندل",
-"فرع حفر الباطن",
-"فرع سكاكا",
-"فرع الدمام",
-"فرع الخبر",
-"فرع الخفجي",
-"فرع الجبيل البلد",
-"فرع الجبيل الصناعية",
-"فرع الاحساء",
-"فرع القطيف",
-"فرع الظهران",
-"فرع الخرج",
-"فرع المجمعة",
-"فرع بريدة",
-"فرع الدوادمي",
-"فرع الرس",
-"فرع عنيزة",
-"فرع الرياض",
-"فرع شقراء",
-"فرع وادي الدواسر",
-"فرع الباحة",
-"فرع جدة",
-"فرع مكة",
-"فرع المدينة المنورة",
-"فرع الطائف",
-"فرع ينبع",
-"فرع ابها",
-"فرع ابو عريش",
-"فرع بيشة",
-"فرع خميس مشيط",
-"فرع جازان",
-"فرع نجران",
-"فرع صامطة",
-"فرع صبيا",
-"فرع النماص"
-
+const loadedBranches = [
+    "فرع تبوك", "فرع القريات", "فرع طبرجل", "فرع حائل", "فرع عرعر",
+    "فرع دومة الجندل", "فرع حفر الباطن", "فرع سكاكا", "فرع الدمام", "فرع الخبر",
+    "فرع الخفجي", "فرع الجبيل البلد", "فرع الاحساء", "فرع القطيف", "فرع الخرج", 
+    "فرع بريدة", "فرع عنيزة", "فرع الرياض", "فرع جدة", "فرع مكة", "فرع المدينة المنورة"
 ];
 
+function initBranches() {
+    renderBranches(loadedBranches);
+    populateEmployeeSelect();
+}
 
-/* =========================
-   REQUEST TYPES
-========================= */
-
-const requestTypeNames = {
-
-shipping_price:"سعر الشحن",
-
-tracking:"تتبع الشحنة",
-
-vehicle:"طلب سيارة تحميل واستلام",
-
-general:"استفسار عام",
-
-other:"خدمة أخرى"
-
-};
-
-
-/* =========================
-   RENDER BRANCHES
-========================= */
+function populateEmployeeSelect() {
+    const select = document.getElementById("employeeBranchSelect");
+    select.innerHTML = '<option value="">اختر الفرع التابع له...</option>';
+    loadedBranches.forEach(b => {
+        const opt = document.createElement("option");
+        opt.value = b;
+        opt.textContent = b;
+        select.appendChild(opt);
+    });
+}
 
 function renderBranches(list){
-
-    const grid =
-    document.getElementById("branchGrid");
-
+    const grid = document.getElementById("branchGrid");
     grid.innerHTML="";
 
-    if(!list || list.length===0){
-
-        grid.innerHTML =
-        `<div class="noMessages">
-        ${translations[lang].noBranch}
-        </div>`;
-
-        return;
-
-    }
-
-    list.forEach(branch=>{
-
-        const card =
-        document.createElement("div");
-
+    list.forEach(branch => {
+        const card = document.createElement("div");
         card.className="branch";
-
-        const h3 =
-        document.createElement("h3");
-
-        h3.textContent=branch;
-
-        const online =
-        document.createElement("div");
-
-        online.className="online";
-
-        online.textContent =
-        "● خدمة العملاء متاحة";
-
-        const btn =
-        document.createElement("button");
-
-        btn.className="branchBtn";
-
-        btn.textContent =
-        translations[lang].contactBranch;
-
-        btn.onclick=()=>{
-            openNewOrder(branch);
-        };
-
-        card.appendChild(h3);
-        card.appendChild(online);
-        card.appendChild(btn);
-
+        card.innerHTML = `
+            <h3>${branch}</h3>
+            <div class="online">● خدمة العملاء متاحة</div>
+            <button class="branchBtn" onclick="openOrderModal('${branch}')">تقديم طلب / استفسار</button>
+        `;
         grid.appendChild(card);
-
     });
-
 }
-
 
 function filterBranches(){
-
-    const value =
-    document
-    .getElementById("branchSearch")
-    .value
-    .trim()
-    .toLowerCase();
-
-    const result =
-    loadedBranches.filter(branch =>
-        branch.toLowerCase().includes(value)
-    );
-
+    const value = document.getElementById("branchSearch").value.trim().toLowerCase();
+    const result = loadedBranches.filter(branch => branch.toLowerCase().includes(value));
     renderBranches(result);
-
 }
 
-
-/* =========================
-   SELECT SERVICE
-========================= */
-
-function selectService(type){
-
-    sessionStorage.setItem(
-        "selected_request_type",
-        type
-    );
-
-    document
-    .querySelector(".branchArea")
-    .scrollIntoView({
-        behavior:"smooth"
-    });
-
+function openOrderModal(branch) {
+    selectedBranchForOrder = branch;
+    document.getElementById("selectedBranchTitle").innerText = "الفرع المحدد: " + branch;
+    document.getElementById("orderModal").style.display = "flex";
 }
 
-
-/* =========================
-   NEW ORDER
-========================= */
-
-function openNewOrder(branch){
-
-    const selectedType =
-    sessionStorage.getItem(
-        "selected_request_type"
-    );
-
-    document
-    .getElementById("homePage")
-    .style.display="none";
-
-    document
-    .getElementById("newOrderPage")
-    .style.display="block";
-
-    document
-    .getElementById("selectedBranch")
-    .value=branch;
-
-    if(selectedType){
-
-        document
-        .getElementById("requestType")
-        .value=selectedType;
-
-    }
-
+function closeOrderModal() {
+    document.getElementById("orderModal").style.display = "none";
 }
 
+async function submitNewOrder() {
+    const reqType = document.getElementById("requestTypeSelect").value;
+    const custName = document.getElementById("custNameInput").value.trim() || "عميل زاجل";
+    const custPhone = document.getElementById("custPhoneInput").value.trim() || "-";
+    const orderNumber = "ZAJIL-" + Math.floor(100000 + Math.random() * 900000);
 
-function generateOrderNumber(){
+    const client = getSupabaseClient();
+    if (!client) return;
 
-    const now =
-    new Date();
-
-    const date =
-    now.getFullYear().toString() +
-
-    String(now.getMonth()+1)
-    .padStart(2,"0") +
-
-    String(now.getDate())
-    .padStart(2,"0");
-
-    const random =
-    Math.floor(
-        1000 + Math.random()*9000
-    );
-
-    return `ZJ-${date}-${random}`;
-
-}
-
-
-/* =========================
-   CREATE ORDER
-========================= */
-
-async function createOrder(){
-
-    const branch =
-    document
-    .getElementById("selectedBranch")
-    .value;
-
-    const type =
-    document
-    .getElementById("requestType")
-    .value;
-
-    const name =
-    document
-    .getElementById("customerName")
-    .value
-    .trim();
-
-    const phone =
-    document
-    .getElementById("customerPhone")
-    .value
-    .trim();
-
-    const message =
-    document
-    .getElementById("initialMessage")
-    .value
-    .trim();
-
-    if(!branch){
-
-        alert("اختر الفرع أولاً.");
-
-        return;
-
-    }
-
-    if(!message){
-
-        alert("اكتب الطلب أو الاستفسار.");
-
-        return;
-
-    }
-
-    const orderNumber =
-    generateOrderNumber();
-
-    const client =
-    getSupabaseClient();
-
-    if(!client){
-
-        alert("تعذر الاتصال بقاعدة البيانات.");
-
-        return;
-
-    }
-
-    try{
-
-        const {data,error} =
-        await client
-        .from("orders")
-        .insert({
-
-            order_number:orderNumber,
-
-            branch:branch,
-
-            request_type:type,
-
-            customer_name:name || null,
-
-            customer_phone:phone || null,
-
-            status:"new"
-
-        })
+    const { data, error } = await client
+        .from('orders')
+        .insert([
+            {
+                order_number: orderNumber,
+                branch: selectedBranchForOrder,
+                request_type: reqType,
+                customer_name: custName,
+                customer_phone: custPhone,
+                status: 'new'
+            }
+        ])
         .select()
         .single();
 
-        if(error){
+    if (error) {
+        alert("حدث خطأ في إنشاء الطلب: " + error.message);
+        return;
+    }
 
-            console.error(error);
+    closeOrderModal();
+    currentOrder = data;
+    isUserEmployee = false;
+    openChatRoom(currentOrder);
+}
 
-            alert(
-                "حدث خطأ أثناء إنشاء الطلب."
-            );
+async function trackCustomerOrder() {
+    const inputVal = document.getElementById("trackOrderInput").value.trim().toUpperCase();
+    if (!inputVal) {
+        alert("يرجى إدخال رقم الطلب أولاً.");
+        return;
+    }
 
-            return;
+    const client = getSupabaseClient();
+    if (!client) return;
 
-        }
+    const { data: orderData, error } = await client
+        .from('orders')
+        .select('*')
+        .eq('order_number', inputVal)
+        .single();
 
-        await client
-        .from("messages")
-        .insert({
+    if (error || !orderData) {
+        alert("لم يتم العثور على أي طلب أو استفسار بهذا الرقم.");
+        return;
+    }
 
-            order_number:orderNumber,
+    currentOrder = orderData;
+    isUserEmployee = false;
+    openChatRoom(currentOrder);
+}
 
-            branch:branch,
+function openChatRoom(orderObj) {
+    document.getElementById("homePage").style.display = "none";
+    document.getElementById("employeeDashboard").style.display = "none";
+    document.getElementById("chatPage").style.display = "block";
 
-            request_type:type,
+    document.getElementById("chatBranch").innerText = orderObj.branch;
+    document.getElementById("chatReqType").innerText = "نوع الخدمة: " + orderObj.request_type;
+    document.getElementById("chatOrderId").innerText = "رقم الطلب: " + orderObj.order_number;
 
-            text:message,
+    loadMessagesHistory(orderObj.order_number);
+    subscribeToLiveMessages(orderObj.order_number);
+}
 
-            sender:"customer",
+async function loadMessagesHistory(orderNumber) {
+    const box = document.getElementById("messages");
+    box.innerHTML = `<div class="noMessages">جاري جلب الرسائل...</div>`;
 
-            customer_name:name || null
+    const client = getSupabaseClient();
+    if (!client) return;
 
+    const { data: messages, error } = await client
+        .from('messages')
+        .select('*')
+        .eq('order_number', orderNumber)
+        .order('created_at', { ascending: true });
+
+    box.innerHTML = "";
+
+    if (!error && messages && messages.length > 0) {
+        messages.forEach(m => {
+            appendMessage(m.text, m.sender, m.created_at);
         });
-
-        currentOrder={
-            ...data
-        };
-
-        showOrderCreated(orderNumber);
-
-    }
-    catch(error){
-
-        console.error(error);
-
-        alert(
-            "حدث خطأ أثناء إنشاء الطلب."
-        );
-
-    }
-
-}
-
-
-/* =========================
-   SHOW CREATED ORDER
-========================= */
-
-function showOrderCreated(orderNumber){
-
-    const box =
-    document
-    .getElementById("newOrderPage");
-
-    box.innerHTML=`
-
-        <div class="container">
-
-            <div class="orderBox">
-
-                <div class="orderNumber">
-
-                    <div>
-                        تم إنشاء طلبك بنجاح
-                    </div>
-
-                    <strong>
-                        ${escapeHTML(orderNumber)}
-                    </strong>
-
-                    <p style="margin-top:10px">
-                        احتفظ برقم الطلب لمراجعة
-                        المحادثة لاحقًا.
-                    </p>
-
-                </div>
-
-                <button
-                    class="primaryBtn"
-                    onclick="openOrderByNumber('${orderNumber}')"
-                >
-                    فتح المحادثة
-                </button>
-
-                <button
-                    class="secondaryBtn"
-                    onclick="goHome()"
-                >
-                    العودة للرئيسية
-                </button>
-
+    } else {
+        box.innerHTML = `
+            <div class="message employeeMessage">
+                مرحباً بك 👋<br>تم استلام طلبك بنجاح (${escapeHTML(currentOrder.request_type)}). يمكنك تزويدنا بالتفاصيل هنا وسيقوم موظف الفرع بالرد عليك فوراً.
             </div>
-
-        </div>
-
-    `;
-
+        `;
+    }
 }
 
+async function sendMessage() {
+    const input = document.getElementById("messageInput");
+    const text = input.value.trim();
+    if (!text || !currentOrder) return;
 
-/* =========================
-   FIND OLD ORDER
-========================= */
+    const senderRole = isUserEmployee ? 'employee' : 'customer';
 
-async function findExistingOrder(){
+    const client = getSupabaseClient();
+    input.value = "";
 
-    const number =
-    document
-    .getElementById("existingOrderNumber")
-    .value
-    .trim()
-    .toUpperCase();
-
-    if(!number){
-
-        alert(
-            "اكتب رقم الطلب."
-        );
-
-        return;
-
-    }
-
-    await openOrderByNumber(number);
-
-}
-
-
-async function openOrderByNumber(orderNumber){
-
-    const client =
-    getSupabaseClient();
-
-    if(!client){
-
-        alert(
-            "تعذر الاتصال بقاعدة البيانات."
-        );
-
-        return;
-
-    }
-
-    try{
-
-        const {data,error} =
-        await client
-        .from("orders")
-        .select("*")
-        .eq("order_number",orderNumber)
-        .maybeSingle();
-
-        if(error){
-
-            console.error(error);
-
-            alert(
-                "حدث خطأ أثناء البحث."
-            );
-
-            return;
-
+    if (client) {
+        try {
+            await client.from('messages').insert([
+                {
+                    order_number: currentOrder.order_number,
+                    branch: currentOrder.branch,
+                    request_type: currentOrder.request_type,
+                    customer_name: currentOrder.customer_name,
+                    text: text,
+                    sender: senderRole,
+                    status: 'new'
+                }
+            ]);
+        } catch (e) {
+            console.error("خطأ أثناء إرسال الرسالة:", e);
         }
-
-        if(!data){
-
-            alert(
-                translations[lang].invalidOrder
-            );
-
-            return;
-
-        }
-
-        currentOrder=data;
-
-        openChatForOrder(data);
-
     }
-    catch(error){
-
-        console.error(error);
-
-    }
-
 }
 
-
-/* =========================
-   OPEN CHAT
-========================= */
-
-async function openChatForOrder(order){
-
-    document
-    .getElementById("homePage")
-    .style.display="none";
-
-    document
-    .getElementById("newOrderPage")
-    .style.display="none";
-
-    document
-    .getElementById("employeeDashboard")
-    .style.display="none";
-
-    document
-    .getElementById("chatPage")
-    .style.display="block";
-
-    document
-    .getElementById("chatBranch")
-    .textContent=
-    "خدمة عملاء " + order.branch;
-
-    document
-    .getElementById("chatOrderNumber")
-    .textContent=
-    order.order_number;
-
-    document
-    .getElementById("chatRequestType")
-    .textContent=
-    requestTypeNames[order.request_type]
-    || order.request_type;
-
-    document
-    .getElementById("customerStatus")
-    .value=
-    order.status || "new";
-
-    sessionStorage.setItem(
-        "customer_order_number",
-        order.order_number
-    );
-
-    await loadOrderMessages(order);
-
-    subscribeToOrder(order.order_number);
-
-}
-
-
-async function loadOrderMessages(order){
-
-    const box =
-    document.getElementById("messages");
-
-    box.innerHTML="";
-
-    const client =
-    getSupabaseClient();
-
-    const {data,error} =
-    await client
-    .from("messages")
-    .select("*")
-    .eq("order_number",order.order_number)
-    .order("created_at",{
-        ascending:true
-    });
-
-    if(error){
-
-        console.error(error);
-
-        return;
-
-    }
-
-    if(!data || data.length===0){
-
-        box.innerHTML=
-        `<div class="noMessages">
-        ${translations[lang].noMessages}
-        </div>`;
-
-        return;
-
-    }
-
-    data.forEach(message=>{
-
-        appendMessage(
-            message.text,
-            message.sender,
-            message.created_at
-        );
-
-    });
-
-}
-
-
-function subscribeToOrder(orderNumber){
-
-    if(realtimeChannel){
-
-        try{
-
-            db.removeChannel(
-                realtimeChannel
-            );
-
-        }catch(e){}
-
-    }
-
-    const client =
-    getSupabaseClient();
-
-    realtimeChannel =
-    client
-    .channel(
-        "order-" + orderNumber
-    )
-    .on(
-        "postgres_changes",
-        {
-            event:"INSERT",
-            schema:"public",
-            table:"messages",
-            filter:
-            "order_number=eq."+orderNumber
-        },
-        payload=>{
-
-            const message =
-            payload.new;
-
-            appendMessage(
-                message.text,
-                message.sender,
-                message.created_at
-            );
-
-        }
-    )
-    .subscribe();
-
-}
-
-
-/* =========================
-   SEND MESSAGE
-========================= */
-
-async function sendMessage(){
-
-    const input =
-    document
-    .getElementById("messageInput");
-
-    const text =
-    input.value.trim();
-
-    if(!text || !currentOrder){
-
-        return;
-
-    }
-
-    input.value="";
-
-    const client =
-    getSupabaseClient();
-
-    if(!client){
-
-        alert(
-            "تعذر الاتصال."
-        );
-
-        return;
-
-    }
-
-    const {error} =
-    await client
-    .from("messages")
-    .insert({
-
-        order_number:
-        currentOrder.order_number,
-
-        branch:
-        currentOrder.branch,
-
-        request_type:
-        currentOrder.request_type,
-
-        text:text,
-
-        sender:"customer",
-
-        customer_name:
-        currentOrder.customer_name || null
-
-    });
-
-    if(error){
-
-        console.error(error);
-
-        alert(
-            "تعذر إرسال الرسالة."
-        );
-
-        input.value=text;
-
-    }
-
-}
-
-
-/* =========================
-   APPEND MESSAGE
-========================= */
-
-function appendMessage(
-    text,
-    sender,
-    timeStr
-){
-
-    const box =
-    document
-    .getElementById("messages");
-
-    const no =
-    box.querySelector(".noMessages");
-
-    if(no){
-
-        no.remove();
-
-    }
-
-    const div =
-    document.createElement("div");
-
-    div.className =
-    sender==="customer"
-    ? "message customerMessage"
-    : "message employeeMessage";
-
-    const time =
-    timeStr
-    ? new Date(timeStr).toLocaleString()
-    : new Date().toLocaleString();
-
-    div.innerHTML=
-    `${escapeHTML(text)}
-     <small>${escapeHTML(time)}</small>`;
-
+function appendMessage(text, sender, timeStr) {
+    const box = document.getElementById("messages");
+    const div = document.createElement("div");
+    div.className = sender === "customer" ? "message customerMessage" : "message employeeMessage";
+    const time = timeStr ? new Date(timeStr).toLocaleTimeString('ar-SA') : new Date().toLocaleTimeString('ar-SA');
+    div.innerHTML = `${escapeHTML(text)}<small>${time}</small>`;
     box.appendChild(div);
-
-    box.scrollTop=
-    box.scrollHeight;
-
+    box.scrollTop = box.scrollHeight;
 }
 
+function subscribeToLiveMessages(orderNumber) {
+    const client = getSupabaseClient();
+    if (!client) return;
 
-/* =========================
-   EMPLOYEE LOGIN
-========================= */
-
-async function employeeLogin(){
-
-    const email =
-    document
-    .getElementById("email")
-    .value
-    .trim();
-
-    const password =
-    document
-    .getElementById("password")
-    .value;
-
-    const errorBox =
-    document
-    .getElementById("loginError");
-
-    errorBox.textContent="";
-
-    if(!email || !password){
-
-        errorBox.textContent=
-        "أدخل البريد الإلكتروني وكلمة المرور.";
-
-        return;
-
+    if (activeChannel) {
+        client.removeChannel(activeChannel);
     }
 
-    const client =
-    getSupabaseClient();
-
-    const {data,error} =
-    await client.auth.signInWithPassword({
-
-        email:email,
-
-        password:password
-
-    });
-
-    if(error){
-
-        console.error(error);
-
-        errorBox.textContent=
-        "بيانات الدخول غير صحيحة.";
-
-        return;
-
-    }
-
-    employeeUser=data.user;
-
-    await loadEmployeeBranch();
-
+    activeChannel = client
+        .channel('public:messages:order_number=eq.' + orderNumber)
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `order_number=eq.${orderNumber}` }, payload => {
+            appendMessage(payload.new.text, payload.new.sender, payload.new.created_at);
+        })
+        .subscribe();
 }
 
+async function loginEmployee() {
+    const selectedBranch = document.getElementById("employeeBranchSelect").value;
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
 
-/* =========================
-   EMPLOYEE BRANCH
-========================= */
-
-async function loadEmployeeBranch(){
-
-    const client =
-    getSupabaseClient();
-
-    /*
-       يجب أن يحتوي جدول employees
-       على:
-       user_id
-       email
-       branch
-    */
-
-    const {data,error} =
-    await client
-    .from("employees")
-    .select("*")
-    .eq("user_id",employeeUser.id)
-    .maybeSingle();
-
-    if(error || !data){
-
-        alert(
-            "تم تسجيل الدخول ولكن لم يتم تحديد الفرع لهذا الموظف."
-        );
-
-        await client.auth.signOut();
-
+    if (!selectedBranch || !email || !password) {
+        alert("يرجى اختيار الفرع وإدخال البيانات.");
         return;
-
     }
 
-    employeeBranch=data.branch;
-
+    currentEmployeeBranch = selectedBranch;
     closeLogin();
 
-    document
-    .getElementById("homePage")
-    .style.display="none";
+    document.getElementById("homePage").style.display = "none";
+    document.getElementById("chatPage").style.display = "none";
+    document.getElementById("employeeDashboard").style.display = "block";
+    document.getElementById("empBranchName").innerText = selectedBranch;
+    document.getElementById("loginHeaderBtn").innerText = "الموظف (" + selectedBranch + ")";
 
-    document
-    .getElementById("chatPage")
-    .style.display="none";
-
-    document
-    .getElementById("employeeDashboard")
-    .style.display="block";
-
-    document
-    .getElementById("employeeBranchText")
-    .textContent=
-    "الفرع: " + employeeBranch;
-
-    loadEmployeeRequests();
-
+    loadBranchOrdersForEmployee();
 }
 
+async function loadBranchOrdersForEmployee() {
+    const listContainer = document.getElementById("employeeOrdersList");
+    listContainer.innerHTML = '<p class="noMessages">جاري جلب الطلبات...</p>';
 
-/* =========================
-   EMPLOYEE REQUESTS
-========================= */
+    const client = getSupabaseClient();
+    if (!client) return;
 
-async function loadEmployeeRequests(){
+    const { data: orders, error } = await client
+        .from('orders')
+        .select('*')
+        .eq('branch', currentEmployeeBranch)
+        .order('created_at', { ascending: false });
 
-    const client =
-    getSupabaseClient();
-
-    const list =
-    document
-    .getElementById("employeeRequests");
-
-    list.innerHTML=
-    `<div class="noMessages">
-    جاري تحميل الطلبات...
-    </div>`;
-
-    const {data,error} =
-    await client
-    .from("orders")
-    .select("*")
-    .eq("branch",employeeBranch)
-    .order("created_at",{
-        ascending:false
-    });
-
-    if(error){
-
-        console.error(error);
-
-        list.innerHTML=
-        `<div class="noMessages">
-        تعذر تحميل الطلبات.
-        </div>`;
-
+    if (error || !orders || orders.length === 0) {
+        listContainer.innerHTML = '<p class="noMessages">لا توجد طلبات موجهة لهذا الفرع حالياً.</p>';
         return;
-
     }
 
-    if(!data || data.length===0){
-
-        list.innerHTML=
-        `<div class="noMessages">
-        لا توجد طلبات حاليًا.
-        </div>`;
-
-        return;
-
-    }
-
-    list.innerHTML="";
-
-    data.forEach(order=>{
-
-        const item =
-        document.createElement("div");
-
-        item.className="requestItem";
-
-        const type =
-        requestTypeNames[
-            order.request_type
-        ] || order.request_type;
-
-        const statusText =
-        order.status==="completed"
-        ? "مكتمل"
-        : order.status==="processing"
-        ? "قيد المعالجة"
-        : "جديد";
-
-        item.innerHTML=`
-
-            <div class="requestTop">
-
-                <div>
-
-                    <div class="requestNumber">
-                        ${escapeHTML(order.order_number)}
-                    </div>
-
-                    <div class="requestType">
-                        ${escapeHTML(type)}
-                    </div>
-
-                </div>
-
-                <span class="requestStatus">
-                    ${statusText}
-                </span>
-
-            </div>
-
+    listContainer.innerHTML = "";
+    orders.forEach(ord => {
+        const card = document.createElement("div");
+        card.className = "orderCard";
+        card.innerHTML = `
             <div>
-                ${escapeHTML(order.customer_name || "عميل")}
+                <h4>رقم الطلب: ${ord.order_number} (${ord.request_type})</h4>
+                <p style="font-size:14px; margin-top:4px; color:#444;">العميل: ${escapeHTML(ord.customer_name || 'عميل')} - الهاتف: ${escapeHTML(ord.customer_phone || '-')}</p>
+                <small style="color:#888;">التاريخ: ${new Date(ord.created_at).toLocaleString('ar-SA')}</small>
             </div>
-
-            <div style="font-size:12px;color:#777;margin-top:6px">
-                ${escapeHTML(order.customer_phone || "")}
-            </div>
-
+            <button class="headerBtn" onclick="openEmployeeChatByOrder('${ord.order_number}')">فتح واستجابة</button>
         `;
-
-        item.onclick=()=>{
-            openEmployeeOrder(order);
-        };
-
-        list.appendChild(item);
-
+        listContainer.appendChild(card);
     });
-
 }
 
+async function openEmployeeChatByOrder(orderNumber) {
+    const client = getSupabaseClient();
+    if (!client) return;
 
-/* =========================
-   EMPLOYEE CHAT
-========================= */
+    const { data: orderData } = await client
+        .from('orders')
+        .select('*')
+        .eq('order_number', orderNumber)
+        .single();
 
-async function openEmployeeOrder(order){
-
-    currentOrder=order;
-
-    document
-    .getElementById("employeeDashboard")
-    .style.display="none";
-
-    document
-    .getElementById("chatPage")
-    .style.display="block";
-
-    document
-    .getElementById("chatBranch")
-    .textContent=
-    "محادثة الطلب " +
-    order.order_number;
-
-    document
-    .getElementById("chatOrderNumber")
-    .textContent=
-    order.order_number;
-
-    document
-    .getElementById("chatRequestType")
-    .textContent=
-    requestTypeNames[order.request_type]
-    || order.request_type;
-
-    document
-    .getElementById("customerStatus")
-    .disabled=false;
-
-    document
-    .getElementById("customerStatus")
-    .value=
-    order.status || "new";
-
-    const input =
-    document
-    .getElementById("messageInput");
-
-    input.placeholder=
-    "اكتب رد الموظف...";
-
-    await loadOrderMessages(order);
-
-    subscribeToOrder(order.order_number);
-
-}
-
-
-/* =========================
-   EMPLOYEE SEND MESSAGE
-========================= */
-
-async function sendEmployeeMessage(){
-
-    const input =
-    document
-    .getElementById("messageInput");
-
-    const text =
-    input.value.trim();
-
-    if(!text || !currentOrder){
-
-        return;
-
+    if (orderData) {
+        currentOrder = orderData;
+        isUserEmployee = true;
+        openChatRoom(currentOrder);
     }
+}
 
-    const client =
-    getSupabaseClient();
+function logoutEmployee() {
+    currentEmployeeBranch = null;
+    isUserEmployee = false;
+    document.getElementById("loginHeaderBtn").innerText = "دخول الموظفين";
+    goHome();
+}
 
-    input.value="";
-
-    const {error} =
-    await client
-    .from("messages")
-    .insert({
-
-        order_number:
-        currentOrder.order_number,
-
-        branch:
-        currentOrder.branch,
-
-        request_type:
-        currentOrder.request_type,
-
-        text:text,
-
-        sender:"employee"
-
-    });
-
-    if(error){
-
-        console.error(error);
-
-        input.value=text;
-
-        alert(
-            "تعذر إرسال الرد."
-        );
-
+function copyOrderId() {
+    if (currentOrder && currentOrder.order_number) {
+        navigator.clipboard.writeText(currentOrder.order_number);
+        alert("تم نسخ رقم الطلب: " + currentOrder.order_number);
     }
-
 }
 
-
-/* =========================
-   DETECT SENDER
-========================= */
-
-const originalSendMessage =
-sendMessage;
-
-sendMessage=function(){
-
-    if(employeeUser){
-
-        return sendEmployeeMessage();
-
-    }
-
-    return originalSendMessage();
-
-};
-
-
-/* =========================
-   UPDATE STATUS
-========================= */
-
-document
-.getElementById("customerStatus")
-.addEventListener(
-    "change",
-    async function(){
-
-        if(
-            !employeeUser ||
-            !currentOrder
-        ){
-
-            return;
-
-        }
-
-        const newStatus=
-        this.value;
-
-        const client =
-        getSupabaseClient();
-
-        const {error} =
-        await client
-        .from("orders")
-        .update({
-            status:newStatus
-        })
-        .eq(
-            "order_number",
-            currentOrder.order_number
-        );
-
-        if(error){
-
-            console.error(error);
-
-            return;
-
-        }
-
-        currentOrder.status=
-        newStatus;
-
-        loadEmployeeRequests();
-
-    }
-);
-
-
-/* =========================
-   LOGOUT
-========================= */
-
-async function employeeLogout(){
-
-    const client =
-    getSupabaseClient();
-
-    await client.auth.signOut();
-
-    employeeUser=null;
-    employeeBranch=null;
-    currentOrder=null;
-
-    document
-    .getElementById("employeeDashboard")
-    .style.display="none";
-
-    document
-    .getElementById("chatPage")
-    .style.display="none";
-
-    document
-    .getElementById("homePage")
-    .style.display="block";
-
-}
-
-
-/* =========================
-   LANGUAGE
-========================= */
-
-function selectLanguage(selected){
-
-    lang=selected;
-
-    localStorage.setItem(
-        "zajil_language",
-        selected
-    );
-
-    applyLanguage();
-
-    document
-    .getElementById("languagePage")
-    .style.display="none";
-
-}
-
-
-function changeLanguage(){
-
-    lang =
-    lang==="ar"
-    ? "en"
-    : "ar";
-
-    localStorage.setItem(
-        "zajil_language",
-        lang
-    );
-
-    applyLanguage();
-
-    renderBranches(
-        loadedBranches
-    );
-
-}
-
-
-function applyLanguage(){
-
-    document.documentElement.lang=
-    lang;
-
-    document.documentElement.dir=
-    lang==="ar"
-    ? "rtl"
-    : "ltr";
-
-    document
-    .querySelectorAll("[data-i18n]")
-    .forEach(element=>{
-
-        const key =
-        element.getAttribute(
-            "data-i18n"
-        );
-
-        if(translations[lang][key]){
-
-            element.innerText=
-            translations[lang][key];
-
-        }
-
-    });
-
-    document
-    .querySelectorAll(
-        "[data-i18n-placeholder]"
-    )
-    .forEach(element=>{
-
-        const key =
-        element.getAttribute(
-            "data-i18n-placeholder"
-        );
-
-        if(translations[lang][key]){
-
-            element.placeholder=
-            translations[lang][key];
-
-        }
-
-    });
-
-}
-
-
-/* =========================
-   LOGIN MODAL
-========================= */
-
-function openLogin(){
-
-    document
-    .getElementById("loginModal")
-    .style.display="flex";
-
-}
-
-
-function closeLogin(){
-
-    document
-    .getElementById("loginModal")
-    .style.display="none";
-
-}
-
-
-/* =========================
-   HOME
-========================= */
-
+function openLogin(){ document.getElementById("loginModal").style.display="flex"; }
+function closeLogin(){ document.getElementById("loginModal").style.display="none"; }
 function goHome(){
-
-    document
-    .getElementById("chatPage")
-    .style.display="none";
-
-    document
-    .getElementById("newOrderPage")
-    .style.display="none";
-
-    document
-    .getElementById("employeeDashboard")
-    .style.display="none";
-
-    document
-    .getElementById("homePage")
-    .style.display="block";
-
-    const input =
-    document
-    .getElementById("messageInput");
-
-    input.placeholder=
-    "اكتب رسالتك...";
-
-    currentOrder=null;
-
+    if (activeChannel && db) {
+        db.removeChannel(activeChannel);
+        activeChannel = null;
+    }
+    document.getElementById("chatPage").style.display="none";
+    document.getElementById("employeeDashboard").style.display="none";
+    document.getElementById("homePage").style.display="block";
 }
-
-
-/* =========================
-   ESCAPE HTML
-========================= */
 
 function escapeHTML(text){
-
-    const div =
-    document.createElement("div");
-
-    div.textContent=
-    String(text);
-
+    const div = document.createElement("div");
+    div.textContent = String(text);
     return div.innerHTML;
-
 }
 
-
-/* =========================
-   START
-========================= */
-
-if(currentLanguage){
-
-    document
-    .getElementById("languagePage")
-    .style.display="none";
-
-    applyLanguage();
-
-}
-else{
-
-    document
-    .getElementById("languagePage")
-    .style.display="flex";
-
-}
-
-
-window.addEventListener(
-    "DOMContentLoaded",
-    ()=>{
-
-        renderBranches(
-            loadedBranches
-        );
-
-    }
-);
-
+window.addEventListener('DOMContentLoaded', () => {
+    initBranches();
+});
 </script>
 
 </body>
