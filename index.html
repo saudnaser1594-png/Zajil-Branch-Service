@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>خدمة فرع الزاجل | Zajil Branch Service</title>
+    <title>بوابة خدمة الفروع | Zajil Branch Service</title>
     <style>
         :root {
             --primary-color: #0d47a1;
@@ -37,17 +37,51 @@
         }
 
         .container {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 20px;
+            max-width: 900px;
+            margin: 25px auto;
+            padding: 0 15px;
         }
 
         .card {
             background: var(--card-bg);
-            padding: 25px;
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             margin-bottom: 20px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            margin-top: 10px;
+        }
+
+        .branch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .branch-item {
+            padding: 12px;
+            background: #eef2f7;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .branch-item:hover, .branch-item.selected {
+            background: var(--primary-color);
+            color: #fff;
         }
 
         .modal-overlay {
@@ -117,7 +151,7 @@
             font-size: 0.9rem;
         }
 
-        .form-group input, .form-group select {
+        .form-group input, .form-group select, .form-group textarea {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
@@ -143,32 +177,79 @@
             background-color: #00695c;
         }
 
-        .info-text {
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 15px;
-            line-height: 1.4;
+        .badge {
+            background: #d32f2f;
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-right: 5px;
+        }
+
+        .msg-card {
+            border-right: 4px solid var(--primary-color);
+            background: #fff;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="header-title">منصة خدمة فرع الزاجل</div>
+        <div class="header-title">منصة خدمة فرع الزاجل (Zajil Branch Service)</div>
         <div>
-            <button onclick="openModal()" style="background: transparent; border: 1px solid #fff; color: #fff; padding: 6px 12px; border-radius: 4px; cursor: pointer;">بوابة الموظفين</button>
+            <button id="authBtn" onclick="openModal()" style="background: transparent; border: 1px solid #fff; color: #fff; padding: 6px 12px; border-radius: 4px; cursor: pointer;">بوابة الموظفين</button>
         </div>
     </header>
 
     <div class="container">
+        <!-- قسم تحديد الفرع وإرسال الطلبات للعملاء -->
         <div class="card">
-            <h2>مرحباً بك في خدمة الفروع</h2>
-            <p>يمكنك استخدام هذه المنصة المخصصة لإدارة العمليات وطلبات خدمة العملاء بفرعك.</p>
+            <h2>اختر الفرع للتواصل أو تقديم طلب</h2>
+            <input type="text" id="branchSearch" class="search-box" placeholder="ابحث عن اسم الفرع (مثال: القريات، الرياض، جدة...)" oninput="filterBranches()">
+            
+            <div class="branch-grid" id="branchContainer">
+                <!-- سيتم تعبئة الفروع تلقائياً -->
+            </div>
+
+            <div id="selectedBranchInfo" style="margin-top: 15px; font-weight: bold; color: var(--primary-color);">
+                الفرع المحدد: فرع القريات
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>إرسال استفسار / طلب للفرع</h3>
+            <form onsubmit="handleCustomerMessage(event)">
+                <div class="form-group">
+                    <label>الاسم الكامل</label>
+                    <input type="text" id="custName" required placeholder="أدخل اسمك">
+                </div>
+                <div class="form-group">
+                    <label>رقم الشحنة / رقم الجوال</label>
+                    <input type="text" id="custContact" required placeholder="05xxxxxxxx أو رقم الشحنة">
+                </div>
+                <div class="form-group">
+                    <label>تفاصيل الاستفسار</label>
+                    <textarea id="custMsg" rows="3" required placeholder="اكتب تفاصيل طلبك هنا..."></textarea>
+                </div>
+                <button type="submit" class="btn">إرسال الطلب للفرع</button>
+            </form>
+        </div>
+
+        <!-- لوحة تحكم الموظف (تظهر عند الدخول) -->
+        <div class="card" id="employeeDashboard" style="display: none;">
+            <h3>لوحة طلبات الفرع الموردة <span class="badge" id="msgCount">0</span></h3>
+            <div id="messagesList">
+                <p style="color: #777;">لا توجد طلبات جديدة للفرع حالياً.</p>
+            </div>
         </div>
     </div>
 
-    <!-- نافذة التسجيل وتسجيل الدخول -->
-    <div id="authModal" class="modal-overlay" style="display: flex;">
+    <!-- نافذة تسجيل الموظفين -->
+    <div id="authModal" class="modal-overlay" style="display: none;">
         <div class="modal">
             <button class="close-btn" onclick="closeModal()">&times;</button>
             
@@ -177,9 +258,9 @@
                 <button class="tab-btn active" id="signupTabBtn" onclick="switchTab('signup')">تسجيل موظف جديد</button>
             </div>
 
-            <!-- نموذج تسجيل موظف جديد -->
+            <!-- تسجيل موظف جديد -->
             <form id="signupForm" onsubmit="handleEmployeeSignup(event)">
-                <div class="info-text">
+                <div style="font-size:0.85rem; color:#666; margin-bottom:12px;">
                     يتطلب التسجيل إدخال كود تفعيل الفرع والرقم الوظيفي للتأكد من هويتك.
                 </div>
 
@@ -194,13 +275,14 @@
                         <option value="QURAYYAT">فرع القريات</option>
                         <option value="RIYADH">فرع الرياض</option>
                         <option value="JEDDAH">فرع جدة</option>
+                        <option value="DAMMAM">فرع الدمام</option>
                         <option value="OTHER">فرع آخر</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label>كود التفعيل الأمني للفرع</label>
-                    <input type="text" id="signupPasscode" placeholder="أدخل كود التفعيل" required>
+                    <input type="text" id="signupPasscode" placeholder="أدخل كود التفعيل (مثال: QURAYYAT_700)" required>
                 </div>
 
                 <div class="form-group">
@@ -213,10 +295,10 @@
                     <input type="password" id="signupPassword" placeholder="••••••••" required minlength="6">
                 </div>
 
-                <button type="submit" id="submitBtn" class="btn">توثيق الهوية وإنشاء الحساب</button>
+                <button type="submit" class="btn">توثيق الهوية وإنشاء الحساب</button>
             </form>
 
-            <!-- نموذج تسجيل الدخول -->
+            <!-- تسجيل الدخول -->
             <form id="loginForm" onsubmit="handleEmployeeLogin(event)" style="display: none;">
                 <div class="form-group">
                     <label>البريد الإلكتروني</label>
@@ -232,9 +314,18 @@
     </div>
 
     <script>
-        // ==========================================
-        // 1. أكواد الأمان المعتمدة لكل فرع
-        // ==========================================
+        // قائمة الفروع (40 فرع)
+        const branches = [
+            "فرع القريات", "فرع الرياض - الرئيسي", "فرع جدة - الصفا", "فرع الدمام", "فرع مكة المكرمة",
+            "فرع المدينة المنورة", "فرع الأحساء", "فرع تبوك", "فرع حائل", "فرع عرعر",
+            "فرع سكاكا", "فرع الطائف", "فرع أبها", "فرع جازان", "فرع نجران",
+            "فرع الجبيل", "فرع حفر الباطن", "فرع الخفجي", "فرع ينبع", "فرع القصيم - بريدة",
+            "فرع عنيزة", "فرع الرس", "فرع المجمعة", "فرع الخرج", "فرع الدوادمي",
+            "فرع وادي الدواسر", "فرع بيشة", "فرع محايل عسير", "فرع القنفذة", "فرع رابغ",
+            "فرع الوجه", "فرع أملج", "فرع طريف", "فرع رفحاء", "فرع بقيق",
+            "فرع القطيف", "فرع رأس تنورة", "فرع شرورة", "فرع الخرمة", "فرع تربة"
+        ];
+
         const BRANCH_SECURITY_CODES = {
             "QURAYYAT": "QURAYYAT_700",
             "RIYADH": "RIYADH_100",
@@ -242,85 +333,135 @@
             "DEFAULT": "ZAJIL2026"
         };
 
-        // ==========================================
-        // 2. معالجة إنشاء حساب موظف جديد
-        // ==========================================
+        let selectedBranch = "فرع القريات";
+        let currentUser = null;
+
+        // تحميل الفروع في الواجهة
+        function renderBranches(list) {
+            const container = document.getElementById('branchContainer');
+            container.innerHTML = "";
+            list.forEach(b => {
+                const item = document.createElement('div');
+                item.className = 'branch-item ' + (b === selectedBranch ? 'selected' : '');
+                item.innerText = b;
+                item.onclick = () => {
+                    selectedBranch = b;
+                    document.getElementById('selectedBranchInfo').innerText = "الفرع المحدد: " + b;
+                    renderBranches(list);
+                };
+                container.appendChild(item);
+            });
+        }
+
+        function filterBranches() {
+            const q = document.getElementById('branchSearch').value.toLowerCase();
+            const filtered = branches.filter(b => b.toLowerCase().includes(q));
+            renderBranches(filtered);
+        }
+
+        // إرسال رسالة عميل
+        function handleCustomerMessage(e) {
+            e.preventDefault();
+            const name = document.getElementById('custName').value;
+            const contact = document.getElementById('custContact').value;
+            const msg = document.getElementById('custMsg').value;
+
+            const newMsg = { branch: selectedBranch, name, contact, msg, time: new Date().toLocaleTimeString('ar-SA') };
+            
+            let storedMsgs = JSON.parse(localStorage.getItem('zajil_messages') || '[]');
+            storedMsgs.push(newMsg);
+            localStorage.setItem('zajil_messages', JSON.stringify(storedMsgs));
+
+            alert("✅ تم إرسال طلبك بنجاح إلى " + selectedBranch);
+            document.getElementById('custName').value = "";
+            document.getElementById('custContact').value = "";
+            document.getElementById('custMsg').value = "";
+
+            loadDashboardMessages();
+        }
+
+        // تسجيل موظف
         function handleEmployeeSignup(e) {
             e.preventDefault();
-
             const name = document.getElementById('signupName').value.trim();
-            const branch = document.getElementById('signupBranch').value;
+            const branchKey = document.getElementById('signupBranch').value;
             const passcode = document.getElementById('signupPasscode').value.trim();
             const email = document.getElementById('signupEmail').value.trim();
             const password = document.getElementById('signupPassword').value;
 
-            // التحقق من كود التفعيل الأمني للفرع
-            const validCode = BRANCH_SECURITY_CODES[branch] || BRANCH_SECURITY_CODES["DEFAULT"];
+            const validCode = BRANCH_SECURITY_CODES[branchKey] || BRANCH_SECURITY_CODES["DEFAULT"];
             if (passcode !== validCode) {
-                alert("❌ كود التفعيل الأمني للفرع غير صحيح! أطلب الكود من المشرف لتأكيد هويتك.");
+                alert("❌ كود التفعيل الأمني للفرع غير صحيح!");
                 return;
             }
 
-            // حفظ بيانات الموظف محلياً
-            const employeeData = { name, branch, email, password };
-            localStorage.setItem('employee_' + email, JSON.stringify(employeeData));
+            const userData = { name, branchKey, email, password };
+            localStorage.setItem('employee_' + email, JSON.stringify(userData));
 
-            alert("✅ تم إنشاء الحساب وتوثيقه بنجاح!");
-            closeModal();
+            alert("✅ تم إنشاء وتوثيق الحساب بنجاح!");
+            currentUser = userData;
+            loginSuccess();
         }
 
-        // ==========================================
-        // 3. معالجة تسجيل الدخول
-        // ==========================================
+        // تسجيل دخول موظف
         function handleEmployeeLogin(e) {
             e.preventDefault();
-
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
 
-            const storedUser = localStorage.getItem('employee_' + email);
-
-            if (storedUser) {
-                const userData = JSON.parse(storedUser);
-                if (userData.password === password) {
-                    alert("✅ تم تسجيل الدخول بنجاح! مرحباً بك " + userData.name);
-                    closeModal();
+            const stored = localStorage.getItem('employee_' + email);
+            if (stored) {
+                const user = JSON.parse(stored);
+                if (user.password === password) {
+                    currentUser = user;
+                    alert("✅ مرحباً بك " + user.name);
+                    loginSuccess();
                     return;
                 }
             }
-
-            alert("❌ البريد الإلكتروني أو كلمة المرور غير صحيحة.");
+            alert("❌ بيانات الدخول غير صحيحة.");
         }
 
-        // ==========================================
-        // 4. التحكم بالواجهة والتبويب
-        // ==========================================
-        function switchTab(tab) {
-            const signupForm = document.getElementById('signupForm');
-            const loginForm = document.getElementById('loginForm');
-            const signupBtn = document.getElementById('signupTabBtn');
-            const loginBtn = document.getElementById('loginTabBtn');
+        function loginSuccess() {
+            closeModal();
+            document.getElementById('authBtn').innerText = "الموظف: " + currentUser.name;
+            document.getElementById('employeeDashboard').style.display = 'block';
+            loadDashboardMessages();
+        }
 
-            if (tab === 'signup') {
-                signupForm.style.display = 'block';
-                loginForm.style.display = 'none';
-                signupBtn.classList.add('active');
-                loginBtn.classList.remove('active');
-            } else {
-                signupForm.style.display = 'none';
-                loginForm.style.display = 'block';
-                loginBtn.classList.add('active');
-                signupBtn.classList.remove('active');
+        function loadDashboardMessages() {
+            if (!currentUser) return;
+            const msgsList = document.getElementById('messagesList');
+            let storedMsgs = JSON.parse(localStorage.getItem('zajil_messages') || '[]');
+            
+            msgsList.innerHTML = "";
+            document.getElementById('msgCount').innerText = storedMsgs.length;
+
+            if (storedMsgs.length === 0) {
+                msgsList.innerHTML = '<p style="color: #777;">لا توجد طلبات جديدة.</p>';
+                return;
             }
+
+            storedMsgs.reverse().forEach(m => {
+                const card = document.createElement('div');
+                card.className = 'msg-card';
+                card.innerHTML = `<strong>الفرع:</strong> ${m.branch} | <strong>العميل:</strong> ${m.name} (${m.contact})<br><p style="margin:5px 0;">${m.msg}</p><small style="color:#888;">الوقت: ${m.time}</small>`;
+                msgsList.appendChild(card);
+            });
         }
 
-        function openModal() {
-            document.getElementById('authModal').style.display = 'flex';
+        function switchTab(tab) {
+            document.getElementById('signupForm').style.display = tab === 'signup' ? 'block' : 'none';
+            document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+            document.getElementById('signupTabBtn').className = 'tab-btn ' + (tab === 'signup' ? 'active' : '');
+            document.getElementById('loginTabBtn').className = 'tab-btn ' + (tab === 'login' ? 'active' : '');
         }
 
-        function closeModal() {
-            document.getElementById('authModal').style.display = 'none';
-        }
+        function openModal() { document.getElementById('authModal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('authModal').style.display = 'none'; }
+
+        // التجهيز الابتدائي
+        renderBranches(branches);
     </script>
 </body>
 </html>
