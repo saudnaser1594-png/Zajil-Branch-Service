@@ -1,467 +1,2794 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة خدمة الفروع | Zajil Branch Service</title>
-    <style>
-        :root {
-            --primary-color: #0d47a1;
-            --accent-color: #00897b;
-            --bg-color: #f4f6f9;
-            --card-bg: #ffffff;
-            --text-color: #333333;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            margin: 0;
-            padding: 0;
-            color: var(--text-color);
-        }
+<title>Zajil Branch Service</title>
 
-        header {
-            background-color: var(--primary-color);
-            color: #fff;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 
-        .header-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,Tahoma,sans-serif;
+}
 
-        .container {
-            max-width: 900px;
-            margin: 25px auto;
-            padding: 0 15px;
-        }
+body{
+    background:#f4f7fa;
+    color:#17324d;
+}
 
-        .card {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            margin-bottom: 20px;
-        }
+button{
+    cursor:pointer;
+    border:0;
+}
 
-        .search-box {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 1rem;
-            box-sizing: border-box;
-            margin-top: 10px;
-        }
+header{
+    background:#0756a8;
+    color:white;
+    padding:14px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 3px 12px rgba(0,0,0,.15);
+}
 
-        .branch-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-            max-height: 250px;
-            overflow-y: auto;
-        }
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:bold;
+    font-size:18px;
+}
 
-        .branch-item {
-            padding: 12px;
-            background: #eef2f7;
-            border-radius: 6px;
-            cursor: pointer;
-            text-align: center;
-            font-weight: 600;
-            transition: 0.2s;
-        }
+.logoIcon{
+    width:42px;
+    height:42px;
+    background:#ffd400;
+    color:#0756a8;
+    border-radius:10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:22px;
+}
 
-        .branch-item:hover, .branch-item.selected {
-            background: var(--primary-color);
-            color: #fff;
-        }
+.headerActions{
+    display:flex;
+    gap:8px;
+}
 
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
+.headerBtn{
+    background:#ffd400;
+    color:#0756a8;
+    padding:11px 16px;
+    border-radius:8px;
+    font-weight:bold;
+}
 
-        .modal {
-            background: #fff;
-            width: 90%;
-            max-width: 450px;
-            border-radius: 12px;
-            padding: 25px;
-            position: relative;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-        }
+.langBtn{
+    background:white;
+    color:#0756a8;
+    padding:11px 14px;
+    border-radius:8px;
+    font-weight:bold;
+}
 
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            border: none;
-            background: none;
-        }
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:25px 18px;
+}
 
-        .tabs {
-            display: flex;
-            border-bottom: 2px solid #eee;
-            margin-bottom: 20px;
-        }
+.hero{
+    background:linear-gradient(135deg,#0756a8,#0c72d4);
+    color:white;
+    border-radius:20px;
+    padding:40px 25px;
+    text-align:center;
+}
 
-        .tab-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            background: none;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            color: #777;
-        }
+.hero h1{
+    font-size:30px;
+    margin-bottom:12px;
+}
 
-        .tab-btn.active {
-            color: var(--primary-color);
-            border-bottom: 3px solid var(--primary-color);
-        }
+.hero p{
+    line-height:1.9;
+}
 
-        .form-group {
-            margin-bottom: 15px;
-            text-align: right;
-        }
+.title{
+    color:#0756a8;
+    margin:25px 0 15px;
+}
 
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
+.services{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+}
 
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 0.95rem;
-        }
+.service{
+    background:white;
+    padding:22px;
+    border-radius:15px;
+    border:2px solid transparent;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+    cursor:pointer;
+    transition:.2s;
+}
 
-        .btn {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--accent-color);
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
+.service:hover{
+    border-color:#ffd400;
+    transform:translateY(-2px);
+}
 
-        .btn:hover {
-            background-color: #00695c;
-        }
+.serviceIcon{
+    font-size:32px;
+    margin-bottom:10px;
+}
 
-        .badge {
-            background: #d32f2f;
-            color: #fff;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            margin-right: 5px;
-        }
+.service h3{
+    color:#0756a8;
+    margin-bottom:7px;
+}
 
-        .msg-card {
-            border-right: 4px solid var(--primary-color);
-            background: #fff;
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 4px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-    </style>
+.service p{
+    color:#667085;
+    line-height:1.6;
+    font-size:14px;
+}
+
+.branchArea{
+    background:white;
+    padding:25px;
+    border-radius:16px;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+}
+
+.branchSearch{
+    width:100%;
+    padding:14px;
+    border:1px solid #ddd;
+    border-radius:9px;
+    margin-bottom:15px;
+    font-size:15px;
+    outline:none;
+}
+
+.branchGrid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+    gap:15px;
+}
+
+.branch{
+    background:#f8fafc;
+    padding:18px;
+    border-radius:11px;
+    border:1px solid #e5e7eb;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    min-height:145px;
+}
+
+.branch h3{
+    color:#0756a8;
+    margin-bottom:8px;
+    font-size:16px;
+    line-height:1.4;
+}
+
+.online{
+    color:#198754;
+    font-size:12px;
+    margin-bottom:12px;
+}
+
+.branchBtn{
+    width:100%;
+    background:#ffd400;
+    color:#0756a8;
+    padding:10px;
+    border-radius:7px;
+    font-weight:bold;
+}
+
+.primaryBtn{
+    width:100%;
+    padding:13px;
+    margin-top:8px;
+    background:#0756a8;
+    color:white;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.secondaryBtn{
+    width:100%;
+    padding:12px;
+    margin-top:8px;
+    background:#eef4fb;
+    color:#0756a8;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.page{
+    display:none;
+}
+
+.languagePage{
+    position:fixed;
+    inset:0;
+    background:linear-gradient(135deg,#0756a8,#0c72d4);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:9999;
+}
+
+.languageBox{
+    background:white;
+    width:100%;
+    max-width:500px;
+    padding:35px;
+    border-radius:22px;
+    text-align:center;
+    box-shadow:0 10px 35px rgba(0,0,0,.2);
+}
+
+.languageLogo{
+    width:65px;
+    height:65px;
+    margin:0 auto 15px;
+    border-radius:15px;
+    background:#ffd400;
+    color:#0756a8;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:32px;
+    font-weight:bold;
+}
+
+.languageBox h1{
+    color:#0756a8;
+    margin-bottom:10px;
+}
+
+.languageBox p{
+    color:#667085;
+    margin-bottom:25px;
+}
+
+.languageChoices{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.languageChoice{
+    padding:20px;
+    border:2px solid #e5e7eb;
+    background:#f8fafc;
+    border-radius:14px;
+    font-size:18px;
+    font-weight:bold;
+    color:#0756a8;
+}
+
+.orderBox{
+    background:white;
+    padding:25px;
+    border-radius:16px;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+    margin-top:25px;
+}
+
+.formGroup{
+    margin-bottom:15px;
+}
+
+.formGroup label{
+    display:block;
+    margin-bottom:7px;
+    font-weight:bold;
+    color:#17324d;
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea{
+    width:100%;
+    padding:13px;
+    border:1px solid #d5d9df;
+    border-radius:8px;
+    font-size:15px;
+    outline:none;
+}
+
+.formGroup textarea{
+    min-height:100px;
+    resize:vertical;
+}
+
+.orderNumber{
+    background:#eef6ff;
+    border:2px dashed #0756a8;
+    color:#0756a8;
+    padding:18px;
+    border-radius:12px;
+    text-align:center;
+    margin-bottom:18px;
+}
+
+.orderNumber strong{
+    display:block;
+    font-size:24px;
+    margin-top:8px;
+    direction:ltr;
+}
+
+.chatPage{
+    max-width:850px;
+    margin:25px auto;
+    padding:0 15px;
+}
+
+.chatBox{
+    background:white;
+    border-radius:17px;
+    overflow:hidden;
+    box-shadow:0 5px 20px rgba(0,0,0,.1);
+}
+
+.chatHeader{
+    background:#0756a8;
+    color:white;
+    padding:18px;
+}
+
+.chatHeader h2{
+    margin-bottom:8px;
+}
+
+.chatInfo{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:10px;
+}
+
+.chatTag{
+    background:rgba(255,255,255,.15);
+    padding:6px 9px;
+    border-radius:6px;
+    font-size:12px;
+}
+
+.chatStatus{
+    color:#ffd400;
+    font-size:13px;
+    margin-top:5px;
+}
+
+.messages{
+    height:430px;
+    overflow-y:auto;
+    background:#f3f5f7;
+    padding:20px;
+}
+
+.message{
+    max-width:80%;
+    padding:12px 15px;
+    border-radius:14px;
+    margin-bottom:12px;
+    line-height:1.7;
+    word-break:break-word;
+}
+
+.customerMessage{
+    background:#0756a8;
+    color:white;
+    margin-right:auto;
+}
+
+.employeeMessage{
+    background:#ffd400;
+    color:#17324d;
+    margin-left:auto;
+}
+
+.message small{
+    display:block;
+    font-size:10px;
+    margin-top:5px;
+    opacity:.7;
+}
+
+.chatInput{
+    display:flex;
+    gap:8px;
+    padding:12px;
+}
+
+.chatInput input{
+    flex:1;
+    padding:13px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    outline:none;
+}
+
+.chatInput button{
+    background:#0756a8;
+    color:white;
+    padding:0 20px;
+    border-radius:8px;
+}
+
+.statusBox{
+    padding:12px;
+    background:#f8fafc;
+    border-top:1px solid #eee;
+}
+
+.statusBox select{
+    padding:8px;
+    border:1px solid #ddd;
+    border-radius:7px;
+}
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:10000;
+}
+
+.loginBox{
+    width:100%;
+    max-width:430px;
+    background:white;
+    padding:25px;
+    border-radius:17px;
+    position:relative;
+}
+
+.close{
+    position:absolute;
+    top:15px;
+    left:20px;
+    font-size:25px;
+    cursor:pointer;
+    color:#333;
+}
+
+.employeeDashboard{
+    max-width:1100px;
+    margin:25px auto;
+    padding:0 15px;
+}
+
+.dashboardCard{
+    background:white;
+    padding:22px;
+    border-radius:16px;
+    box-shadow:0 4px 15px rgba(0,0,0,.07);
+    margin-bottom:18px;
+}
+
+.requestList{
+    display:grid;
+    gap:12px;
+}
+
+.requestItem{
+    background:#f8fafc;
+    border:1px solid #e5e7eb;
+    border-radius:12px;
+    padding:15px;
+    cursor:pointer;
+}
+
+.requestItem:hover{
+    border-color:#0756a8;
+}
+
+.requestTop{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:8px;
+}
+
+.requestNumber{
+    color:#0756a8;
+    font-weight:bold;
+    direction:ltr;
+}
+
+.requestType{
+    font-size:13px;
+    color:#666;
+}
+
+.requestStatus{
+    display:inline-block;
+    padding:5px 8px;
+    border-radius:6px;
+    font-size:11px;
+    background:#e8f7ed;
+    color:#198754;
+}
+
+.noMessages{
+    text-align:center;
+    padding:40px;
+    color:#888;
+}
+
+.hidden{
+    display:none !important;
+}
+
+footer{
+    text-align:center;
+    color:#777;
+    padding:30px;
+    font-size:13px;
+}
+
+@media(max-width:600px){
+    .hero h1{
+        font-size:24px;
+    }
+
+    .logo{
+        font-size:14px;
+    }
+
+    .headerActions{
+        flex-direction:column;
+    }
+
+    .headerBtn,
+    .langBtn{
+        padding:8px;
+        font-size:11px;
+    }
+
+    .languageChoices{
+        grid-template-columns:1fr;
+    }
+
+    .chatInput button{
+        padding:0 12px;
+    }
+
+    .message{
+        max-width:90%;
+    }
+
+    .requestTop{
+        flex-direction:column;
+    }
+}
+</style>
 </head>
+
 <body>
 
-    <header>
-        <div class="header-title">منصة خدمة فرع الزاجل (Zajil Branch Service)</div>
-        <div>
-            <button id="authBtn" onclick="openModal()" style="background: transparent; border: 1px solid #fff; color: #fff; padding: 6px 12px; border-radius: 4px; cursor: pointer;">بوابة الموظفين</button>
-        </div>
-    </header>
+<div id="languagePage" class="languagePage">
+    <div class="languageBox">
+        <div class="languageLogo">ز</div>
+        <h1>Zajil Branch Service</h1>
+        <p>اختر اللغة / Choose your language</p>
 
-    <div class="container">
-        <!-- قسم تحديد الفرع وإرسال الطلبات للعملاء -->
-        <div class="card">
-            <h2>اختر الفرع للتواصل أو تقديم طلب</h2>
-            <input type="text" id="branchSearch" class="search-box" placeholder="ابحث عن اسم الفرع (مثال: القريات، الرياض، جدة...)" oninput="filterBranches()">
-            
-            <div class="branch-grid" id="branchContainer">
-                <!-- سيتم تعبئة الفروع تلقائياً -->
-            </div>
+        <div class="languageChoices">
+            <button class="languageChoice" onclick="selectLanguage('ar')">
+                🇸🇦 العربية
+            </button>
 
-            <div id="selectedBranchInfo" style="margin-top: 15px; font-weight: bold; color: var(--primary-color);">
-                الفرع المحدد: فرع القريات
-            </div>
-        </div>
-
-        <div class="card">
-            <h3>إرسال استفسار / طلب للفرع</h3>
-            <form onsubmit="handleCustomerMessage(event)">
-                <div class="form-group">
-                    <label>الاسم الكامل</label>
-                    <input type="text" id="custName" required placeholder="أدخل اسمك">
-                </div>
-                <div class="form-group">
-                    <label>رقم الشحنة / رقم الجوال</label>
-                    <input type="text" id="custContact" required placeholder="05xxxxxxxx أو رقم الشحنة">
-                </div>
-                <div class="form-group">
-                    <label>تفاصيل الاستفسار</label>
-                    <textarea id="custMsg" rows="3" required placeholder="اكتب تفاصيل طلبك هنا..."></textarea>
-                </div>
-                <button type="submit" class="btn">إرسال الطلب للفرع</button>
-            </form>
-        </div>
-
-        <!-- لوحة تحكم الموظف (تظهر عند الدخول) -->
-        <div class="card" id="employeeDashboard" style="display: none;">
-            <h3>لوحة طلبات الفرع الموردة <span class="badge" id="msgCount">0</span></h3>
-            <div id="messagesList">
-                <p style="color: #777;">لا توجد طلبات جديدة للفرع حالياً.</p>
-            </div>
+            <button class="languageChoice" onclick="selectLanguage('en')">
+                🇬🇧 English
+            </button>
         </div>
     </div>
+</div>
 
-    <!-- نافذة تسجيل الموظفين -->
-    <div id="authModal" class="modal-overlay" style="display: none;">
-        <div class="modal">
-            <button class="close-btn" onclick="closeModal()">&times;</button>
-            
-            <div class="tabs">
-                <button class="tab-btn" id="loginTabBtn" onclick="switchTab('login')">تسجيل الدخول</button>
-                <button class="tab-btn active" id="signupTabBtn" onclick="switchTab('signup')">تسجيل موظف جديد</button>
-            </div>
+<header>
 
-            <!-- تسجيل موظف جديد -->
-            <form id="signupForm" onsubmit="handleEmployeeSignup(event)">
-                <div style="font-size:0.85rem; color:#666; margin-bottom:12px;">
-                    يتطلب التسجيل إدخال كود تفعيل الفرع والرقم الوظيفي للتأكد من هويتك.
-                </div>
-
-                <div class="form-group">
-                    <label>الاسم الكامل</label>
-                    <input type="text" id="signupName" placeholder="سعود الدهام" required>
-                </div>
-
-                <div class="form-group">
-                    <label>الفرع</label>
-                    <select id="signupBranch" required>
-                        <option value="QURAYYAT">فرع القريات</option>
-                        <option value="RIYADH">فرع الرياض</option>
-                        <option value="JEDDAH">فرع جدة</option>
-                        <option value="DAMMAM">فرع الدمام</option>
-                        <option value="OTHER">فرع آخر</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>كود التفعيل الأمني للفرع</label>
-                    <input type="text" id="signupPasscode" placeholder="أدخل كود التفعيل (مثال: QURAYYAT_700)" required>
-                </div>
-
-                <div class="form-group">
-                    <label>البريد الإلكتروني</label>
-                    <input type="email" id="signupEmail" placeholder="saudnaser1594@gmail.com" required>
-                </div>
-
-                <div class="form-group">
-                    <label>كلمة المرور</label>
-                    <input type="password" id="signupPassword" placeholder="••••••••" required minlength="6">
-                </div>
-
-                <button type="submit" class="btn">توثيق الهوية وإنشاء الحساب</button>
-            </form>
-
-            <!-- تسجيل الدخول -->
-            <form id="loginForm" onsubmit="handleEmployeeLogin(event)" style="display: none;">
-                <div class="form-group">
-                    <label>البريد الإلكتروني</label>
-                    <input type="email" id="loginEmail" required>
-                </div>
-                <div class="form-group">
-                    <label>كلمة المرور</label>
-                    <input type="password" id="loginPassword" required>
-                </div>
-                <button type="submit" class="btn">تسجيل الدخول</button>
-            </form>
-        </div>
+    <div class="logo">
+        <div class="logoIcon">ز</div>
+        <span>Zajil Branch Service</span>
     </div>
 
-    <script>
-        // قائمة الفروع (40 فرع)
-        const branches = [
-            "فرع القريات", "فرع الرياض - الرئيسي", "فرع جدة - الصفا", "فرع الدمام", "فرع مكة المكرمة",
-            "فرع المدينة المنورة", "فرع الأحساء", "فرع تبوك", "فرع حائل", "فرع عرعر",
-            "فرع سكاكا", "فرع الطائف", "فرع أبها", "فرع جازان", "فرع نجران",
-            "فرع الجبيل", "فرع حفر الباطن", "فرع الخفجي", "فرع ينبع", "فرع القصيم - بريدة",
-            "فرع عنيزة", "فرع الرس", "فرع المجمعة", "فرع الخرج", "فرع الدوادمي",
-            "فرع وادي الدواسر", "فرع بيشة", "فرع محايل عسير", "فرع القنفذة", "فرع رابغ",
-            "فرع الوجه", "فرع أملج", "فرع طريف", "فرع رفحاء", "فرع بقيق",
-            "فرع القطيف", "فرع رأس تنورة", "فرع شرورة", "فرع الخرمة", "فرع تربة"
-        ];
+    <div class="headerActions">
+        <button class="langBtn" onclick="changeLanguage()">
+            العربية / English
+        </button>
 
-        const BRANCH_SECURITY_CODES = {
-            "QURAYYAT": "QURAYYAT_700",
-            "RIYADH": "RIYADH_100",
-            "JEDDAH": "JEDDAH_200",
-            "DEFAULT": "ZAJIL2026"
+        <button class="headerBtn" onclick="openLogin()">
+            <span data-i18n="employeeLogin">دخول الموظفين</span>
+        </button>
+    </div>
+
+</header>
+
+<section id="homePage">
+
+<div class="container">
+
+    <div class="hero">
+
+        <h1 data-i18n="heroTitle">
+            تكامل اللوجستيات بين يديك
+        </h1>
+
+        <p data-i18n="heroText">
+            تواصل مباشرة مع فرعك لخدمات شحن أسرع وأكثر كفاءة.
+        </p>
+
+    </div>
+
+    <h2 class="title" data-i18n="servicesTitle">
+        الخدمات
+    </h2>
+
+    <div class="services">
+
+        <div class="service" onclick="selectService('shipping_price')">
+
+            <div class="serviceIcon">💰</div>
+
+            <h3 data-i18n="shippingPrice">
+                سعر الشحن
+            </h3>
+
+            <p data-i18n="shippingPriceDesc">
+                استفسر عن تكلفة الشحن.
+            </p>
+
+        </div>
+
+        <div class="service" onclick="selectService('tracking')">
+
+            <div class="serviceIcon">📦</div>
+
+            <h3 data-i18n="tracking">
+                تتبع الشحنة
+            </h3>
+
+            <p data-i18n="trackingDesc">
+                استفسر عن حالة شحنتك.
+            </p>
+
+        </div>
+
+        <div class="service" onclick="selectService('vehicle')">
+
+            <div class="serviceIcon">🚚</div>
+
+            <h3 data-i18n="vehicle">
+                طلب سيارة
+            </h3>
+
+            <p data-i18n="vehicleDesc">
+                اطلب سيارة لاستلام البضائع من موقعك.
+            </p>
+
+        </div>
+
+        <div class="service" onclick="selectService('general')">
+
+            <div class="serviceIcon">💬</div>
+
+            <h3 data-i18n="generalInquiry">
+                استفسار عام
+            </h3>
+
+            <p data-i18n="generalInquiryDesc">
+                تواصل مع خدمة العملاء لأي استفسار.
+            </p>
+
+        </div>
+
+        <div class="service" onclick="selectService('other')">
+
+            <div class="serviceIcon">📋</div>
+
+            <h3 data-i18n="otherService">
+                خدمة أخرى
+            </h3>
+
+            <p data-i18n="otherServiceDesc">
+                أرسل طلبك أو استفسارك للفرع.
+            </p>
+
+        </div>
+
+    </div>
+
+    <h2 class="title" data-i18n="branchesTitle">
+        اختر الفرع
+    </h2>
+
+    <div class="branchArea">
+
+        <input
+            id="branchSearch"
+            class="branchSearch"
+            placeholder="🔎 ابحث عن الفرع أو المدينة..."
+            oninput="filterBranches()"
+        >
+
+        <div id="branchGrid" class="branchGrid"></div>
+
+    </div>
+
+    <div class="orderBox">
+
+        <h2 class="title" style="margin-top:0" data-i18n="reviewOrder">
+            مراجعة طلب سابق
+        </h2>
+
+        <div class="formGroup">
+
+            <label data-i18n="orderNumberLabel">
+                رقم الطلب
+            </label>
+
+            <input
+                id="existingOrderNumber"
+                placeholder="مثال: ZJ-20260903-4821"
+            >
+
+        </div>
+
+        <button
+            class="primaryBtn"
+            onclick="findExistingOrder()"
+            data-i18n="reviewButton"
+        >
+            مراجعة الطلب
+        </button>
+
+    </div>
+
+</div>
+
+</section>
+
+<section id="newOrderPage" class="page">
+
+<div class="container">
+
+    <div class="orderBox">
+
+        <h2 class="title" style="margin-top:0" data-i18n="createRequest">
+            إنشاء طلب أو استفسار
+        </h2>
+
+        <div class="formGroup">
+
+            <label data-i18n="selectedBranch">
+                الفرع
+            </label>
+
+            <input id="selectedBranch" readonly>
+
+        </div>
+
+        <div class="formGroup">
+
+            <label data-i18n="requestType">
+                نوع الطلب
+            </label>
+
+            <select id="requestType">
+
+                <option value="shipping_price">
+                    سعر الشحن
+                </option>
+
+                <option value="tracking">
+                    تتبع الشحنة
+                </option>
+
+                <option value="vehicle">
+                    طلب سيارة تحميل واستلام
+                </option>
+
+                <option value="general">
+                    استفسار عام
+                </option>
+
+                <option value="other">
+                    خدمة أخرى
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="formGroup">
+
+            <label data-i18n="customerName">
+                اسم العميل
+            </label>
+
+            <input
+                id="customerName"
+                placeholder="اكتب اسمك"
+            >
+
+        </div>
+
+        <div class="formGroup">
+
+            <label data-i18n="customerPhone">
+                رقم الجوال
+            </label>
+
+            <input
+                id="customerPhone"
+                type="tel"
+                placeholder="05xxxxxxxx"
+            >
+
+        </div>
+
+        <div class="formGroup">
+
+            <label data-i18n="message">
+                الرسالة
+            </label>
+
+            <textarea
+                id="initialMessage"
+                placeholder="اكتب طلبك أو استفسارك..."
+            ></textarea>
+
+        </div>
+
+        <button
+            class="primaryBtn"
+            onclick="createOrder()"
+            data-i18n="createOrderButton"
+        >
+            إنشاء الطلب
+        </button>
+
+        <button
+            class="secondaryBtn"
+            onclick="goHome()"
+            data-i18n="backHome"
+        >
+            العودة للرئيسية
+        </button>
+
+    </div>
+
+</div>
+
+</section>
+
+<section id="chatPage" class="page">
+
+<div class="chatPage">
+
+    <div class="chatBox">
+
+        <div class="chatHeader">
+
+            <h2 id="chatBranch">
+                خدمة العملاء
+            </h2>
+
+            <div class="chatStatus">
+                ● <span data-i18n="liveConnection">
+                    المحادثة مباشرة
+                </span>
+            </div>
+
+            <div class="chatInfo">
+
+                <div class="chatTag">
+                    <span data-i18n="orderNumberLabel">
+                        رقم الطلب
+                    </span>:
+                    <span id="chatOrderNumber"></span>
+                </div>
+
+                <div class="chatTag">
+                    <span data-i18n="requestType">
+                        نوع الطلب
+                    </span>:
+                    <span id="chatRequestType"></span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="messages" class="messages"></div>
+
+        <div class="chatInput">
+
+            <input
+                id="messageInput"
+                placeholder="اكتب رسالتك..."
+                onkeydown="if(event.key==='Enter')sendMessage()"
+            >
+
+            <button
+                onclick="sendMessage()"
+                data-i18n="send"
+            >
+                إرسال
+            </button>
+
+        </div>
+
+        <div class="statusBox">
+
+            <label data-i18n="requestStatus">
+                حالة الطلب
+            </label>
+
+            <select id="customerStatus" disabled>
+
+                <option value="new">
+                    جديد
+                </option>
+
+                <option value="processing">
+                    قيد المعالجة
+                </option>
+
+                <option value="completed">
+                    مكتمل
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+    <button
+        class="primaryBtn"
+        onclick="goHome()"
+        data-i18n="backHome"
+    >
+        العودة للرئيسية
+    </button>
+
+</div>
+
+</section>
+
+<section id="employeeDashboard" class="page">
+
+<div class="employeeDashboard">
+
+    <div class="dashboardCard">
+
+        <h2 class="title" style="margin-top:0">
+            لوحة الموظف
+        </h2>
+
+        <p id="employeeBranchText"></p>
+
+        <button
+            class="secondaryBtn"
+            onclick="employeeLogout()"
+        >
+            تسجيل الخروج
+        </button>
+
+    </div>
+
+    <div class="dashboardCard">
+
+        <h3 class="title" style="margin-top:0">
+            الطلبات والمحادثات
+        </h3>
+
+        <div id="employeeRequests" class="requestList"></div>
+
+    </div>
+
+</div>
+
+</section>
+
+<div id="loginModal" class="modal">
+
+<div class="loginBox">
+
+    <span class="close" onclick="closeLogin()">×</span>
+
+    <h2 data-i18n="employeeLogin">
+        دخول الموظفين
+    </h2>
+
+    <p style="margin:15px 0;color:#666;">
+        أدخل البريد الإلكتروني وكلمة المرور.
+    </p>
+
+    <input
+        id="email"
+        type="email"
+        placeholder="البريد الإلكتروني"
+        style="width:100%;padding:12px;margin-bottom:12px;border:1px solid #ccc;border-radius:8px;"
+    >
+
+    <input
+        id="password"
+        type="password"
+        placeholder="كلمة المرور"
+        style="width:100%;padding:12px;margin-bottom:12px;border:1px solid #ccc;border-radius:8px;"
+    >
+
+    <button
+        class="primaryBtn"
+        onclick="employeeLogin()"
+    >
+        تسجيل الدخول
+    </button>
+
+    <div
+        id="loginError"
+        style="color:#dc3545;margin-top:12px;text-align:center;"
+    ></div>
+
+</div>
+
+</div>
+
+<footer>
+    Zajil Branch Service © 2026
+</footer>
+
+<script>
+
+const SUPABASE_URL =
+'https://hyyzhgewqkdxywhkbbxs.supabase.co';
+
+const SUPABASE_KEY =
+'Sb_publishable_HCbypT7XNYC_BRgpYYerGw_YFtbnPYw';
+
+let db = null;
+
+let currentLanguage =
+localStorage.getItem("zajil_language") || null;
+
+let lang =
+currentLanguage || "ar";
+
+let currentOrder = null;
+
+let realtimeChannel = null;
+
+let employeeUser = null;
+
+let employeeBranch = null;
+
+
+/* =========================
+   SUPABASE
+========================= */
+
+function getSupabaseClient(){
+
+    if(!db){
+
+        if(
+            window.supabase &&
+            typeof window.supabase.createClient === "function"
+        ){
+
+            db =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+        }
+
+    }
+
+    return db;
+}
+
+
+/* =========================
+   TRANSLATIONS
+========================= */
+
+const translations = {
+
+ar:{
+
+employeeLogin:"دخول الموظفين",
+
+heroTitle:"تكامل اللوجستيات بين يديك",
+
+heroText:
+"تواصل مباشرة مع فرعك لخدمات شحن أسرع وأكثر كفاءة.",
+
+servicesTitle:"الخدمات",
+
+shippingPrice:"سعر الشحن",
+
+shippingPriceDesc:
+"استفسر عن تكلفة الشحن.",
+
+tracking:"تتبع الشحنة",
+
+trackingDesc:
+"استفسر عن حالة شحنتك.",
+
+vehicle:"طلب سيارة",
+
+vehicleDesc:
+"اطلب سيارة لتحميل واستلام البضائع من موقعك.",
+
+generalInquiry:"استفسار عام",
+
+generalInquiryDesc:
+"تواصل مع خدمة العملاء لأي استفسار.",
+
+otherService:"خدمة أخرى",
+
+otherServiceDesc:
+"أرسل طلبك أو استفسارك للفرع.",
+
+branchesTitle:"اختر الفرع",
+
+searchBranch:
+"🔎 ابحث عن الفرع أو المدينة...",
+
+contactBranch:
+"إنشاء طلب",
+
+reviewOrder:
+"مراجعة طلب سابق",
+
+orderNumberLabel:
+"رقم الطلب",
+
+reviewButton:
+"مراجعة الطلب",
+
+createRequest:
+"إنشاء طلب أو استفسار",
+
+selectedBranch:
+"الفرع",
+
+requestType:
+"نوع الطلب",
+
+customerName:
+"اسم العميل",
+
+customerPhone:
+"رقم الجوال",
+
+message:
+"الرسالة",
+
+createOrderButton:
+"إنشاء الطلب",
+
+backHome:
+"العودة للرئيسية",
+
+liveConnection:
+"المحادثة مباشرة",
+
+send:
+"إرسال",
+
+requestStatus:
+"حالة الطلب",
+
+noBranch:
+"لا يوجد فرع بهذا الاسم.",
+
+noMessages:
+"لا توجد رسائل.",
+
+newRequest:
+"طلب جديد",
+
+processing:
+"قيد المعالجة",
+
+completed:
+"مكتمل",
+
+invalidOrder:
+"لم يتم العثور على هذا الطلب.",
+
+orderCreated:
+"تم إنشاء الطلب بنجاح."
+
+},
+
+en:{
+
+employeeLogin:"Employee Login",
+
+heroTitle:
+"Logistics at Your Fingertips",
+
+heroText:
+"Connect directly with your branch for faster shipping services.",
+
+servicesTitle:"Services",
+
+shippingPrice:"Shipping Price",
+
+shippingPriceDesc:
+"Ask about shipping costs.",
+
+tracking:"Shipment Tracking",
+
+trackingDesc:
+"Ask about your shipment status.",
+
+vehicle:"Vehicle Request",
+
+vehicleDesc:
+"Request a vehicle to collect goods from your location.",
+
+generalInquiry:"General Inquiry",
+
+generalInquiryDesc:
+"Contact customer service for any inquiry.",
+
+otherService:"Other Service",
+
+otherServiceDesc:
+"Send your request or inquiry to the branch.",
+
+branchesTitle:"Select a Branch",
+
+searchBranch:
+"🔎 Search branch or city...",
+
+contactBranch:
+"Create Request",
+
+reviewOrder:
+"Review Previous Request",
+
+orderNumberLabel:
+"Order Number",
+
+reviewButton:
+"Review Request",
+
+createRequest:
+"Create Request or Inquiry",
+
+selectedBranch:
+"Branch",
+
+requestType:
+"Request Type",
+
+customerName:
+"Customer Name",
+
+customerPhone:
+"Phone Number",
+
+message:
+"Message",
+
+createOrderButton:
+"Create Request",
+
+backHome:
+"Back to Home",
+
+liveConnection:
+"Live Conversation",
+
+send:
+"Send",
+
+requestStatus:
+"Request Status",
+
+noBranch:
+"No branch found.",
+
+noMessages:
+"No messages.",
+
+newRequest:
+"New",
+
+processing:
+"Processing",
+
+completed:
+"Completed",
+
+invalidOrder:
+"Request not found.",
+
+orderCreated:
+"Request created successfully."
+
+}
+
+};
+
+
+/* =========================
+   BRANCHES
+========================= */
+
+let loadedBranches = [
+
+"فرع تبوك",
+"فرع القريات",
+"فرع طبرجل",
+"فرع حائل",
+"فرع عرعر",
+"فرع دومة الجندل",
+"فرع حفر الباطن",
+"فرع سكاكا",
+"فرع الدمام",
+"فرع الخبر",
+"فرع الخفجي",
+"فرع الجبيل البلد",
+"فرع الجبيل الصناعية",
+"فرع الاحساء",
+"فرع القطيف",
+"فرع الظهران",
+"فرع الخرج",
+"فرع المجمعة",
+"فرع بريدة",
+"فرع الدوادمي",
+"فرع الرس",
+"فرع عنيزة",
+"فرع الرياض",
+"فرع شقراء",
+"فرع وادي الدواسر",
+"فرع الباحة",
+"فرع جدة",
+"فرع مكة",
+"فرع المدينة المنورة",
+"فرع الطائف",
+"فرع ينبع",
+"فرع ابها",
+"فرع ابو عريش",
+"فرع بيشة",
+"فرع خميس مشيط",
+"فرع جازان",
+"فرع نجران",
+"فرع صامطة",
+"فرع صبيا",
+"فرع النماص"
+
+];
+
+
+/* =========================
+   REQUEST TYPES
+========================= */
+
+const requestTypeNames = {
+
+shipping_price:"سعر الشحن",
+
+tracking:"تتبع الشحنة",
+
+vehicle:"طلب سيارة تحميل واستلام",
+
+general:"استفسار عام",
+
+other:"خدمة أخرى"
+
+};
+
+
+/* =========================
+   RENDER BRANCHES
+========================= */
+
+function renderBranches(list){
+
+    const grid =
+    document.getElementById("branchGrid");
+
+    grid.innerHTML="";
+
+    if(!list || list.length===0){
+
+        grid.innerHTML =
+        `<div class="noMessages">
+        ${translations[lang].noBranch}
+        </div>`;
+
+        return;
+
+    }
+
+    list.forEach(branch=>{
+
+        const card =
+        document.createElement("div");
+
+        card.className="branch";
+
+        const h3 =
+        document.createElement("h3");
+
+        h3.textContent=branch;
+
+        const online =
+        document.createElement("div");
+
+        online.className="online";
+
+        online.textContent =
+        "● خدمة العملاء متاحة";
+
+        const btn =
+        document.createElement("button");
+
+        btn.className="branchBtn";
+
+        btn.textContent =
+        translations[lang].contactBranch;
+
+        btn.onclick=()=>{
+            openNewOrder(branch);
         };
 
-        let selectedBranch = "فرع القريات";
-        let currentUser = null;
+        card.appendChild(h3);
+        card.appendChild(online);
+        card.appendChild(btn);
 
-        // تحميل الفروع في الواجهة
-        function renderBranches(list) {
-            const container = document.getElementById('branchContainer');
-            container.innerHTML = "";
-            list.forEach(b => {
-                const item = document.createElement('div');
-                item.className = 'branch-item ' + (b === selectedBranch ? 'selected' : '');
-                item.innerText = b;
-                item.onclick = () => {
-                    selectedBranch = b;
-                    document.getElementById('selectedBranchInfo').innerText = "الفرع المحدد: " + b;
-                    renderBranches(list);
-                };
-                container.appendChild(item);
-            });
+        grid.appendChild(card);
+
+    });
+
+}
+
+
+function filterBranches(){
+
+    const value =
+    document
+    .getElementById("branchSearch")
+    .value
+    .trim()
+    .toLowerCase();
+
+    const result =
+    loadedBranches.filter(branch =>
+        branch.toLowerCase().includes(value)
+    );
+
+    renderBranches(result);
+
+}
+
+
+/* =========================
+   SELECT SERVICE
+========================= */
+
+function selectService(type){
+
+    sessionStorage.setItem(
+        "selected_request_type",
+        type
+    );
+
+    document
+    .querySelector(".branchArea")
+    .scrollIntoView({
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================
+   NEW ORDER
+========================= */
+
+function openNewOrder(branch){
+
+    const selectedType =
+    sessionStorage.getItem(
+        "selected_request_type"
+    );
+
+    document
+    .getElementById("homePage")
+    .style.display="none";
+
+    document
+    .getElementById("newOrderPage")
+    .style.display="block";
+
+    document
+    .getElementById("selectedBranch")
+    .value=branch;
+
+    if(selectedType){
+
+        document
+        .getElementById("requestType")
+        .value=selectedType;
+
+    }
+
+}
+
+
+function generateOrderNumber(){
+
+    const now =
+    new Date();
+
+    const date =
+    now.getFullYear().toString() +
+
+    String(now.getMonth()+1)
+    .padStart(2,"0") +
+
+    String(now.getDate())
+    .padStart(2,"0");
+
+    const random =
+    Math.floor(
+        1000 + Math.random()*9000
+    );
+
+    return `ZJ-${date}-${random}`;
+
+}
+
+
+/* =========================
+   CREATE ORDER
+========================= */
+
+async function createOrder(){
+
+    const branch =
+    document
+    .getElementById("selectedBranch")
+    .value;
+
+    const type =
+    document
+    .getElementById("requestType")
+    .value;
+
+    const name =
+    document
+    .getElementById("customerName")
+    .value
+    .trim();
+
+    const phone =
+    document
+    .getElementById("customerPhone")
+    .value
+    .trim();
+
+    const message =
+    document
+    .getElementById("initialMessage")
+    .value
+    .trim();
+
+    if(!branch){
+
+        alert("اختر الفرع أولاً.");
+
+        return;
+
+    }
+
+    if(!message){
+
+        alert("اكتب الطلب أو الاستفسار.");
+
+        return;
+
+    }
+
+    const orderNumber =
+    generateOrderNumber();
+
+    const client =
+    getSupabaseClient();
+
+    if(!client){
+
+        alert("تعذر الاتصال بقاعدة البيانات.");
+
+        return;
+
+    }
+
+    try{
+
+        const {data,error} =
+        await client
+        .from("orders")
+        .insert({
+
+            order_number:orderNumber,
+
+            branch:branch,
+
+            request_type:type,
+
+            customer_name:name || null,
+
+            customer_phone:phone || null,
+
+            status:"new"
+
+        })
+        .select()
+        .single();
+
+        if(error){
+
+            console.error(error);
+
+            alert(
+                "حدث خطأ أثناء إنشاء الطلب."
+            );
+
+            return;
+
         }
 
-        function filterBranches() {
-            const q = document.getElementById('branchSearch').value.toLowerCase();
-            const filtered = branches.filter(b => b.toLowerCase().includes(q));
-            renderBranches(filtered);
+        await client
+        .from("messages")
+        .insert({
+
+            order_number:orderNumber,
+
+            branch:branch,
+
+            request_type:type,
+
+            text:message,
+
+            sender:"customer",
+
+            customer_name:name || null
+
+        });
+
+        currentOrder={
+            ...data
+        };
+
+        showOrderCreated(orderNumber);
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        alert(
+            "حدث خطأ أثناء إنشاء الطلب."
+        );
+
+    }
+
+}
+
+
+/* =========================
+   SHOW CREATED ORDER
+========================= */
+
+function showOrderCreated(orderNumber){
+
+    const box =
+    document
+    .getElementById("newOrderPage");
+
+    box.innerHTML=`
+
+        <div class="container">
+
+            <div class="orderBox">
+
+                <div class="orderNumber">
+
+                    <div>
+                        تم إنشاء طلبك بنجاح
+                    </div>
+
+                    <strong>
+                        ${escapeHTML(orderNumber)}
+                    </strong>
+
+                    <p style="margin-top:10px">
+                        احتفظ برقم الطلب لمراجعة
+                        المحادثة لاحقًا.
+                    </p>
+
+                </div>
+
+                <button
+                    class="primaryBtn"
+                    onclick="openOrderByNumber('${orderNumber}')"
+                >
+                    فتح المحادثة
+                </button>
+
+                <button
+                    class="secondaryBtn"
+                    onclick="goHome()"
+                >
+                    العودة للرئيسية
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================
+   FIND OLD ORDER
+========================= */
+
+async function findExistingOrder(){
+
+    const number =
+    document
+    .getElementById("existingOrderNumber")
+    .value
+    .trim()
+    .toUpperCase();
+
+    if(!number){
+
+        alert(
+            "اكتب رقم الطلب."
+        );
+
+        return;
+
+    }
+
+    await openOrderByNumber(number);
+
+}
+
+
+async function openOrderByNumber(orderNumber){
+
+    const client =
+    getSupabaseClient();
+
+    if(!client){
+
+        alert(
+            "تعذر الاتصال بقاعدة البيانات."
+        );
+
+        return;
+
+    }
+
+    try{
+
+        const {data,error} =
+        await client
+        .from("orders")
+        .select("*")
+        .eq("order_number",orderNumber)
+        .maybeSingle();
+
+        if(error){
+
+            console.error(error);
+
+            alert(
+                "حدث خطأ أثناء البحث."
+            );
+
+            return;
+
         }
 
-        // إرسال رسالة عميل
-        function handleCustomerMessage(e) {
-            e.preventDefault();
-            const name = document.getElementById('custName').value;
-            const contact = document.getElementById('custContact').value;
-            const msg = document.getElementById('custMsg').value;
+        if(!data){
 
-            const newMsg = { branch: selectedBranch, name, contact, msg, time: new Date().toLocaleTimeString('ar-SA') };
-            
-            let storedMsgs = JSON.parse(localStorage.getItem('zajil_messages') || '[]');
-            storedMsgs.push(newMsg);
-            localStorage.setItem('zajil_messages', JSON.stringify(storedMsgs));
+            alert(
+                translations[lang].invalidOrder
+            );
 
-            alert("✅ تم إرسال طلبك بنجاح إلى " + selectedBranch);
-            document.getElementById('custName').value = "";
-            document.getElementById('custContact').value = "";
-            document.getElementById('custMsg').value = "";
+            return;
 
-            loadDashboardMessages();
         }
 
-        // تسجيل موظف
-        function handleEmployeeSignup(e) {
-            e.preventDefault();
-            const name = document.getElementById('signupName').value.trim();
-            const branchKey = document.getElementById('signupBranch').value;
-            const passcode = document.getElementById('signupPasscode').value.trim();
-            const email = document.getElementById('signupEmail').value.trim();
-            const password = document.getElementById('signupPassword').value;
+        currentOrder=data;
 
-            const validCode = BRANCH_SECURITY_CODES[branchKey] || BRANCH_SECURITY_CODES["DEFAULT"];
-            if (passcode !== validCode) {
-                alert("❌ كود التفعيل الأمني للفرع غير صحيح!");
-                return;
-            }
+        openChatForOrder(data);
 
-            const userData = { name, branchKey, email, password };
-            localStorage.setItem('employee_' + email, JSON.stringify(userData));
+    }
+    catch(error){
 
-            alert("✅ تم إنشاء وتوثيق الحساب بنجاح!");
-            currentUser = userData;
-            loginSuccess();
+        console.error(error);
+
+    }
+
+}
+
+
+/* =========================
+   OPEN CHAT
+========================= */
+
+async function openChatForOrder(order){
+
+    document
+    .getElementById("homePage")
+    .style.display="none";
+
+    document
+    .getElementById("newOrderPage")
+    .style.display="none";
+
+    document
+    .getElementById("employeeDashboard")
+    .style.display="none";
+
+    document
+    .getElementById("chatPage")
+    .style.display="block";
+
+    document
+    .getElementById("chatBranch")
+    .textContent=
+    "خدمة عملاء " + order.branch;
+
+    document
+    .getElementById("chatOrderNumber")
+    .textContent=
+    order.order_number;
+
+    document
+    .getElementById("chatRequestType")
+    .textContent=
+    requestTypeNames[order.request_type]
+    || order.request_type;
+
+    document
+    .getElementById("customerStatus")
+    .value=
+    order.status || "new";
+
+    sessionStorage.setItem(
+        "customer_order_number",
+        order.order_number
+    );
+
+    await loadOrderMessages(order);
+
+    subscribeToOrder(order.order_number);
+
+}
+
+
+async function loadOrderMessages(order){
+
+    const box =
+    document.getElementById("messages");
+
+    box.innerHTML="";
+
+    const client =
+    getSupabaseClient();
+
+    const {data,error} =
+    await client
+    .from("messages")
+    .select("*")
+    .eq("order_number",order.order_number)
+    .order("created_at",{
+        ascending:true
+    });
+
+    if(error){
+
+        console.error(error);
+
+        return;
+
+    }
+
+    if(!data || data.length===0){
+
+        box.innerHTML=
+        `<div class="noMessages">
+        ${translations[lang].noMessages}
+        </div>`;
+
+        return;
+
+    }
+
+    data.forEach(message=>{
+
+        appendMessage(
+            message.text,
+            message.sender,
+            message.created_at
+        );
+
+    });
+
+}
+
+
+function subscribeToOrder(orderNumber){
+
+    if(realtimeChannel){
+
+        try{
+
+            db.removeChannel(
+                realtimeChannel
+            );
+
+        }catch(e){}
+
+    }
+
+    const client =
+    getSupabaseClient();
+
+    realtimeChannel =
+    client
+    .channel(
+        "order-" + orderNumber
+    )
+    .on(
+        "postgres_changes",
+        {
+            event:"INSERT",
+            schema:"public",
+            table:"messages",
+            filter:
+            "order_number=eq."+orderNumber
+        },
+        payload=>{
+
+            const message =
+            payload.new;
+
+            appendMessage(
+                message.text,
+                message.sender,
+                message.created_at
+            );
+
+        }
+    )
+    .subscribe();
+
+}
+
+
+/* =========================
+   SEND MESSAGE
+========================= */
+
+async function sendMessage(){
+
+    const input =
+    document
+    .getElementById("messageInput");
+
+    const text =
+    input.value.trim();
+
+    if(!text || !currentOrder){
+
+        return;
+
+    }
+
+    input.value="";
+
+    const client =
+    getSupabaseClient();
+
+    if(!client){
+
+        alert(
+            "تعذر الاتصال."
+        );
+
+        return;
+
+    }
+
+    const {error} =
+    await client
+    .from("messages")
+    .insert({
+
+        order_number:
+        currentOrder.order_number,
+
+        branch:
+        currentOrder.branch,
+
+        request_type:
+        currentOrder.request_type,
+
+        text:text,
+
+        sender:"customer",
+
+        customer_name:
+        currentOrder.customer_name || null
+
+    });
+
+    if(error){
+
+        console.error(error);
+
+        alert(
+            "تعذر إرسال الرسالة."
+        );
+
+        input.value=text;
+
+    }
+
+}
+
+
+/* =========================
+   APPEND MESSAGE
+========================= */
+
+function appendMessage(
+    text,
+    sender,
+    timeStr
+){
+
+    const box =
+    document
+    .getElementById("messages");
+
+    const no =
+    box.querySelector(".noMessages");
+
+    if(no){
+
+        no.remove();
+
+    }
+
+    const div =
+    document.createElement("div");
+
+    div.className =
+    sender==="customer"
+    ? "message customerMessage"
+    : "message employeeMessage";
+
+    const time =
+    timeStr
+    ? new Date(timeStr).toLocaleString()
+    : new Date().toLocaleString();
+
+    div.innerHTML=
+    `${escapeHTML(text)}
+     <small>${escapeHTML(time)}</small>`;
+
+    box.appendChild(div);
+
+    box.scrollTop=
+    box.scrollHeight;
+
+}
+
+
+/* =========================
+   EMPLOYEE LOGIN
+========================= */
+
+async function employeeLogin(){
+
+    const email =
+    document
+    .getElementById("email")
+    .value
+    .trim();
+
+    const password =
+    document
+    .getElementById("password")
+    .value;
+
+    const errorBox =
+    document
+    .getElementById("loginError");
+
+    errorBox.textContent="";
+
+    if(!email || !password){
+
+        errorBox.textContent=
+        "أدخل البريد الإلكتروني وكلمة المرور.";
+
+        return;
+
+    }
+
+    const client =
+    getSupabaseClient();
+
+    const {data,error} =
+    await client.auth.signInWithPassword({
+
+        email:email,
+
+        password:password
+
+    });
+
+    if(error){
+
+        console.error(error);
+
+        errorBox.textContent=
+        "بيانات الدخول غير صحيحة.";
+
+        return;
+
+    }
+
+    employeeUser=data.user;
+
+    await loadEmployeeBranch();
+
+}
+
+
+/* =========================
+   EMPLOYEE BRANCH
+========================= */
+
+async function loadEmployeeBranch(){
+
+    const client =
+    getSupabaseClient();
+
+    /*
+       يجب أن يحتوي جدول employees
+       على:
+       user_id
+       email
+       branch
+    */
+
+    const {data,error} =
+    await client
+    .from("employees")
+    .select("*")
+    .eq("user_id",employeeUser.id)
+    .maybeSingle();
+
+    if(error || !data){
+
+        alert(
+            "تم تسجيل الدخول ولكن لم يتم تحديد الفرع لهذا الموظف."
+        );
+
+        await client.auth.signOut();
+
+        return;
+
+    }
+
+    employeeBranch=data.branch;
+
+    closeLogin();
+
+    document
+    .getElementById("homePage")
+    .style.display="none";
+
+    document
+    .getElementById("chatPage")
+    .style.display="none";
+
+    document
+    .getElementById("employeeDashboard")
+    .style.display="block";
+
+    document
+    .getElementById("employeeBranchText")
+    .textContent=
+    "الفرع: " + employeeBranch;
+
+    loadEmployeeRequests();
+
+}
+
+
+/* =========================
+   EMPLOYEE REQUESTS
+========================= */
+
+async function loadEmployeeRequests(){
+
+    const client =
+    getSupabaseClient();
+
+    const list =
+    document
+    .getElementById("employeeRequests");
+
+    list.innerHTML=
+    `<div class="noMessages">
+    جاري تحميل الطلبات...
+    </div>`;
+
+    const {data,error} =
+    await client
+    .from("orders")
+    .select("*")
+    .eq("branch",employeeBranch)
+    .order("created_at",{
+        ascending:false
+    });
+
+    if(error){
+
+        console.error(error);
+
+        list.innerHTML=
+        `<div class="noMessages">
+        تعذر تحميل الطلبات.
+        </div>`;
+
+        return;
+
+    }
+
+    if(!data || data.length===0){
+
+        list.innerHTML=
+        `<div class="noMessages">
+        لا توجد طلبات حاليًا.
+        </div>`;
+
+        return;
+
+    }
+
+    list.innerHTML="";
+
+    data.forEach(order=>{
+
+        const item =
+        document.createElement("div");
+
+        item.className="requestItem";
+
+        const type =
+        requestTypeNames[
+            order.request_type
+        ] || order.request_type;
+
+        const statusText =
+        order.status==="completed"
+        ? "مكتمل"
+        : order.status==="processing"
+        ? "قيد المعالجة"
+        : "جديد";
+
+        item.innerHTML=`
+
+            <div class="requestTop">
+
+                <div>
+
+                    <div class="requestNumber">
+                        ${escapeHTML(order.order_number)}
+                    </div>
+
+                    <div class="requestType">
+                        ${escapeHTML(type)}
+                    </div>
+
+                </div>
+
+                <span class="requestStatus">
+                    ${statusText}
+                </span>
+
+            </div>
+
+            <div>
+                ${escapeHTML(order.customer_name || "عميل")}
+            </div>
+
+            <div style="font-size:12px;color:#777;margin-top:6px">
+                ${escapeHTML(order.customer_phone || "")}
+            </div>
+
+        `;
+
+        item.onclick=()=>{
+            openEmployeeOrder(order);
+        };
+
+        list.appendChild(item);
+
+    });
+
+}
+
+
+/* =========================
+   EMPLOYEE CHAT
+========================= */
+
+async function openEmployeeOrder(order){
+
+    currentOrder=order;
+
+    document
+    .getElementById("employeeDashboard")
+    .style.display="none";
+
+    document
+    .getElementById("chatPage")
+    .style.display="block";
+
+    document
+    .getElementById("chatBranch")
+    .textContent=
+    "محادثة الطلب " +
+    order.order_number;
+
+    document
+    .getElementById("chatOrderNumber")
+    .textContent=
+    order.order_number;
+
+    document
+    .getElementById("chatRequestType")
+    .textContent=
+    requestTypeNames[order.request_type]
+    || order.request_type;
+
+    document
+    .getElementById("customerStatus")
+    .disabled=false;
+
+    document
+    .getElementById("customerStatus")
+    .value=
+    order.status || "new";
+
+    const input =
+    document
+    .getElementById("messageInput");
+
+    input.placeholder=
+    "اكتب رد الموظف...";
+
+    await loadOrderMessages(order);
+
+    subscribeToOrder(order.order_number);
+
+}
+
+
+/* =========================
+   EMPLOYEE SEND MESSAGE
+========================= */
+
+async function sendEmployeeMessage(){
+
+    const input =
+    document
+    .getElementById("messageInput");
+
+    const text =
+    input.value.trim();
+
+    if(!text || !currentOrder){
+
+        return;
+
+    }
+
+    const client =
+    getSupabaseClient();
+
+    input.value="";
+
+    const {error} =
+    await client
+    .from("messages")
+    .insert({
+
+        order_number:
+        currentOrder.order_number,
+
+        branch:
+        currentOrder.branch,
+
+        request_type:
+        currentOrder.request_type,
+
+        text:text,
+
+        sender:"employee"
+
+    });
+
+    if(error){
+
+        console.error(error);
+
+        input.value=text;
+
+        alert(
+            "تعذر إرسال الرد."
+        );
+
+    }
+
+}
+
+
+/* =========================
+   DETECT SENDER
+========================= */
+
+const originalSendMessage =
+sendMessage;
+
+sendMessage=function(){
+
+    if(employeeUser){
+
+        return sendEmployeeMessage();
+
+    }
+
+    return originalSendMessage();
+
+};
+
+
+/* =========================
+   UPDATE STATUS
+========================= */
+
+document
+.getElementById("customerStatus")
+.addEventListener(
+    "change",
+    async function(){
+
+        if(
+            !employeeUser ||
+            !currentOrder
+        ){
+
+            return;
+
         }
 
-        // تسجيل دخول موظف
-        function handleEmployeeLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
+        const newStatus=
+        this.value;
 
-            const stored = localStorage.getItem('employee_' + email);
-            if (stored) {
-                const user = JSON.parse(stored);
-                if (user.password === password) {
-                    currentUser = user;
-                    alert("✅ مرحباً بك " + user.name);
-                    loginSuccess();
-                    return;
-                }
-            }
-            alert("❌ بيانات الدخول غير صحيحة.");
+        const client =
+        getSupabaseClient();
+
+        const {error} =
+        await client
+        .from("orders")
+        .update({
+            status:newStatus
+        })
+        .eq(
+            "order_number",
+            currentOrder.order_number
+        );
+
+        if(error){
+
+            console.error(error);
+
+            return;
+
         }
 
-        function loginSuccess() {
-            closeModal();
-            document.getElementById('authBtn').innerText = "الموظف: " + currentUser.name;
-            document.getElementById('employeeDashboard').style.display = 'block';
-            loadDashboardMessages();
+        currentOrder.status=
+        newStatus;
+
+        loadEmployeeRequests();
+
+    }
+);
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+async function employeeLogout(){
+
+    const client =
+    getSupabaseClient();
+
+    await client.auth.signOut();
+
+    employeeUser=null;
+    employeeBranch=null;
+    currentOrder=null;
+
+    document
+    .getElementById("employeeDashboard")
+    .style.display="none";
+
+    document
+    .getElementById("chatPage")
+    .style.display="none";
+
+    document
+    .getElementById("homePage")
+    .style.display="block";
+
+}
+
+
+/* =========================
+   LANGUAGE
+========================= */
+
+function selectLanguage(selected){
+
+    lang=selected;
+
+    localStorage.setItem(
+        "zajil_language",
+        selected
+    );
+
+    applyLanguage();
+
+    document
+    .getElementById("languagePage")
+    .style.display="none";
+
+}
+
+
+function changeLanguage(){
+
+    lang =
+    lang==="ar"
+    ? "en"
+    : "ar";
+
+    localStorage.setItem(
+        "zajil_language",
+        lang
+    );
+
+    applyLanguage();
+
+    renderBranches(
+        loadedBranches
+    );
+
+}
+
+
+function applyLanguage(){
+
+    document.documentElement.lang=
+    lang;
+
+    document.documentElement.dir=
+    lang==="ar"
+    ? "rtl"
+    : "ltr";
+
+    document
+    .querySelectorAll("[data-i18n]")
+    .forEach(element=>{
+
+        const key =
+        element.getAttribute(
+            "data-i18n"
+        );
+
+        if(translations[lang][key]){
+
+            element.innerText=
+            translations[lang][key];
+
         }
 
-        function loadDashboardMessages() {
-            if (!currentUser) return;
-            const msgsList = document.getElementById('messagesList');
-            let storedMsgs = JSON.parse(localStorage.getItem('zajil_messages') || '[]');
-            
-            msgsList.innerHTML = "";
-            document.getElementById('msgCount').innerText = storedMsgs.length;
+    });
 
-            if (storedMsgs.length === 0) {
-                msgsList.innerHTML = '<p style="color: #777;">لا توجد طلبات جديدة.</p>';
-                return;
-            }
+    document
+    .querySelectorAll(
+        "[data-i18n-placeholder]"
+    )
+    .forEach(element=>{
 
-            storedMsgs.reverse().forEach(m => {
-                const card = document.createElement('div');
-                card.className = 'msg-card';
-                card.innerHTML = `<strong>الفرع:</strong> ${m.branch} | <strong>العميل:</strong> ${m.name} (${m.contact})<br><p style="margin:5px 0;">${m.msg}</p><small style="color:#888;">الوقت: ${m.time}</small>`;
-                msgsList.appendChild(card);
-            });
+        const key =
+        element.getAttribute(
+            "data-i18n-placeholder"
+        );
+
+        if(translations[lang][key]){
+
+            element.placeholder=
+            translations[lang][key];
+
         }
 
-        function switchTab(tab) {
-            document.getElementById('signupForm').style.display = tab === 'signup' ? 'block' : 'none';
-            document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
-            document.getElementById('signupTabBtn').className = 'tab-btn ' + (tab === 'signup' ? 'active' : '');
-            document.getElementById('loginTabBtn').className = 'tab-btn ' + (tab === 'login' ? 'active' : '');
-        }
+    });
 
-        function openModal() { document.getElementById('authModal').style.display = 'flex'; }
-        function closeModal() { document.getElementById('authModal').style.display = 'none'; }
+}
 
-        // التجهيز الابتدائي
-        renderBranches(branches);
-    </script>
+
+/* =========================
+   LOGIN MODAL
+========================= */
+
+function openLogin(){
+
+    document
+    .getElementById("loginModal")
+    .style.display="flex";
+
+}
+
+
+function closeLogin(){
+
+    document
+    .getElementById("loginModal")
+    .style.display="none";
+
+}
+
+
+/* =========================
+   HOME
+========================= */
+
+function goHome(){
+
+    document
+    .getElementById("chatPage")
+    .style.display="none";
+
+    document
+    .getElementById("newOrderPage")
+    .style.display="none";
+
+    document
+    .getElementById("employeeDashboard")
+    .style.display="none";
+
+    document
+    .getElementById("homePage")
+    .style.display="block";
+
+    const input =
+    document
+    .getElementById("messageInput");
+
+    input.placeholder=
+    "اكتب رسالتك...";
+
+    currentOrder=null;
+
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHTML(text){
+
+    const div =
+    document.createElement("div");
+
+    div.textContent=
+    String(text);
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+if(currentLanguage){
+
+    document
+    .getElementById("languagePage")
+    .style.display="none";
+
+    applyLanguage();
+
+}
+else{
+
+    document
+    .getElementById("languagePage")
+    .style.display="flex";
+
+}
+
+
+window.addEventListener(
+    "DOMContentLoaded",
+    ()=>{
+
+        renderBranches(
+            loadedBranches
+        );
+
+    }
+);
+
+</script>
+
 </body>
 </html>
